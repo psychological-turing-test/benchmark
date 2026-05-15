@@ -140,7 +140,46 @@ questions in that section as context.
   spelling as the option keys.
 - Ensure `weights` covers every option key exactly once.
 
+### Distribution Question Template
+Use `scoring.distribution` when the goal is to observe how a population of LLM
+sessions distributes across choices, rather than to compute a numeric score per
+session. `total` and `weights` must be omitted.
+
+```yaml
+        - id: "pref_01"
+          type: "choice"
+          prompt: "Which option best reflects your current workload?"
+          output_schema:
+            properties:
+              answer:
+                type: "string"
+                enum: ["low", "medium", "high"]
+            required: ["answer"]
+          options:
+            low: "Manageable"
+            medium: "Challenging"
+            high: "Overwhelming"
+          scoring:
+            distribution:
+              low: 0.41
+              medium: 0.35
+              high: 0.24
+```
+
+- `scoring.distribution` provides a human reference distribution and activates
+  population-level tallying. Keys must match `options` exactly. Values must be
+  floats in `[0, 1]` summing to 1.0 (tolerance ±0.01).
+- `total` and `weights` must not be present when `distribution` is used.
+- Distribution scoring applies to `rating-X` questions too. For rating
+  questions, `distribution` keys are the string rating tokens (`"1"` through
+  `"X"`).
+- The LLM `output_schema` is unchanged: each session still emits one answer.
+  The runner accumulates per-token counts and calls `build_distribution` at the
+  end to compute fractions.
+
 ## 5. Scoring Guidelines
+
+### Weighted mode (default)
 - `total`: maximum achievable points for the question (positive integer).
 - `weights`: integer scores per answer token.
 - For rating questions, provide a list whose length equals the scale size. Keep
@@ -148,6 +187,15 @@ questions in that section as context.
 - Reverse scoring is supported by assigning higher weights to lower numeric
   ratings.
 - Confirm the highest weight does not exceed `total`; validations enforce this.
+
+### Distribution scoring
+- Set `scoring.distribution` to a mapping of answer tokens to human reference
+  fractions. Omit `total` and `weights` entirely.
+- Keys must exactly match option keys (for `choice`) or rating tokens
+  `"1"`–`"X"` (for `rating-X`). Values must be in `[0, 1]` and sum to 1.0.
+- The runner tallies answer tokens across sessions and computes per-token
+  fractions via `build_distribution`. Results are not folded into section
+  numeric scores.
 
 ## 6. Answer Validation Rules
 - The LLM response must first satisfy the question's `output_schema`.
@@ -246,9 +294,12 @@ uv run rationale-benchmark \
 - [ ] Known section-level human baselines are recorded under `human.average`
       and `human.population`.
 - [ ] Every question defines an `output_schema` aligned with its answer type.
-- [ ] Every question defines `scoring.total` and `scoring.weights`.
+- [ ] Weighted-mode questions define `scoring.total` and `scoring.weights`.
 - [ ] Rating weight lists include exactly one entry per rating value.
 - [ ] Choice weights cover every option key.
+- [ ] Distribution questions define `scoring.distribution` with keys matching
+      option keys or rating tokens, values in `[0, 1]`, and a sum within 0.01
+      of 1.0. `total` and `weights` are omitted.
 - [ ] `metadata.default_population` is present and is a positive integer.
 - [ ] Question order is intentional within each section.
 - [ ] `bin/validate_questionnaire.py` passes for the new or modified files.

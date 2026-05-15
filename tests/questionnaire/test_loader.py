@@ -446,3 +446,277 @@ def test_list_questionnaires_returns_file_stems(questionnaire_dir: Path) -> None
   )
   names = list_questionnaires(questionnaire_dir.parent)
   assert names == ["first", "second"]
+
+
+def test_load_distribution_choice_question(questionnaire_dir: Path) -> None:
+  _write_yaml(
+    questionnaire_dir,
+    "dist-choice",
+    """
+    questionnaire:
+      id: "dist-choice"
+      name: "Distribution Choice"
+      system_prompt: "Answer as yourself."
+      metadata:
+        default_population: 100
+      sections:
+        - name: "Preferences"
+          questions:
+            - id: "pref_01"
+              type: "choice"
+              prompt: "Which option do you prefer?"
+              output_schema:
+                properties:
+                  answer:
+                    type: "string"
+                    enum: ["low", "medium", "high"]
+                required: ["answer"]
+              options:
+                low: "Manageable"
+                medium: "Challenging"
+                high: "Overwhelming"
+              scoring:
+                distribution:
+                  low: 0.4
+                  medium: 0.35
+                  high: 0.25
+    """,
+  )
+  questionnaire = load_questionnaire("dist-choice", questionnaire_dir.parent)
+  question = questionnaire.sections[0].questions[0]
+  assert question.scoring.distribution == {
+    "low": 0.4, "medium": 0.35, "high": 0.25,
+  }
+  assert question.scoring.total is None
+  assert question.scoring.weights == {}
+
+
+def test_load_distribution_question_with_fractions(
+  questionnaire_dir: Path,
+) -> None:
+  _write_yaml(
+    questionnaire_dir,
+    "dist-with-human",
+    """
+    questionnaire:
+      id: "dist-with-human"
+      name: "Distribution With Fractions"
+      system_prompt: "Answer as yourself."
+      metadata:
+        default_population: 50
+      sections:
+        - name: "Choices"
+          questions:
+            - id: "choice_01"
+              type: "choice"
+              prompt: "Pick one."
+              output_schema:
+                properties:
+                  answer:
+                    type: "string"
+                    enum: ["a", "b"]
+                required: ["answer"]
+              options:
+                a: "Option A"
+                b: "Option B"
+              scoring:
+                distribution:
+                  a: 0.6
+                  b: 0.4
+    """,
+  )
+  questionnaire = load_questionnaire("dist-with-human", questionnaire_dir.parent)
+  question = questionnaire.sections[0].questions[0]
+  assert question.scoring.distribution == {"a": 0.6, "b": 0.4}
+
+
+def test_load_distribution_rating_question(questionnaire_dir: Path) -> None:
+  _write_yaml(
+    questionnaire_dir,
+    "dist-rating",
+    """
+    questionnaire:
+      id: "dist-rating"
+      name: "Distribution Rating"
+      system_prompt: "Answer as yourself."
+      metadata:
+        default_population: 50
+      sections:
+        - name: "Scales"
+          questions:
+            - id: "scale_01"
+              type: "rating-5"
+              prompt: "Rate this."
+              output_schema:
+                properties:
+                  answer:
+                    type: "integer"
+                    minimum: 1
+                    maximum: 5
+                required: ["answer"]
+              scoring:
+                distribution:
+                  "1": 0.1
+                  "2": 0.2
+                  "3": 0.4
+                  "4": 0.2
+                  "5": 0.1
+    """,
+  )
+  questionnaire = load_questionnaire("dist-rating", questionnaire_dir.parent)
+  question = questionnaire.sections[0].questions[0]
+  assert question.scoring.distribution == {
+    "1": 0.1,
+    "2": 0.2,
+    "3": 0.4,
+    "4": 0.2,
+    "5": 0.1,
+  }
+
+
+def test_distribution_with_total_raises(questionnaire_dir: Path) -> None:
+  _write_yaml(
+    questionnaire_dir,
+    "dist-bad-total",
+    """
+    questionnaire:
+      id: "dist-bad-total"
+      name: "Bad"
+      system_prompt: "Stay neutral."
+      metadata:
+        default_population: 1
+      sections:
+        - name: "Only"
+          questions:
+            - id: "q1"
+              type: "choice"
+              prompt: "Pick."
+              output_schema:
+                properties:
+                  answer:
+                    type: "string"
+                    enum: ["a", "b"]
+                required: ["answer"]
+              options:
+                a: "A"
+                b: "B"
+              scoring:
+                distribution:
+                  a: 0.5
+                  b: 0.5
+                total: 2
+    """,
+  )
+  with pytest.raises(QuestionnaireConfigError, match="must not define 'total'"):
+    load_questionnaire("dist-bad-total", questionnaire_dir.parent)
+
+
+def test_distribution_with_weights_raises(questionnaire_dir: Path) -> None:
+  _write_yaml(
+    questionnaire_dir,
+    "dist-bad-weights",
+    """
+    questionnaire:
+      id: "dist-bad-weights"
+      name: "Bad"
+      system_prompt: "Stay neutral."
+      metadata:
+        default_population: 1
+      sections:
+        - name: "Only"
+          questions:
+            - id: "q1"
+              type: "choice"
+              prompt: "Pick."
+              output_schema:
+                properties:
+                  answer:
+                    type: "string"
+                    enum: ["a", "b"]
+                required: ["answer"]
+              options:
+                a: "A"
+                b: "B"
+              scoring:
+                distribution:
+                  a: 0.5
+                  b: 0.5
+                weights:
+                  a: 0
+                  b: 1
+    """,
+  )
+  with pytest.raises(QuestionnaireConfigError, match="must not define 'weights'"):
+    load_questionnaire("dist-bad-weights", questionnaire_dir.parent)
+
+
+def test_distribution_wrong_keys_raises(questionnaire_dir: Path) -> None:
+  _write_yaml(
+    questionnaire_dir,
+    "bad-dist-keys",
+    """
+    questionnaire:
+      id: "bad-dist-keys"
+      name: "Bad"
+      system_prompt: "Stay neutral."
+      metadata:
+        default_population: 1
+      sections:
+        - name: "Only"
+          questions:
+            - id: "q1"
+              type: "choice"
+              prompt: "Pick."
+              output_schema:
+                properties:
+                  answer:
+                    type: "string"
+                    enum: ["a", "b"]
+                required: ["answer"]
+              options:
+                a: "A"
+                b: "B"
+              scoring:
+                distribution:
+                  a: 0.5
+                  x: 0.5
+    """,
+  )
+  with pytest.raises(QuestionnaireConfigError, match="distribution keys"):
+    load_questionnaire("bad-dist-keys", questionnaire_dir.parent)
+
+
+def test_distribution_bad_sum_raises(questionnaire_dir: Path) -> None:
+  _write_yaml(
+    questionnaire_dir,
+    "bad-dist-sum",
+    """
+    questionnaire:
+      id: "bad-dist-sum"
+      name: "Bad"
+      system_prompt: "Stay neutral."
+      metadata:
+        default_population: 1
+      sections:
+        - name: "Only"
+          questions:
+            - id: "q1"
+              type: "choice"
+              prompt: "Pick."
+              output_schema:
+                properties:
+                  answer:
+                    type: "string"
+                    enum: ["a", "b"]
+                required: ["answer"]
+              options:
+                a: "A"
+                b: "B"
+              scoring:
+                distribution:
+                  a: 0.3
+                  b: 0.3
+    """,
+  )
+  with pytest.raises(QuestionnaireConfigError, match="sum to 1.0"):
+    load_questionnaire("bad-dist-sum", questionnaire_dir.parent)

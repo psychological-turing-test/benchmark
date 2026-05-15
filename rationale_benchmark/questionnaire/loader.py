@@ -239,6 +239,7 @@ def _build_questions(
     scoring = _build_scoring(
       question_type,
       question_schema,
+      options,
       path,
       f"{location}.scoring",
     )
@@ -298,13 +299,78 @@ def _validate_options(
 def _build_scoring(
   question_type: QuestionType,
   question_schema: QuestionSchema,
+  options: dict[str, str] | None,
+  path: Path,
+  location: str,
+) -> ScoringRule:
+  if question_schema.scoring.distribution is not None:
+    return _build_distribution_scoring(
+      question_type, question_schema, options, path, location
+    )
+  return _build_weighted_scoring(question_type, question_schema, path, location)
+
+
+def _build_distribution_scoring(
+  question_type: QuestionType,
+  question_schema: QuestionSchema,
+  options: dict[str, str] | None,
+  path: Path,
+  location: str,
+) -> ScoringRule:
+  if question_schema.scoring.total is not None:
+    raise QuestionnaireConfigError(
+      "Distribution scoring must not define 'total'",
+      file_path=str(path),
+      location=f"{location}.total",
+    )
+  if question_schema.scoring.weights is not None:
+    raise QuestionnaireConfigError(
+      "Distribution scoring must not define 'weights'",
+      file_path=str(path),
+      location=f"{location}.weights",
+    )
+  raw = question_schema.scoring.distribution
+  assert raw is not None
+  if question_type is QuestionType.CHOICE:
+    expected_keys = set((options or {}).keys())
+    key_description = "option keys"
+  else:
+    scale = question_type.rating_scale
+    expected_keys = {str(i) for i in range(1, (scale or 0) + 1)}
+    key_description = "rating tokens"
+  if set(raw.keys()) != expected_keys:
+    raise QuestionnaireConfigError(
+      f"distribution keys must match {key_description} exactly",
+      file_path=str(path),
+      location=f"{location}.distribution",
+    )
+  for key, value in raw.items():
+    if not (0.0 <= value <= 1.0):
+      raise QuestionnaireConfigError(
+        f"distribution value for '{key}' must be in [0, 1]",
+        file_path=str(path),
+        location=f"{location}.distribution.{key}",
+      )
+  total = sum(raw.values())
+  if abs(total - 1.0) > 0.01:
+    raise QuestionnaireConfigError(
+      f"distribution values must sum to 1.0 (got {total:.4f})",
+      file_path=str(path),
+      location=f"{location}.distribution",
+    )
+  return ScoringRule(total=None, distribution=dict(raw))
+
+
+def _build_weighted_scoring(
+  question_type: QuestionType,
+  question_schema: QuestionSchema,
   path: Path,
   location: str,
 ) -> ScoringRule:
   total = question_schema.scoring.total
-  if total <= 0:
+  if total is None or total <= 0:
     raise QuestionnaireConfigError(
-      "Scoring total must be positive",
+      "Scoring total must be a positive integer",
       file_path=str(path),
       location=f"{location}.total",
     )
@@ -362,7 +428,7 @@ def _build_choice_weights(
 
 def _build_rating_weights(
   question_type: QuestionType,
-  weights: list[int] | dict[str, int],
+  weights: list[int] | dict[str, int] | None,
   path: Path,
   location: str,
 ) -> dict[str, int]:

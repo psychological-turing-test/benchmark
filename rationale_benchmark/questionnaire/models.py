@@ -22,8 +22,9 @@ class QuestionType(str, Enum):
 
 @dataclass(frozen=True)
 class ScoringRule:
-  total: int
-  weights: dict[str, int]
+  total: int | None
+  weights: dict[str, int] = field(default_factory=dict)
+  distribution: dict[str, float] | None = None
 
 
 @dataclass(frozen=True)
@@ -67,3 +68,10 @@ class QuestionScore:
   question_id: str
   awarded: int
   total: int
+
+
+@dataclass(frozen=True)
+class QuestionDistribution:
+  question_id: str
+  counts: dict[str, int]
+  fractions: dict[str, float]

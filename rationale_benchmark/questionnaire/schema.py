@@ -6,8 +6,9 @@ from pydantic import BaseModel, ConfigDict, Field
 
 
 class ScoringSchema(BaseModel):
-  total: int
-  weights: list[int] | dict[str, int]
+  total: int | None = None
+  weights: list[int] | dict[str, int] | None = None
+  distribution: dict[str, float] | None = None
 
   model_config = ConfigDict(extra="forbid")
 

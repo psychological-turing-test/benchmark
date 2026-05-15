@@ -9,23 +9,26 @@ from .models import (
   HumanBaseline,
   Question,
   Questionnaire,
+  QuestionDistribution,
   QuestionScore,
   QuestionType,
   ScoringRule,
   Section,
 )
-from .scoring import score_question, validate_answer
+from .scoring import build_distribution, score_question, validate_answer
 
 __all__ = [
+  "AnswerValidationError",
   "HumanBaseline",
   "Question",
+  "QuestionDistribution",
   "QuestionScore",
   "QuestionType",
   "Questionnaire",
-  "AnswerValidationError",
   "QuestionnaireConfigError",
   "ScoringRule",
   "Section",
+  "build_distribution",
   "list_questionnaires",
   "load_multiple",
   "load_questionnaire",

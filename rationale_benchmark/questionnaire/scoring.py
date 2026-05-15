@@ -3,7 +3,12 @@ from __future__ import annotations
 from typing import Any
 
 from .errors import AnswerValidationError, QuestionnaireConfigError
-from .models import Question, QuestionScore, QuestionType
+from .models import (
+  Question,
+  QuestionDistribution,
+  QuestionScore,
+  QuestionType,
+)
 
 
 def validate_answer(question: Question, answer: Any) -> str:
@@ -38,7 +43,16 @@ def validate_answer(question: Question, answer: Any) -> str:
 
 
 def score_question(question: Question, answer_token: str) -> QuestionScore:
-  """Compute awarded points for a question given a validated answer token."""
+  """Compute awarded points for a question given a validated answer token.
+
+  Only valid for weighted questions. Raises QuestionnaireConfigError
+  if called on a distribution question.
+  """
+  if question.scoring.distribution is not None:
+    raise QuestionnaireConfigError(
+      f"score_question called on distribution question '{question.id}'; "
+      "use build_distribution instead"
+    )
   try:
     awarded = question.scoring.weights[answer_token]
   except KeyError as exc:
@@ -49,5 +63,28 @@ def score_question(question: Question, answer_token: str) -> QuestionScore:
   return QuestionScore(
     question_id=question.id,
     awarded=awarded,
-    total=question.scoring.total,
+    total=question.scoring.total,  # type: ignore[arg-type]
+  )
+
+
+def build_distribution(
+  question: Question,
+  counts: dict[str, int],
+) -> QuestionDistribution:
+  """Build a QuestionDistribution from accumulated answer counts.
+
+  Only valid for distribution questions. Raises QuestionnaireConfigError
+  if called on a weighted question.
+  """
+  if question.scoring.distribution is None:
+    raise QuestionnaireConfigError(
+      f"build_distribution called on weighted question '{question.id}'; "
+      "use score_question instead"
+    )
+  total = sum(counts.values())
+  fractions = {k: (v / total if total > 0 else 0.0) for k, v in counts.items()}
+  return QuestionDistribution(
+    question_id=question.id,
+    counts=counts,
+    fractions=fractions,
   )

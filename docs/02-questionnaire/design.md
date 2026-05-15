@@ -68,6 +68,24 @@ questionnaire:
               low: 0
               medium: 2
               high: 3
+        - id: "workload_03"
+          type: "choice"
+          prompt: "Which option best reflects your workload right now?"
+          output_schema:
+            properties:
+              answer:
+                type: "string"
+                enum: ["low", "medium", "high"]
+            required: ["answer"]
+          options:
+            low: "Manageable"
+            medium: "Challenging"
+            high: "Overwhelming"
+          scoring:
+            distribution:
+              low: 0.41
+              medium: 0.35
+              high: 0.24
 ```
 
 #### Section Requirements
@@ -105,12 +123,21 @@ questionnaire:
   question type. The canonical answer lives in the required `answer` field.
 - `options`: required only for `"choice"` questions. Mapping of option keys to
   human readable labels. Keys double as canonical answer IDs.
-- `scoring`: mapping containing
-  - `total`: integer maximum score attainable for the question.
-  - `weights`: scoring definition shaped by question type.
+- `scoring`: mapping containing either `{total, weights}` for weighted scoring
+  or `{distribution}` for distribution scoring. The two forms are mutually
+  exclusive.
+  - `total`: integer maximum score attainable for the question. Required for
+    weighted scoring; must be absent when `distribution` is present.
+  - `weights`: scoring definition shaped by question type. Required for
+    weighted scoring; must be absent when `distribution` is present.
     - Rating questions (`rating-X`) accept a list of length `X` with integer
       weights ordered from rating `1` to rating `X`.
     - Choice questions require a mapping whose keys match the declared `options`.
+  - `distribution`: a mapping of answer tokens to human reference fractions.
+    Keys must match option keys (for `"choice"`) or rating tokens `"1"` through
+    `"X"` (for `"rating-X"`). Values must be floats in `[0, 1]` summing to 1.0
+    (within a tolerance of 0.01). When present, the question uses distribution
+    scoring and `total`/`weights` must be absent.
 
 ### Validation Pipeline
 Every questionnaire load now triggers an automatic sanity check that runs before
@@ -132,10 +159,14 @@ friendly error messages.
    - `output_schema.properties.answer` must exist and match the question type:
      integer with the correct min/max for rating questions, string enum matching
      `options` for choice questions.
-   - Rating question weight lists must include exactly `X` entries and stay
-     within `[0, total]`.
-   - Choice question weights must cover exactly the declared options.
-   - `total` must be positive and at least the max defined weight.
+   - Weighted questions must define `total` (positive integer) and `weights`.
+     Rating question weight lists must include exactly `X` entries and stay
+     within `[0, total]`. Choice question weights must cover exactly the
+     declared options. `total` must be at least the max defined weight.
+   - Distribution questions must define `scoring.distribution` with keys
+     matching option keys (for `"choice"`) or rating tokens `"1"`–`"X"` (for
+     `"rating-X"`), values in `[0, 1]`, and a sum within 0.01 of 1.0.
+     `total` and `weights` must be absent.
    - Scoring definitions must match the declared `QuestionType` (e.g., rating
      questions may not supply option maps).
    - `metadata.default_population` must be present and positive.
@@ -155,8 +186,9 @@ The module produces domain objects mirroring the schema and aligning with
 ```python
 @dataclass
 class ScoringRule:
-  total: int
-  weights: dict[str, int]
+  total: int | None                        # None for distribution scoring
+  weights: dict[str, int]                  # empty for distribution scoring
+  distribution: dict[str, float] | None    # None for weighted scoring
 
 @dataclass
 class Question:
@@ -189,6 +221,12 @@ class Questionnaire:
   system_prompt: str
   default_population: int
   sections: list[Section]
+
+@dataclass
+class QuestionDistribution:
+  question_id: str
+  counts: dict[str, int]      # raw tally per answer token, across sessions
+  fractions: dict[str, float] # counts[k] / sum(counts)
 
 @dataclass
 class PopulationResult:
@@ -227,10 +265,13 @@ lookups into `scoring.weights`.
 
 ### Scoring Flow
 Scoring is handled by pure functions to stay deterministic and testable.
+The flow branches on whether `question.scoring.distribution` is present.
+
+**Weighted scoring** (`scoring.distribution is None`):
 
 1. Accept a `Question` and a validated answer token.
 2. Look up the weight for that token; raise if unmapped (indicates config bug).
-3. Return a `QuestionScore` structure:
+3. Return a `QuestionScore`:
    ```python
    @dataclass
    class QuestionScore:
@@ -238,9 +279,29 @@ Scoring is handled by pure functions to stay deterministic and testable.
      awarded: int
      total: int
    ```
-4. Aggregate question scores per section and questionnaire to produce a
-   normalized score (e.g., sum of `awarded` / sum of `total`). Aggregation lives
-   in the benchmark runner but relies on the consistent shape from this module.
+4. Aggregate per section and questionnaire to produce a normalized score
+   (sum of `awarded` / sum of `total`). Aggregation lives in the benchmark
+   runner but relies on the consistent shape from this module.
+
+**Distribution scoring** (`scoring.distribution is not None`):
+
+1. Each session produces a validated answer token via `validate_answer`.
+   Answer validation rules are identical to those for weighted-mode questions —
+   the LLM still emits one answer per session.
+2. The runner accumulates a token → count mapping across all sessions for each
+   distribution-mode question.
+3. After all sessions complete, call `build_distribution(question, counts)` to
+   produce a `QuestionDistribution`:
+   ```python
+   @dataclass
+   class QuestionDistribution:
+     question_id: str
+     counts: dict[str, int]
+     fractions: dict[str, float]  # counts[k] / sum(counts)
+   ```
+4. Distribution questions are excluded from section-level numeric score
+   aggregation. `score_question` raises if called on a distribution question;
+   `build_distribution` raises if called on a weighted question.
 
 ### Population Dispatch
 Some questionnaires are designed to be administered to a large population of
