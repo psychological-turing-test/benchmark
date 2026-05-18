@@ -27,6 +27,7 @@ STREAMING_KEYS = {
   "incremental",
 }
 FORBIDDEN_CONFIG_KEYS = {"response_format"}
+DEFAULT_ALIYUN_JSON_FORMATTING_MODEL = "qwen3.6-flash"
 
 ALIYUN_MODEL_SUFFIX_PATTERN = re.compile(
   r"^(?P<model>.+?)\s*\((?P<thinking_budget>-?\d+)\)\s*$"
@@ -522,6 +523,12 @@ class ConnectorConfigLoader:
       payload["retry"] = retry_payload
 
     payload["default_params"] = default_params
+    if self._is_aliyun_provider(provider_name):
+      provider_specific = self._normalise_aliyun_provider_specific(
+        provider_specific,
+        provider=provider_name,
+        model=model_name,
+      )
     payload["provider_specific"] = provider_specific
     payload["metadata"] = metadata
 
@@ -585,6 +592,26 @@ class ConnectorConfigLoader:
 
   def _is_aliyun_provider(self, provider: str) -> bool:
     return provider == "aliyun"
+
+  def _normalise_aliyun_provider_specific(
+    self,
+    provider_specific: dict[str, Any],
+    *,
+    provider: str,
+    model: str,
+  ) -> dict[str, Any]:
+    normalized = dict(provider_specific)
+    value = normalized.setdefault(
+      "json_formatting_model",
+      DEFAULT_ALIYUN_JSON_FORMATTING_MODEL,
+    )
+    if not isinstance(value, str) or not value.strip():
+      raise ConfigurationError(
+        f"json_formatting_model must be a non-empty string for {provider}/{model}",
+        field=f"providers.{provider}.provider_specific.json_formatting_model",
+      )
+    normalized["json_formatting_model"] = value.strip()
+    return normalized
 
   def _assert_no_streaming(
     self,

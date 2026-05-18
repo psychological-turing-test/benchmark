@@ -30,6 +30,17 @@ OUTPUT_SCHEMA = {
 }
 
 
+class CapturingAliyunClient(AliyunClient):
+  def __init__(self, config: LLMConnectorConfig, responses):
+    super().__init__(config)
+    self.requests = []
+    self._responses = list(responses)
+
+  def _post_json(self, url, headers, payload):
+    self.requests.append(payload)
+    return self._responses.pop(0), {}
+
+
 def test_openai_payload_omits_temperature_when_unset():
   config = LLMConnectorConfig(
     provider=ProviderType.OPENAI,
@@ -191,7 +202,7 @@ def test_aliyun_payload_omits_native_structured_output_by_default():
   assert "response_format" not in payload
 
 
-def test_aliyun_payload_uses_native_structured_output_when_thinking_disabled():
+def test_aliyun_payload_uses_json_object_mode_when_thinking_disabled():
   config = LLMConnectorConfig(
     provider=ProviderType.ALIYUN,
     model="qwen3.6-plus",
@@ -206,4 +217,121 @@ def test_aliyun_payload_uses_native_structured_output_when_thinking_disabled():
     OUTPUT_SCHEMA,
   )
 
-  assert payload["response_format"]["type"] == "json_schema"
+  assert payload["response_format"] == {"type": "json_object"}
+
+
+def test_aliyun_repairs_malformed_reasoning_json_with_formatting_model():
+  config = LLMConnectorConfig(
+    provider=ProviderType.ALIYUN,
+    model="qwen3.6-plus",
+    api_key="token",
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    provider_specific={"json_formatting_model": "qwen-flash"},
+  )
+  client = CapturingAliyunClient(
+    config,
+    responses=[
+      {
+        "choices": [
+          {
+            "message": {"content": "answer: 4"},
+            "finish_reason": "stop",
+          }
+        ]
+      },
+      {
+        "choices": [
+          {
+            "message": {"content": "{\"answer\": 4}"},
+            "finish_reason": "stop",
+          }
+        ]
+      },
+    ],
+  )
+
+  response = client._generate(
+    [{"role": "user", "content": "hello"}],
+    output_schema=OUTPUT_SCHEMA,
+  )
+
+  assert response.content == "{\"answer\": 4}"
+  assert [request["model"] for request in client.requests] == [
+    "qwen3.6-plus",
+    "qwen-flash",
+  ]
+  assert "response_format" not in client.requests[0]
+  assert client.requests[1]["response_format"] == {"type": "json_object"}
+  assert client.requests[1]["extra_body"] == {"enable_thinking": False}
+  formatting_message = client.requests[1]["messages"][-1]
+  assert formatting_message["role"] == "user"
+  assert "JSON Schema:" in formatting_message["content"]
+  assert "Model output:\nanswer: 4" in formatting_message["content"]
+
+
+def test_aliyun_repairs_schema_invalid_reasoning_json():
+  config = LLMConnectorConfig(
+    provider=ProviderType.ALIYUN,
+    model="qwen3.6-plus",
+    api_key="token",
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+  )
+  client = CapturingAliyunClient(
+    config,
+    responses=[
+      {
+        "choices": [
+          {
+            "message": {"content": "{\"answer\": 9}"},
+            "finish_reason": "stop",
+          }
+        ]
+      },
+      {
+        "choices": [
+          {
+            "message": {"content": "{\"answer\": 5}"},
+            "finish_reason": "stop",
+          }
+        ]
+      },
+    ],
+  )
+
+  response = client._generate(
+    [{"role": "user", "content": "hello"}],
+    output_schema=OUTPUT_SCHEMA,
+  )
+
+  assert response.content == "{\"answer\": 5}"
+  assert client.requests[1]["model"] == "qwen3.6-flash"
+
+
+def test_aliyun_does_not_repair_schema_valid_reasoning_json():
+  config = LLMConnectorConfig(
+    provider=ProviderType.ALIYUN,
+    model="qwen3.6-plus",
+    api_key="token",
+    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+  )
+  client = CapturingAliyunClient(
+    config,
+    responses=[
+      {
+        "choices": [
+          {
+            "message": {"content": "{\"answer\": 4}"},
+            "finish_reason": "stop",
+          }
+        ]
+      },
+    ],
+  )
+
+  response = client._generate(
+    [{"role": "user", "content": "hello"}],
+    output_schema=OUTPUT_SCHEMA,
+  )
+
+  assert response.content == "{\"answer\": 4}"
+  assert len(client.requests) == 1

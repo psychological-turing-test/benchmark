@@ -173,6 +173,29 @@ def test_aliyun_provider_name_is_supported_as_dedicated_provider(tmp_path):
   config = configs["aliyun/qwen3.6-plus"]
   assert config.provider is ProviderType.ALIYUN
   assert config.base_url == "https://dashscope.aliyuncs.com/compatible-mode/v1"
+  assert config.provider_specific["json_formatting_model"] == "qwen3.6-flash"
+
+
+def test_aliyun_provider_accepts_custom_json_formatting_model(tmp_path):
+  path = write_config(
+    tmp_path,
+    """
+    providers:
+      aliyun:
+        api_key: token
+        base_url: https://dashscope.aliyuncs.com/compatible-mode/v1
+        provider_specific:
+          json_formatting_model: qwen-flash
+        models:
+          - qwen3.6-plus
+    """,
+  )
+
+  loader = ConnectorConfigLoader()
+  configs = loader.load(path)
+
+  config = configs["aliyun/qwen3.6-plus"]
+  assert config.provider_specific["json_formatting_model"] == "qwen-flash"
 
 
 def test_suffix_aliyun_provider_is_rejected(tmp_path):
@@ -322,14 +345,18 @@ def test_deepseek_config_defaults_to_runnable_models(monkeypatch):
   )
 
   assert list(configs.keys()) == [
-    "aliyun/deepseek-v4-pro (0)",
-    "aliyun/deepseek-v3.2 (0)",
+    "aliyun/deepseek-v4-pro (-1)",
+    "aliyun/deepseek-v4-flash (-1)",
+    "aliyun/deepseek-v3.2 (-1)",
   ]
-  assert configs["aliyun/deepseek-v4-pro (0)"].default_params == {
-    "enable_thinking": False,
+  assert configs["aliyun/deepseek-v4-pro (-1)"].default_params == {
+    "enable_thinking": True,
   }
-  assert configs["aliyun/deepseek-v3.2 (0)"].default_params == {
-    "enable_thinking": False,
+  assert configs["aliyun/deepseek-v4-flash (-1)"].default_params == {
+    "enable_thinking": True,
+  }
+  assert configs["aliyun/deepseek-v3.2 (-1)"].default_params == {
+    "enable_thinking": True,
   }
 
 

@@ -10,6 +10,8 @@ providers:
   aliyun:
     api_key: "${DASHSCOPE_API_KEY}"
     base_url: "https://dashscope.aliyuncs.com/compatible-mode/v1"
+    provider_specific:
+      json_formatting_model: "qwen3.6-flash"
     models:
       - "deepseek-v4-pro (-1)"
       - "deepseek-v4-flash (-1)"

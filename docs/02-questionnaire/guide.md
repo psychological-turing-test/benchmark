@@ -109,6 +109,9 @@ questions in that section as context.
 - `output_schema` is required for every question. It must describe the
   structured response object expected from the LLM and must align with the
   question type. At minimum, require an `answer` field.
+- For Aliyun reasoning models, this same schema is also passed to the configured
+  `json_formatting_model` when the first response is not valid JSON or does not
+  match the schema.
 - `weights` is a list whose length matches the rating scale. Entry index `0`
   corresponds to rating `1`, index `1` to rating `2`, and so on.
 
@@ -199,6 +202,10 @@ session. `total` and `weights` must be omitted.
 
 ## 6. Answer Validation Rules
 - The LLM response must first satisfy the question's `output_schema`.
+- Aliyun reasoning models do not use native structured output. If their initial
+  text response cannot be parsed as JSON or fails the requested schema, the
+  Aliyun provider asks its `json_formatting_model` (default `qwen3.6-flash`) to
+  repair the response with thinking disabled before the runner retries.
 - `rating-*`: answers must be integers within the defined range. CLI clients
   will reject values outside the range before scoring.
 - `choice`: answers must use the canonical option keys (`low`, `medium`, etc.).

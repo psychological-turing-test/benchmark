@@ -121,6 +121,8 @@ questionnaire:
 - `output_schema`: required structured-output schema for this question. It must
   define the response object expected from the LLM and align with the declared
   question type. The canonical answer lives in the required `answer` field.
+  Aliyun reasoning models also use this schema during their provider-local JSON
+  repair step when the first model response is malformed or schema-invalid.
 - `options`: required only for `"choice"` questions. Mapping of option keys to
   human readable labels. Keys double as canonical answer IDs.
 - `scoring`: mapping containing either `{total, weights}` for weighted scoring
@@ -246,11 +248,20 @@ address all question types uniformly.
 
 Question output schemas are preserved on the loaded `Question` objects so the
 runner can pass them directly to the LLM connector when asking each question.
+For Aliyun reasoning models, the connector first requests text from the target
+model, then asks the configured `json_formatting_model` to repair the response
+with `enable_thinking: false` and JSON mode when the original text is malformed
+or does not match the question schema.
 
 ### Answer Validation
 Before scoring, every LLM response must satisfy the question's
 `output_schema`. The scorer then validates the extracted `answer` field against
 the rules derived from `QuestionType`.
+
+Aliyun reasoning models are handled as a provider-specific two-step flow. The
+first response is parsed and checked against `output_schema`; only failures are
+sent to the configured JSON formatting model, which defaults to
+`qwen3.6-flash`, with thinking explicitly disabled.
 
 | Type        | Validator                                                     |
 |-------------|---------------------------------------------------------------|
