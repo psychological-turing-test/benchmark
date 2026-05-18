@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(uv run *)",
+      "Skill(update-config)",
+      "Bash(uv add *)"
+    ]
+  }
+}
