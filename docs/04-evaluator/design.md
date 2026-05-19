@@ -38,33 +38,51 @@ The runner-emitted `responses.jsonl` file is the only data input. It must
 contain all runner records needed for scoring, grouping, and charting.
 
 ### JSON Output
-The basic evaluator should also write `question-analysis.json` into the runner
-output directory. The file contains a large JSON array where each element
-describes one questionnaire question:
+The basic evaluator should also write a JSON results file named
+`<questionnaire-id>-<model-config>-results.json` into the runner output
+directory. The evaluator should derive `<questionnaire-id>` and
+`<model-config>` from the runner output directory name
+`<questionnaire-id>-<model-config>-<timestamp>`.
+
+The file contains a large JSON array where each element describes one
+questionnaire question:
 
 - `questionnaire_id`
 - `section_name`
 - `question_id`
 - `question_prompt`
-- `population`: count of scorable responses collected for the question
+- `human`: human baseline aggregate when the questionnaire question defines
+  `scoring.distribution`; otherwise `null`
+- `llms`: ordered list of per-model aggregates
+
+The `human` object should include:
+
+- `population`: count of collected human responses from the questionnaire
+  baseline
 - `responses`: ordered list of
-  `{"option": ..., "count": ..., "percentage": ..., "delta": ...}`
+  `{"option": ..., "count": ..., "percentage": ...}`
+
+Each `llms` entry should include:
+
+- `llm_id`
+- `population`: count of scorable responses collected for that question from
+  that model
+- `responses`: ordered list of
+  `{"option": ..., "count": ..., "percentage": ...}`
 
 For each response entry:
 
 - `option` is the canonical answer token.
   - rating questions use stringified scale values such as `"1"` through `"5"`.
   - choice questions use declared option keys such as `"low"` or `"high"`.
-- `count` is the number of scorable responses that selected the option.
-- `percentage` is `count / population`. If `population` is zero, the evaluator
-  should emit `0.0`.
-- `delta` is the difference from the human baseline percentage for that option
-  when such a per-question baseline exists. Current questionnaires only define
-  section-level human baselines, so the evaluator should emit `null` when a
-  per-question option baseline is unavailable.
+- `count` is the number of scorable responses from that model that selected the
+  option.
+- `percentage` is `count / population` for that model. If `population` is
+  zero, the evaluator should emit `0.0`.
 
 Question entries should follow questionnaire section/question order, and
-response entries should follow the canonical option order for the question.
+`llms` entries should be sorted by `llm_id`. Response entries should follow the
+canonical option order for the question.
 
 ### Input Resolution
 For each record in `<runner-output-dir>/responses.jsonl`, the evaluator reads:
@@ -99,6 +117,11 @@ For each record:
 5. Sum awarded and total points per section.
 6. Store per-question, per-section, per-record, and per-model aggregates.
 
+Distribution-mode questions should still participate in the per-question JSON
+analysis, but they should not be forced through weighted point scoring. Section
+score means and delta charts should only use weighted questions with explicit
+point totals.
+
 Section scores should be reported as awarded points. When a normalized view is
 useful, compute it explicitly as `awarded / total` and label it separately. Do
 not compare normalized LLM scores to raw human averages unless the questionnaire
@@ -129,7 +152,7 @@ For each model and section, compute:
 - absolute delta (`abs(llm_mean - human_average)`).
 
 ### Visual Outputs
-The evaluator should write PDF bar graphs and `question-analysis.json` directly
+The evaluator should write PDF bar graphs and the JSON results file directly
 into the existing runner output directory. For example,
 `results/risky-choice-framing-default-llms-2026-05-04T16-30-00Z/` receives the
 artifacts alongside `responses.jsonl` and `metadata.jsonl`.
@@ -139,8 +162,8 @@ artifacts alongside `responses.jsonl` and `metadata.jsonl`.
 - `section-delta.pdf`: bars showing each model's delta from the human average
   per section. Positive values mean the model scored higher than the human
   baseline; negative values mean lower.
-- `question-analysis.json`: per-question counts, percentages, and human-baseline
-  deltas for each canonical response option.
+- `<questionnaire-id>-<model-config>-results.json`: per-question, per-model
+  counts and percentages for each canonical response option.
 
 Charts should include:
 
@@ -175,8 +198,9 @@ runner output directories under `tests/evaluator/`. Cover:
 - scoring rating and choice answers.
 - grouping section means by `llm_id`.
 - comparing section means against `human.average`.
-- writing `question-analysis.json` with stable question order, counts, and
-  percentages.
+- writing `<questionnaire-id>-<model-config>-results.json` with stable question
+  order, `human` results from questionnaire distributions when available,
+  sorted `llms`, and per-model counts and percentages.
 - creating non-empty PDF chart files directly under the runner output
   directory.
 - failing on mixed-questionnaire runner outputs.

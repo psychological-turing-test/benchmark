@@ -1,0 +1,30 @@
+questionnaire:
+  id: "distribution-fixture"
+  name: "Distribution Fixture"
+  description: "Small questionnaire for distribution evaluator tests."
+  version: 1
+  system_prompt: "Answer directly."
+  metadata:
+    default_population: 1
+  sections:
+    - name: "Preferences"
+      human:
+        average: 0.6
+        population: 10
+      questions:
+        - id: "pref-choice"
+          type: "choice"
+          prompt: "Pick one option."
+          output_schema:
+            properties:
+              answer:
+                type: "string"
+                enum: ["A", "B"]
+            required: ["answer"]
+          options:
+            A: "Plan A"
+            B: "Plan B"
+          scoring:
+            distribution:
+              A: 0.4
+              B: 0.6

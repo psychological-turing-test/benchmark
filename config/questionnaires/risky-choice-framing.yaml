@@ -12,7 +12,7 @@ questionnaire:
     author: "Benchmark Curation Team"
     source: "config/questionnaires/Turing-Test-Materials.xlsx, RiskyChoiceFraming sheet"
     response_type: "Option"
-    scoring: "Plan A=0, Plan B=1; population averages measure the proportion choosing Plan B."
+    scoring: "Question distributions encode human Plan A / Plan B choice rates; population averages measure the proportion choosing Plan B."
   sections:
     - name: "Group size sensitivity for human lives-P-6life"
       human:
@@ -40,10 +40,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.36
+              B: 0.64
     - name: "Group size sensitivity for human lives-N-6life"
       human:
         average: 0.7
@@ -70,10 +69,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.3
+              B: 0.7
     - name: "Group size sensitivity for human lives-P-60life"
       human:
         average: 0.675
@@ -100,10 +98,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.325
+              B: 0.675
     - name: "Group size sensitivity for human lives-N-60life"
       human:
         average: 0.65
@@ -130,10 +127,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.35
+              B: 0.65
     - name: "Group size sensitivity for human lives-P-600life"
       human:
         average: 0.4
@@ -160,10 +156,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.6
+              B: 0.4
     - name: "Group size sensitivity for human lives-N-600life"
       human:
         average: 0.68
@@ -190,10 +185,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.32
+              B: 0.68
     - name: "Group size sensitivity for human lives-P-6000life"
       human:
         average: 0.409090909091
@@ -220,10 +214,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.590909090909
+              B: 0.409090909091
     - name: "Group size sensitivity for human lives-N-6000life"
       human:
         average: 0.613636363636
@@ -250,10 +243,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.386363636364
+              B: 0.613636363636
     - name: "Kin constituent in a mixed group of six-P-1kin"
       human:
         average: 0.44
@@ -280,10 +272,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.56
+              B: 0.44
     - name: "Kin constituent in a mixed group of six-N-1kin"
       human:
         average: 0.76
@@ -310,10 +301,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.24
+              B: 0.76
     - name: "Kin constituent in a mixed group of six-P-2kin"
       human:
         average: 0.48
@@ -340,10 +330,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.52
+              B: 0.48
     - name: "Kin constituent in a mixed group of six-N-2kin"
       human:
         average: 0.74
@@ -370,10 +359,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.26
+              B: 0.74
     - name: "Kin constituent in a mixed group of six-P-3kin"
       human:
         average: 0.66
@@ -400,10 +388,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.34
+              B: 0.66
     - name: "Kin constituent in a mixed group of six-N-3kin"
       human:
         average: 0.72
@@ -430,10 +417,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.28
+              B: 0.72
     - name: "Kin constituent in a mixed group of six-P-6kin"
       human:
         average: 0.7
@@ -460,10 +446,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.3
+              B: 0.7
     - name: "Kin constituent in a mixed group of six-N-6kin"
       human:
         average: 0.7
@@ -490,10 +475,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.3
+              B: 0.7
     - name: "Human population vs. ET population-P-Human"
       human:
         average: 0.36
@@ -520,10 +504,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.64
+              B: 0.36
     - name: "Human population vs. ET population-N-Human"
       human:
         average: 0.66
@@ -550,10 +533,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.34
+              B: 0.66
     - name: "Human population vs. ET population-P-Alien"
       human:
         average: 0.52
@@ -580,10 +562,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.48
+              B: 0.52
     - name: "Human population vs. ET population-N-Alien"
       human:
         average: 0.52
@@ -610,10 +591,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.48
+              B: 0.52
     - name: "Group size sensitivity for public properties-P-6painting"
       human:
         average: 0.377777777778
@@ -640,10 +620,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.622222222222
+              B: 0.377777777778
     - name: "Group size sensitivity for public properties-N-6painting"
       human:
         average: 0.609756097561
@@ -670,10 +649,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.390243902439
+              B: 0.609756097561
     - name: "Group size sensitivity for public properties-P-60painting"
       human:
         average: 0.244444444444
@@ -700,10 +678,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.755555555556
+              B: 0.244444444444
     - name: "Group size sensitivity for public properties-N-60painting"
       human:
         average: 0.55
@@ -730,10 +707,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.45
+              B: 0.55
     - name: "Group size sensitivity for public properties-P-600painting"
       human:
         average: 0.307692307692
@@ -760,10 +736,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.692307692308
+              B: 0.307692307692
     - name: "Group size sensitivity for public properties-N-600painting"
       human:
         average: 0.341463414634
@@ -790,10 +765,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.658536585366
+              B: 0.341463414634
     - name: "Group size sensitivity for public properties-P-6000painting"
       human:
         average: 0.184210526316
@@ -820,10 +794,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.815789473684
+              B: 0.184210526316
     - name: "Group size sensitivity for public properties-N-6000painting"
       human:
         average: 0.394736842105
@@ -850,10 +823,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.605263157895
+              B: 0.394736842105
     - name: "Group size sensitivity for personal stocks-P-6dollar"
       human:
         average: 0.483870967742
@@ -880,10 +852,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.516129032258
+              B: 0.483870967742
     - name: "Group size sensitivity for personal stocks-N-6dollar"
       human:
         average: 0.41935483871
@@ -910,10 +881,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.58064516129
+              B: 0.41935483871
     - name: "Group size sensitivity for personal stocks-P-60dollar"
       human:
         average: 0.428571428571
@@ -940,10 +910,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.571428571429
+              B: 0.428571428571
     - name: "Group size sensitivity for personal stocks-N-60dollar"
       human:
         average: 0.515151515152
@@ -970,10 +939,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.484848484848
+              B: 0.515151515152
     - name: "Group size sensitivity for personal stocks-P-600dollar"
       human:
         average: 0.21875
@@ -1000,10 +968,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.78125
+              B: 0.21875
     - name: "Group size sensitivity for personal stocks-N-600dollar"
       human:
         average: 0.354838709677
@@ -1030,10 +997,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.645161290323
+              B: 0.354838709677
     - name: "Group size sensitivity for personal stocks-P-6000dollar"
       human:
         average: 0.083333333333
@@ -1060,10 +1026,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.916666666667
+              B: 0.083333333333
     - name: "Group size sensitivity for personal stocks-N-6000dollar"
       human:
         average: 0.333333333333
@@ -1090,7 +1055,6 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.666666666667
+              B: 0.333333333333

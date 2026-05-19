@@ -9,6 +9,16 @@ import pytest
 from rationale_benchmark.evaluator.basic import EvaluatorError, evaluate_basic
 
 FIXTURE_CONFIG_DIR = Path(__file__).parent / "fixtures" / "config"
+RUN_TIMESTAMP = "2026-05-19T12-00-00-000000Z"
+
+
+def runner_output_dir(
+  tmp_path: Path,
+  *,
+  questionnaire_name: str = "evaluator-fixture",
+  model_config: str = "thinking",
+) -> Path:
+  return tmp_path / f"{questionnaire_name}-{model_config}-{RUN_TIMESTAMP}"
 
 
 def write_runner_output(output_dir: Path, records: list[dict[str, Any]]) -> None:
@@ -73,7 +83,7 @@ def record(
 def test_evaluate_basic_scores_groups_and_compares_human_baselines(
   tmp_path: Path,
 ) -> None:
-  output_dir = tmp_path / "fixture-output"
+  output_dir = runner_output_dir(tmp_path)
   write_runner_output(
     output_dir,
     [
@@ -129,7 +139,7 @@ def test_evaluate_basic_scores_groups_and_compares_human_baselines(
 def test_evaluate_basic_excludes_question_level_runner_errors(
   tmp_path: Path,
 ) -> None:
-  output_dir = tmp_path / "with-errors"
+  output_dir = runner_output_dir(tmp_path)
   write_runner_output(
     output_dir,
     [
@@ -161,7 +171,10 @@ def test_evaluate_basic_excludes_question_level_runner_errors(
 
 
 def test_evaluate_basic_accepts_choice_option_labels(tmp_path: Path) -> None:
-  output_dir = tmp_path / "plan-labels"
+  output_dir = runner_output_dir(
+    tmp_path,
+    questionnaire_name="plan-choice-fixture",
+  )
   write_runner_output(
     output_dir,
     [
@@ -189,7 +202,7 @@ def test_evaluate_basic_accepts_choice_option_labels(tmp_path: Path) -> None:
 
 
 def test_evaluate_basic_writes_question_analysis_json(tmp_path: Path) -> None:
-  output_dir = tmp_path / "question-analysis"
+  output_dir = runner_output_dir(tmp_path)
   write_runner_output(
     output_dir,
     [
@@ -232,29 +245,47 @@ def test_evaluate_basic_writes_question_analysis_json(tmp_path: Path) -> None:
   result = evaluate_basic(output_dir, config_dir=FIXTURE_CONFIG_DIR)
   payload = json.loads(result.question_analysis_json.read_text(encoding="utf-8"))
 
-  assert result.question_analysis_json == output_dir / "question-analysis.json"
+  assert (
+    result.question_analysis_json
+    == output_dir / "evaluator-fixture-thinking-results.json"
+  )
   assert payload == [
     {
       "questionnaire_id": "evaluator-fixture",
       "section_name": "Risk",
       "question_id": "risk-rating",
       "question_prompt": "Rate the risk.",
-      "population": 3,
-      "responses": [
-        {"option": "1", "count": 0, "percentage": 0.0, "delta": None},
-        {"option": "2", "count": 0, "percentage": 0.0, "delta": None},
+      "human": None,
+      "llms": [
         {
-          "option": "3",
-          "count": 1,
-          "percentage": pytest.approx(1 / 3),
-          "delta": None,
+          "llm_id": "anthropic/claude",
+          "population": 1,
+          "responses": [
+            {"option": "1", "count": 0, "percentage": 0.0},
+            {"option": "2", "count": 0, "percentage": 0.0},
+            {"option": "3", "count": 0, "percentage": 0.0},
+            {"option": "4", "count": 0, "percentage": 0.0},
+            {"option": "5", "count": 1, "percentage": 1.0},
+          ],
         },
-        {"option": "4", "count": 0, "percentage": 0.0, "delta": None},
         {
-          "option": "5",
-          "count": 2,
-          "percentage": pytest.approx(2 / 3),
-          "delta": None,
+          "llm_id": "openai/gpt-4",
+          "population": 2,
+          "responses": [
+            {"option": "1", "count": 0, "percentage": 0.0},
+            {"option": "2", "count": 0, "percentage": 0.0},
+            {
+              "option": "3",
+              "count": 1,
+              "percentage": 0.5,
+            },
+            {"option": "4", "count": 0, "percentage": 0.0},
+            {
+              "option": "5",
+              "count": 1,
+              "percentage": 0.5,
+            },
+          ],
         },
       ],
     },
@@ -263,19 +294,23 @@ def test_evaluate_basic_writes_question_analysis_json(tmp_path: Path) -> None:
       "section_name": "Risk",
       "question_id": "risk-choice",
       "question_prompt": "Choose a risk option.",
-      "population": 3,
-      "responses": [
+      "human": None,
+      "llms": [
         {
-          "option": "low",
-          "count": 1,
-          "percentage": pytest.approx(1 / 3),
-          "delta": None,
+          "llm_id": "anthropic/claude",
+          "population": 1,
+          "responses": [
+            {"option": "low", "count": 0, "percentage": 0.0},
+            {"option": "high", "count": 1, "percentage": 1.0},
+          ],
         },
         {
-          "option": "high",
-          "count": 2,
-          "percentage": pytest.approx(2 / 3),
-          "delta": None,
+          "llm_id": "openai/gpt-4",
+          "population": 2,
+          "responses": [
+            {"option": "low", "count": 1, "percentage": 0.5},
+            {"option": "high", "count": 1, "percentage": 0.5},
+          ],
         },
       ],
     },
@@ -284,30 +319,145 @@ def test_evaluate_basic_writes_question_analysis_json(tmp_path: Path) -> None:
       "section_name": "Trust",
       "question_id": "trust-rating",
       "question_prompt": "Rate trust.",
-      "population": 3,
-      "responses": [
+      "human": None,
+      "llms": [
         {
-          "option": "1",
-          "count": 2,
-          "percentage": pytest.approx(2 / 3),
-          "delta": None,
+          "llm_id": "anthropic/claude",
+          "population": 1,
+          "responses": [
+            {"option": "1", "count": 1, "percentage": 1.0},
+            {"option": "2", "count": 0, "percentage": 0.0},
+            {"option": "3", "count": 0, "percentage": 0.0},
+            {"option": "4", "count": 0, "percentage": 0.0},
+            {"option": "5", "count": 0, "percentage": 0.0},
+          ],
         },
-        {"option": "2", "count": 0, "percentage": 0.0, "delta": None},
         {
-          "option": "3",
-          "count": 1,
-          "percentage": pytest.approx(1 / 3),
-          "delta": None,
+          "llm_id": "openai/gpt-4",
+          "population": 2,
+          "responses": [
+            {"option": "1", "count": 1, "percentage": 0.5},
+            {"option": "2", "count": 0, "percentage": 0.0},
+            {"option": "3", "count": 1, "percentage": 0.5},
+            {"option": "4", "count": 0, "percentage": 0.0},
+            {"option": "5", "count": 0, "percentage": 0.0},
+          ],
         },
-        {"option": "4", "count": 0, "percentage": 0.0, "delta": None},
-        {"option": "5", "count": 0, "percentage": 0.0, "delta": None},
       ],
     },
   ]
 
 
+def test_evaluate_basic_writes_human_results_for_distribution_questions(
+  tmp_path: Path,
+) -> None:
+  output_dir = runner_output_dir(
+    tmp_path,
+    questionnaire_name="distribution-fixture",
+  )
+  write_runner_output(
+    output_dir,
+    [
+      record(
+        questionnaire_name="distribution-fixture",
+        llm_id="openai/gpt-4",
+        population_index=0,
+        sections=[
+          {
+            "id": "Preferences",
+            "questions": [
+              {
+                "id": "pref-choice",
+                "response": "A",
+                "errors": [],
+              }
+            ],
+          }
+        ],
+      ),
+      record(
+        questionnaire_name="distribution-fixture",
+        llm_id="openai/gpt-4",
+        population_index=1,
+        sections=[
+          {
+            "id": "Preferences",
+            "questions": [
+              {
+                "id": "pref-choice",
+                "response": "B",
+                "errors": [],
+              }
+            ],
+          }
+        ],
+      ),
+      record(
+        questionnaire_name="distribution-fixture",
+        llm_id="anthropic/claude",
+        population_index=0,
+        sections=[
+          {
+            "id": "Preferences",
+            "questions": [
+              {
+                "id": "pref-choice",
+                "response": "B",
+                "errors": [],
+              }
+            ],
+          }
+        ],
+      ),
+    ],
+  )
+
+  result = evaluate_basic(output_dir, config_dir=FIXTURE_CONFIG_DIR)
+  payload = json.loads(result.question_analysis_json.read_text(encoding="utf-8"))
+
+  assert (
+    result.question_analysis_json
+    == output_dir / "distribution-fixture-thinking-results.json"
+  )
+  assert result.model_section_means == {}
+  assert result.human_comparisons == {}
+  assert payload == [
+    {
+      "questionnaire_id": "distribution-fixture",
+      "section_name": "Preferences",
+      "question_id": "pref-choice",
+      "question_prompt": "Pick one option.",
+      "human": {
+        "population": 10,
+        "responses": [
+          {"option": "A", "count": 4, "percentage": 0.4},
+          {"option": "B", "count": 6, "percentage": 0.6},
+        ],
+      },
+      "llms": [
+        {
+          "llm_id": "anthropic/claude",
+          "population": 1,
+          "responses": [
+            {"option": "A", "count": 0, "percentage": 0.0},
+            {"option": "B", "count": 1, "percentage": 1.0},
+          ],
+        },
+        {
+          "llm_id": "openai/gpt-4",
+          "population": 2,
+          "responses": [
+            {"option": "A", "count": 1, "percentage": 0.5},
+            {"option": "B", "count": 1, "percentage": 0.5},
+          ],
+        },
+      ],
+    }
+  ]
+
+
 def test_evaluate_basic_writes_non_empty_pdf_charts(tmp_path: Path) -> None:
-  output_dir = tmp_path / "chart-output"
+  output_dir = runner_output_dir(tmp_path)
   write_runner_output(output_dir, [record()])
 
   result = evaluate_basic(output_dir, config_dir=FIXTURE_CONFIG_DIR)
@@ -319,7 +469,7 @@ def test_evaluate_basic_writes_non_empty_pdf_charts(tmp_path: Path) -> None:
 
 
 def test_evaluate_basic_adds_score_ticks_and_bar_values(tmp_path: Path) -> None:
-  output_dir = tmp_path / "value-labels"
+  output_dir = runner_output_dir(tmp_path)
   write_runner_output(output_dir, [record()])
 
   result = evaluate_basic(output_dir, config_dir=FIXTURE_CONFIG_DIR)
@@ -338,7 +488,10 @@ def test_evaluate_basic_preserves_long_section_labels_in_charts(
   tmp_path: Path,
 ) -> None:
   section_name = "Group size sensitivity for human lives-P-6000life"
-  output_dir = tmp_path / "long-labels"
+  output_dir = runner_output_dir(
+    tmp_path,
+    questionnaire_name="long-section-fixture",
+  )
   write_runner_output(
     output_dir,
     [
@@ -367,7 +520,7 @@ def test_evaluate_basic_preserves_long_section_labels_in_charts(
 
 
 def test_evaluate_basic_fails_on_mixed_questionnaires(tmp_path: Path) -> None:
-  output_dir = tmp_path / "mixed"
+  output_dir = runner_output_dir(tmp_path)
   write_runner_output(
     output_dir,
     [
@@ -381,7 +534,7 @@ def test_evaluate_basic_fails_on_mixed_questionnaires(tmp_path: Path) -> None:
 
 
 def test_evaluate_basic_fails_on_unknown_section(tmp_path: Path) -> None:
-  output_dir = tmp_path / "unknown-section"
+  output_dir = runner_output_dir(tmp_path)
   write_runner_output(
     output_dir,
     [record(sections=[{"id": "Unknown", "questions": []}])],
@@ -392,7 +545,7 @@ def test_evaluate_basic_fails_on_unknown_section(tmp_path: Path) -> None:
 
 
 def test_evaluate_basic_fails_on_unknown_question(tmp_path: Path) -> None:
-  output_dir = tmp_path / "unknown-question"
+  output_dir = runner_output_dir(tmp_path)
   write_runner_output(
     output_dir,
     [

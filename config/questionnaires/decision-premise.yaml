@@ -12,7 +12,7 @@ questionnaire:
     author: "Benchmark Curation Team"
     source: "config/questionnaires/Turing-Test-Materials.xlsx, DecisionPremise sheet"
     response_type: "Option"
-    scoring: "Plan A=0, Plan B=1; population averages measure the proportion choosing Plan B."
+    scoring: "Question distributions encode human Plan A / Plan B choice rates; population averages measure the proportion choosing Plan B."
   sections:
     - name: "Sense of fairness-Pf-6life"
       human:
@@ -40,10 +40,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.8
+              B: 0.2
     - name: "Sense of fairness-Pf-600life"
       human:
         average: 0.4
@@ -70,10 +69,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.6
+              B: 0.4
     - name: "Self-age awareness (young participants of 20 years old)-Py-old"
       human:
         average: 0.775
@@ -100,10 +98,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.225
+              B: 0.775
     - name: "Self-age awareness (young participants of 20 years old)-Py-young"
       human:
         average: 0.761904761905
@@ -130,10 +127,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.238095238095
+              B: 0.761904761905
     - name: "Self-age awareness (middle-aged participants of 40 years old)-Pm-old"
       human:
         average: 0.966666666667
@@ -160,10 +156,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.033333333333
+              B: 0.966666666667
     - name: "Self-age awareness (middle-aged participants of 40 years old)-Pm-young"
       human:
         average: 0.527777777778
@@ -190,10 +185,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.472222222222
+              B: 0.527777777778
     - name: "Group-dependent goal settings with unequal EVs (Sure-thing vs. Gamble)-Pu-6kin"
       human:
         average: 0.55
@@ -220,10 +214,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.45
+              B: 0.55
     - name: "Group-dependent goal settings with unequal EVs (Sure-thing vs. Gamble)-Pu-6life"
       human:
         average: 0.25
@@ -250,10 +243,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.75
+              B: 0.25
     - name: "Group-dependent goal settings with unequal EVs (Sure-thing vs. Gamble)-Pu-600life"
       human:
         average: 0.1
@@ -280,10 +272,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.9
+              B: 0.1
     - name: "Group-dependent goal settings with equal EVs (two-thirds vs. one-third)-Pe-6kin"
       human:
         average: 0.677419354839
@@ -310,10 +301,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.322580645161
+              B: 0.677419354839
     - name: "Group-dependent goal settings with equal EVs (two-thirds vs. one-third)-Pe-6life"
       human:
         average: 0.40625
@@ -340,10 +330,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.59375
+              B: 0.40625
     - name: "Group-dependent goal settings with equal EVs (two-thirds vs. one-third)-Pe-600life"
       human:
         average: 0.294117647059
@@ -370,10 +359,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.705882352941
+              B: 0.294117647059
     - name: "Group-dependent goal settings with equal EVs (two-thirds vs. one-third)-P-6kin"
       human:
         average: 0.7
@@ -400,10 +388,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.3
+              B: 0.7
     - name: "Group-dependent goal settings with equal EVs (two-thirds vs. one-third)-P-6life"
       human:
         average: 0.64
@@ -430,10 +417,9 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.36
+              B: 0.64
     - name: "Group-dependent goal settings with equal EVs (two-thirds vs. one-third)-P-600life"
       human:
         average: 0.4
@@ -460,7 +446,6 @@ questionnaire:
             A: "Plan A"
             B: "Plan B"
           scoring:
-            total: 1
-            weights:
-              A: 0
-              B: 1
+            distribution:
+              A: 0.6
+              B: 0.4

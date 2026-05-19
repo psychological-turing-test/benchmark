@@ -59,19 +59,35 @@ class QuestionResponseAnalysis:
   option: str
   count: int
   percentage: float
-  delta: float | None
+
+
+@dataclass(frozen=True)
+class QuestionLlmAnalysis:
+  """Aggregated response stats for one model on one question."""
+
+  llm_id: str
+  population: int
+  responses: list[QuestionResponseAnalysis]
+
+
+@dataclass(frozen=True)
+class QuestionHumanAnalysis:
+  """Aggregated human baseline stats for one question."""
+
+  population: int
+  responses: list[QuestionResponseAnalysis]
 
 
 @dataclass(frozen=True)
 class QuestionAnalysis:
-  """Aggregated response stats for one questionnaire question."""
+  """Aggregated per-model response stats for one questionnaire question."""
 
   questionnaire_id: str
   section_name: str
   question_id: str
   question_prompt: str
-  population: int
-  responses: list[QuestionResponseAnalysis]
+  human: QuestionHumanAnalysis | None
+  llms: list[QuestionLlmAnalysis]
 
 
 @dataclass(frozen=True)
@@ -93,8 +109,8 @@ class _ScoredQuestion:
   question_id: str
   question_prompt: str
   answer_token: str
-  awarded: int
-  total: int
+  awarded: int | None
+  total: int | None
 
 
 @dataclass(frozen=True)
@@ -141,7 +157,7 @@ def evaluate_basic(
   )
   question_analyses = _aggregate_question_analyses(section_scores, questionnaire)
 
-  question_analysis_json = output_dir / "question-analysis.json"
+  question_analysis_json = _question_analysis_path(output_dir, questionnaire.id)
   section_scores_pdf = output_dir / "section-scores.pdf"
   section_delta_pdf = output_dir / "section-delta.pdf"
   _write_question_analysis_json(question_analysis_json, question_analyses)
@@ -271,13 +287,18 @@ def _score_records(
         if question_score is not None:
           question_scores.append(question_score)
       if question_scores:
+        weighted_scores = [
+          score
+          for score in question_scores
+          if score.awarded is not None and score.total is not None
+        ]
         scored_sections.append(
           _RecordSectionScore(
             llm_id=llm_id,
             population_index=population_index,
             section_name=section_name,
-            awarded=sum(score.awarded for score in question_scores),
-            total=sum(score.total for score in question_scores),
+            awarded=sum(score.awarded for score in weighted_scores),
+            total=sum(score.total for score in weighted_scores),
             questions=question_scores,
           )
         )
@@ -321,13 +342,18 @@ def _score_question_payload(
   try:
     answer = _canonicalize_choice_answer(question, answer)
     token = validate_answer(question, answer)
-    score = score_question(question, token)
+    awarded = None
+    total = None
+    if question.scoring.distribution is None:
+      score = score_question(question, token)
+      awarded = score.awarded
+      total = score.total
     return _ScoredQuestion(
-      question_id=score.question_id,
+      question_id=question.id,
       question_prompt=question.prompt,
       answer_token=token,
-      awarded=score.awarded,
-      total=score.total,
+      awarded=awarded,
+      total=total,
     )
   except (AnswerValidationError, QuestionnaireConfigError) as exc:
     raise EvaluatorError(
@@ -429,6 +455,8 @@ def _aggregate_section_means(
 ) -> dict[tuple[str, str], SectionMean]:
   grouped: dict[tuple[str, str], list[int]] = defaultdict(list)
   for section_score in section_scores:
+    if section_score.total == 0:
+      continue
     grouped[(section_score.llm_id, section_score.section_name)].append(
       section_score.awarded
     )
@@ -472,35 +500,89 @@ def _compare_human_baselines(
   return comparisons
 
 
+def _question_analysis_path(output_dir: Path, questionnaire_id: str) -> Path:
+  model_config = _parse_model_config(output_dir.name, questionnaire_id)
+  return output_dir / f"{questionnaire_id}-{model_config}-results.json"
+
+
+def _parse_model_config(output_dir_name: str, questionnaire_id: str) -> str:
+  prefix = f"{questionnaire_id}-"
+  if not output_dir_name.startswith(prefix):
+    raise EvaluatorError(
+      "Runner output directory name must start with "
+      f"'{questionnaire_id}-' to derive the JSON output file name"
+    )
+
+  match = re.search(
+    r"-\d{4}-\d{2}-\d{2}T\d{2}-\d{2}-\d{2}-\d{6}Z$",
+    output_dir_name,
+  )
+  if match is None:
+    raise EvaluatorError(
+      "Runner output directory name must end with "
+      "a runner timestamp to derive the JSON output file name"
+    )
+
+  model_config = output_dir_name[len(prefix) : match.start()]
+  if not model_config:
+    raise EvaluatorError(
+      "Runner output directory name is missing the model config segment"
+    )
+  return model_config
+
+
 def _aggregate_question_analyses(
   section_scores: list[_RecordSectionScore],
   questionnaire: Questionnaire,
 ) -> list[QuestionAnalysis]:
-  counts_by_question: dict[tuple[str, str], dict[str, int]] = defaultdict(
+  counts_by_question: dict[tuple[str, str, str], dict[str, int]] = defaultdict(
     lambda: defaultdict(int)
   )
-  populations_by_question: dict[tuple[str, str], int] = defaultdict(int)
+  populations_by_question: dict[tuple[str, str, str], int] = defaultdict(int)
 
   for section_score in section_scores:
     for question_score in section_score.questions:
-      key = (section_score.section_name, question_score.question_id)
+      key = (
+        section_score.section_name,
+        question_score.question_id,
+        section_score.llm_id,
+      )
       counts_by_question[key][question_score.answer_token] += 1
       populations_by_question[key] += 1
 
   analyses: list[QuestionAnalysis] = []
   for section in questionnaire.sections:
     for question in section.questions:
-      key = (section.name, question.id)
-      population = populations_by_question.get(key, 0)
-      counts = counts_by_question.get(key, {})
-      responses = [
-        QuestionResponseAnalysis(
-          option=option,
-          count=counts.get(option, 0),
-          percentage=_response_percentage(counts.get(option, 0), population),
-          delta=None,
+      llm_ids = sorted(
+        {
+          llm_id
+          for section_name, question_id, llm_id in populations_by_question
+          if section_name == section.name and question_id == question.id
+        }
+      )
+      llms = [
+        QuestionLlmAnalysis(
+          llm_id=llm_id,
+          population=populations_by_question[(section.name, question.id, llm_id)],
+          responses=[
+            QuestionResponseAnalysis(
+              option=option,
+              count=counts_by_question[(section.name, question.id, llm_id)].get(
+                option,
+                0,
+              ),
+              percentage=_response_percentage(
+                counts_by_question[(section.name, question.id, llm_id)].get(
+                  option,
+                  0,
+                ),
+                populations_by_question[(section.name, question.id, llm_id)],
+              ),
+            )
+            for option in _question_options(question)
+          ],
         )
-        for option in _question_options(question)
+        for llm_id in llm_ids
       ]
       analyses.append(
         QuestionAnalysis(
@@ -508,11 +590,33 @@ def _aggregate_question_analyses(
           section_name=section.name,
           question_id=question.id,
           question_prompt=question.prompt,
-          population=population,
-          responses=responses,
+          human=_human_analysis(question, section.human.population if section.human else None),
+          llms=llms,
         )
       )
   return analyses
+
+
+def _human_analysis(
+  question: Question,
+  population: int | None,
+) -> QuestionHumanAnalysis | None:
+  distribution = question.scoring.distribution
+  if distribution is None or population is None:
+    return None
+
+  counts = _distribution_counts(distribution, population, _question_options(question))
+  return QuestionHumanAnalysis(
+    population=population,
+    responses=[
+      QuestionResponseAnalysis(
+        option=option,
+        count=counts[option],
+        percentage=distribution[option],
+      )
+      for option in _question_options(question)
+    ],
+  )
 
 
 def _question_options(question: Question) -> list[str]:
@@ -527,6 +631,24 @@ def _response_percentage(count: int, population: int) -> float:
   if population == 0:
     return 0.0
   return count / population
+
+
+def _distribution_counts(
+  distribution: dict[str, float],
+  population: int,
+  options: list[str],
+) -> dict[str, int]:
+  raw_counts = {option: distribution[option] * population for option in options}
+  counts = {option: int(math.floor(raw_counts[option])) for option in options}
+  remaining = population - sum(counts.values())
+  remainders = sorted(
+    options,
+    key=lambda option: (raw_counts[option] - counts[option], option),
+    reverse=True,
+  )
+  for option in remainders[:remaining]:
+    counts[option] += 1
+  return counts
 
 
 def _write_question_analysis_json(
