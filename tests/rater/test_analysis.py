@@ -87,3 +87,26 @@ def test_rate_results_rejects_unsupported_questionnaire(tmp_path: Path) -> None:
 
   with pytest.raises(RaterError, match="Unsupported questionnaire"):
     rate_results(tmp_path)
+
+
+def test_rate_results_script_reports_outputs(tmp_path: Path) -> None:
+  write_json(
+    tmp_path / "decision-premise-thinking-results.json",
+    [
+      question("decision-premise", "q1", 0.4, 0.7),
+      question("decision-premise", "q2", 0.8, 0.6),
+    ],
+  )
+
+  import subprocess
+
+  completed = subprocess.run(
+    ["uv", "run", "python", "bin/rate_results.py", str(tmp_path)],
+    check=False,
+    text=True,
+    capture_output=True,
+  )
+
+  assert completed.returncode == 0
+  assert f"Wrote {tmp_path / 'analysis.json'}" in completed.stdout
+  assert f"Wrote {tmp_path / 'analysis-visualize.html'}" in completed.stdout
