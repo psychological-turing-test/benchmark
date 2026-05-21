@@ -10,6 +10,7 @@ from .models import (
   SUPPORTED_QUESTIONNAIRES,
   format_model_display_name,
 )
+from .scoring import score_questionnaire
 
 __all__ = [
   "ANALYSIS_VERSION",
@@ -21,4 +22,5 @@ __all__ = [
   "discover_result_files",
   "format_model_display_name",
   "load_results",
+  "score_questionnaire",
 ]
