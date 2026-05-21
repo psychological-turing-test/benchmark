@@ -244,7 +244,7 @@ _HTML = """<!DOCTYPE html>
         const points = axes.map((axis, index) => {
           const metric = axis.endsWith(" BAS") ? "bas" : "vas";
           const name = axis.slice(0, -4);
-          const value = model.questionnaires[name][metric];
+          const value = model.questionnaires[name]?.[metric] ?? 0;
           const angle = (Math.PI * 2 * index / axes.length) - Math.PI / 2;
           const scaled = radius * value / 100;
           const x = center + Math.cos(angle) * scaled;

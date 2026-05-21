@@ -73,6 +73,7 @@ def test_rate_results_writes_analysis_json(tmp_path: Path) -> None:
   assert result.visualization_html == tmp_path / "analysis-visualize.html"
   assert "fetch(\"analysis.json\")" in html
   assert 'input.type = "checkbox"' in html
+  assert "model.questionnaires[name]?.[metric] ?? 0" in html
   assert "Overall ratings" in html
   assert "Individual scores" in html
   assert "Comparison table" in html
