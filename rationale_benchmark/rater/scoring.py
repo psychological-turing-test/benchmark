@@ -52,7 +52,7 @@ def _score_decision_premise(
   for scenario in scenarios:
     human_risk, human_cons = _risk_and_conservative(scenario.human)
     llm_risk, llm_cons = _risk_and_conservative(_llm_distribution(scenario, llm_id))
-    score = _similarity_score(
+    score, distance = _similarity_score_and_distance(
       [llm_risk, llm_cons],
       [human_risk, human_cons],
       math.sqrt(2),
@@ -61,6 +61,8 @@ def _score_decision_premise(
       {
         "label": scenario.question_id,
         "score": score,
+        "bas": score,
+        "distance": distance,
         "human": [human_risk, human_cons],
         "llm": [llm_risk, llm_cons],
       }
@@ -69,10 +71,11 @@ def _score_decision_premise(
     llm_trajectory.append(llm_risk)
 
   bas = _mean(item["score"] for item in bas_items)
-  vas = _similarity_score(
+  max_distance = math.sqrt(len(human_trajectory))
+  vas, distance = _similarity_score_and_distance(
     llm_trajectory,
     human_trajectory,
-    math.sqrt(len(human_trajectory)),
+    max_distance,
   )
   return _rating(
     bas,
@@ -83,6 +86,9 @@ def _score_decision_premise(
         "labels": [scenario.question_id for scenario in scenarios],
         "human": human_trajectory,
         "llm": llm_trajectory,
+        "distance": distance,
+        "max_distance": max_distance,
+        "vas": vas,
       },
     },
   )
@@ -110,11 +116,17 @@ def _score_risky_choice_framing(
     human_n = _risk(pair["N"].human)
     llm_p = _risk(_llm_distribution(pair["P"], llm_id))
     llm_n = _risk(_llm_distribution(pair["N"], llm_id))
-    score = _similarity_score([llm_p, llm_n], [human_p, human_n], math.sqrt(2))
+    score, distance = _similarity_score_and_distance(
+      [llm_p, llm_n],
+      [human_p, human_n],
+      math.sqrt(2),
+    )
     bas_items.append(
       {
         "label": key,
         "score": score,
+        "bas": score,
+        "distance": distance,
         "human": [human_p, human_n],
         "llm": [llm_p, llm_n],
       }
@@ -125,10 +137,11 @@ def _score_risky_choice_framing(
     llm_trajectory.append(llm_n - llm_p)
 
   bas = _mean(item["score"] for item in bas_items)
-  vas = _similarity_score(
+  max_distance = math.sqrt(len(human_trajectory))
+  vas, distance = _similarity_score_and_distance(
     llm_trajectory,
     human_trajectory,
-    math.sqrt(len(human_trajectory)),
+    max_distance,
   )
   return _rating(
     bas,
@@ -139,6 +152,9 @@ def _score_risky_choice_framing(
         "labels": labels,
         "human": human_trajectory,
         "llm": llm_trajectory,
+        "distance": distance,
+        "max_distance": max_distance,
+        "vas": vas,
       },
     },
   )
@@ -190,13 +206,14 @@ def _option(distribution: dict[str, float], option: str) -> float:
   return distribution[option]
 
 
-def _similarity_score(
+def _similarity_score_and_distance(
   llm_vector: list[float],
   human_vector: list[float],
   max_distance: float,
-) -> float:
+) -> tuple[float, float]:
   distance = math.dist(llm_vector, human_vector)
-  return _clamp(100.0 * (1.0 - distance / max_distance))
+  score = _clamp(100.0 * (1.0 - distance / max_distance))
+  return score, distance
 
 
 def _rating(bas: float, vas: float, details: dict[str, Any]) -> QuestionnaireRating:
