@@ -58,6 +58,19 @@ def test_discover_result_files_fails_when_directory_missing(tmp_path: Path) -> N
     discover_result_files(tmp_path / "missing")
 
 
+def test_discover_result_files_fails_when_directory_unreadable(
+  tmp_path: Path,
+) -> None:
+  unreadable = tmp_path / "unreadable"
+  unreadable.mkdir()
+  unreadable.chmod(0)
+  try:
+    with pytest.raises(RaterError, match="cannot be read"):
+      discover_result_files(unreadable)
+  finally:
+    unreadable.chmod(0o700)
+
+
 def test_discover_result_files_fails_when_no_results(tmp_path: Path) -> None:
   with pytest.raises(RaterError, match="No direct \\*-results\\.json"):
     discover_result_files(tmp_path)

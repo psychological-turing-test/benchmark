@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import json
+import os
 from pathlib import Path
 from typing import Any
 
@@ -12,7 +13,7 @@ from .models import EvaluatorQuestionResult, RaterError
 def discover_result_files(input_dir: Path | str) -> list[Path]:
   """Return direct evaluator result JSON files under ``input_dir``."""
   directory = Path(input_dir)
-  if not directory.is_dir():
+  if not directory.is_dir() or not os.access(directory, os.R_OK | os.X_OK):
     raise RaterError(f"Input directory '{directory}' cannot be read")
 
   files = sorted(path for path in directory.glob("*-results.json") if path.is_file())
