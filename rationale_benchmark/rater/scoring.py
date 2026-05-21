@@ -9,10 +9,10 @@ from collections.abc import Iterable
 from typing import Any
 
 from .models import (
+  SUPPORTED_QUESTIONNAIRES,
   EvaluatorQuestionResult,
   QuestionnaireRating,
   RaterError,
-  SUPPORTED_QUESTIONNAIRES,
 )
 
 RISK_OPTION = "B"
