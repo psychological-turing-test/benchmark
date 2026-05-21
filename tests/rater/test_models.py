@@ -1,6 +1,15 @@
 from __future__ import annotations
 
+from rationale_benchmark.rater import ANALYSIS_VERSION, SUPPORTED_QUESTIONNAIRES
 from rationale_benchmark.rater.models import format_model_display_name
+
+
+def test_public_constants_are_exported() -> None:
+  assert ANALYSIS_VERSION == 1
+  assert SUPPORTED_QUESTIONNAIRES == {
+    "decision-premise",
+    "risky-choice-framing",
+  }
 
 
 def test_format_aliyun_no_thinking_suffix() -> None:
@@ -35,4 +44,11 @@ def test_format_non_aliyun_suffix_is_unchanged() -> None:
   assert (
     format_model_display_name("openai/gpt-4.1 (0)")
     == "openai/gpt-4.1 (0)"
+  )
+
+
+def test_format_provider_ending_in_aliyun_suffix_is_unchanged() -> None:
+  assert (
+    format_model_display_name("foo_aliyun/model (0)")
+    == "foo_aliyun/model (0)"
   )

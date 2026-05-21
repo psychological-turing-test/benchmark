@@ -53,7 +53,7 @@ _ALIYUN_SUFFIX_RE = re.compile(r"^(?P<prefix>.+?)\s*\((?P<budget>-?\d+)\)$")
 def format_model_display_name(llm_id: str) -> str:
   """Return a human-readable model label for visualization."""
   provider = llm_id.split("/", 1)[0]
-  if provider != "aliyun" and not provider.endswith("_aliyun"):
+  if provider != "aliyun":
     return llm_id
 
   match = _ALIYUN_SUFFIX_RE.match(llm_id)
