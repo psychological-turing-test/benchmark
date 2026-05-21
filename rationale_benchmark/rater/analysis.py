@@ -63,10 +63,8 @@ def build_analysis_payload(
   for llm_id in llm_ids:
     questionnaires: dict[str, dict[str, Any]] = {}
     for questionnaire_id in sorted(grouped):
-      questionnaire_results = [
-        result for result in grouped[questionnaire_id] if llm_id in result.llms
-      ]
-      if not questionnaire_results:
+      questionnaire_results = grouped[questionnaire_id]
+      if not any(llm_id in result.llms for result in questionnaire_results):
         continue
       rating = score_questionnaire(questionnaire_id, llm_id, questionnaire_results)
       questionnaires[questionnaire_id] = asdict(rating)

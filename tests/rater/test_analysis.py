@@ -42,6 +42,18 @@ def question(
   }
 
 
+def question_with_llms(
+  questionnaire_id: str,
+  question_id: str,
+  llm_ids: list[str],
+) -> dict:
+  payload = question(questionnaire_id, question_id, 0.4, 0.7)
+  payload["llms"] = [
+    {**payload["llms"][0], "llm_id": llm_id} for llm_id in llm_ids
+  ]
+  return payload
+
+
 def write_json(path: Path, payload: list[dict]) -> None:
   path.write_text(json.dumps(payload) + "\n", encoding="utf-8")
 
@@ -86,6 +98,21 @@ def test_rate_results_rejects_unsupported_questionnaire(tmp_path: Path) -> None:
   )
 
   with pytest.raises(RaterError, match="Unsupported questionnaire"):
+    rate_results(tmp_path)
+
+
+def test_rate_results_rejects_partial_model_coverage_within_questionnaire(
+  tmp_path: Path,
+) -> None:
+  write_json(
+    tmp_path / "decision-premise-thinking-results.json",
+    [
+      question_with_llms("decision-premise", "q1", ["model-a", "model-b"]),
+      question_with_llms("decision-premise", "q2", ["model-a"]),
+    ],
+  )
+
+  with pytest.raises(RaterError, match="missing model distribution"):
     rate_results(tmp_path)
 
 
