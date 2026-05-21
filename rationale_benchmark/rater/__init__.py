@@ -12,6 +12,7 @@ from .models import (
   format_model_display_name,
 )
 from .scoring import score_questionnaire
+from .visualization import write_visualization_html
 
 __all__ = [
   "ANALYSIS_VERSION",
@@ -26,4 +27,5 @@ __all__ = [
   "load_results",
   "rate_results",
   "score_questionnaire",
+  "write_visualization_html",
 ]

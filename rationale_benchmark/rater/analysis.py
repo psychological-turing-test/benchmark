@@ -17,6 +17,7 @@ from .models import (
   format_model_display_name,
 )
 from .scoring import score_questionnaire
+from .visualization import write_visualization_html
 
 
 def rate_results(input_dir: Path | str) -> RatingRunResult:
@@ -29,6 +30,7 @@ def rate_results(input_dir: Path | str) -> RatingRunResult:
   analysis_json = directory / "analysis.json"
   visualization_html = directory / "analysis-visualize.html"
   analysis_json.write_text(json.dumps(payload, indent=2) + "\n", encoding="utf-8")
+  write_visualization_html(visualization_html)
   return RatingRunResult(
     input_dir=directory,
     analysis_json=analysis_json,

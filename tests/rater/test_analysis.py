@@ -69,6 +69,13 @@ def test_rate_results_writes_analysis_json(tmp_path: Path) -> None:
   assert payload["models"][0]["vas"] == pytest.approx(74.504871)
   assert payload["models"][0]["srs"] == pytest.approx(74.752436)
   assert "decision-premise" in payload["models"][0]["questionnaires"]
+  html = result.visualization_html.read_text(encoding="utf-8")
+  assert result.visualization_html == tmp_path / "analysis-visualize.html"
+  assert "fetch(\"analysis.json\")" in html
+  assert 'input.type = "checkbox"' in html
+  assert "Overall ratings" in html
+  assert "Individual scores" in html
+  assert "Comparison table" in html
 
 
 def test_rate_results_rejects_unsupported_questionnaire(tmp_path: Path) -> None:
