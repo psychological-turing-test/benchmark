@@ -56,6 +56,21 @@ _HTML = """<!DOCTYPE html>
       gap: 8px 16px;
       margin-top: 12px;
     }
+    .selector-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 12px;
+    }
+    button {
+      border: 1px solid #b8c4d6;
+      border-radius: 6px;
+      background: #ffffff;
+      color: #1f2937;
+      cursor: pointer;
+      font: inherit;
+      padding: 6px 10px;
+    }
     label {
       display: flex;
       align-items: center;
@@ -117,6 +132,7 @@ _HTML = """<!DOCTYPE html>
   <main>
     <header>
       <h1>Rater Analysis</h1>
+      <div id="selector-actions" class="selector-actions"></div>
       <div id="model-selector" class="selector"></div>
     </header>
     <section class="charts">
@@ -147,6 +163,7 @@ _HTML = """<!DOCTYPE html>
     render();
 
     function render() {
+      renderSelectorActions();
       renderSelector();
       const models = selectedModels();
       renderBarChart(models);
@@ -155,13 +172,42 @@ _HTML = """<!DOCTYPE html>
     }
 
     function selectedModels() {
-      return state.data.models.filter((model) => state.selected.has(model.llm_id));
+      return modelsByDisplayName().filter((model) => state.selected.has(model.llm_id));
+    }
+
+    function modelsByDisplayName() {
+      return [...state.data.models].sort((left, right) =>
+        left.display_name.localeCompare(right.display_name)
+      );
+    }
+
+    function renderSelectorActions() {
+      const root = document.getElementById("selector-actions");
+      root.innerHTML = "";
+      root.append(
+        selectorButton("Select all", () => {
+          state.data.models.forEach((model) => state.selected.add(model.llm_id));
+          render();
+        }),
+        selectorButton("Deselect all", () => {
+          state.selected.clear();
+          render();
+        })
+      );
+    }
+
+    function selectorButton(text, onClick) {
+      const button = document.createElement("button");
+      button.type = "button";
+      button.textContent = text;
+      button.addEventListener("click", onClick);
+      return button;
     }
 
     function renderSelector() {
       const root = document.getElementById("model-selector");
       root.innerHTML = "";
-      state.data.models.forEach((model) => {
+      modelsByDisplayName().forEach((model) => {
         const label = document.createElement("label");
         const input = document.createElement("input");
         input.type = "checkbox";

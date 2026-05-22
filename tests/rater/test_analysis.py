@@ -86,6 +86,10 @@ def test_rate_results_writes_analysis_json(tmp_path: Path) -> None:
   assert "window.__RATER_ANALYSIS__" in html
   assert "fetch(\"analysis.json\")" not in html
   assert '"display_name": "aliyun/qwen3.6-plus (no thinking)"' in html
+  assert "modelsByDisplayName()" in html
+  assert "localeCompare(right.display_name)" in html
+  assert 'selectorButton("Select all"' in html
+  assert 'selectorButton("Deselect all"' in html
   assert 'input.type = "checkbox"' in html
   assert "model.questionnaires[name]?.[metric] ?? 0" in html
   assert "grid-template-columns: minmax(0, 2fr) minmax(280px, 0.9fr)" in html
