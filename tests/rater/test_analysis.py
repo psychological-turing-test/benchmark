@@ -125,6 +125,53 @@ def test_rate_results_rejects_partial_model_coverage_within_questionnaire(
     rate_results(tmp_path)
 
 
+def test_rate_results_allows_separate_model_cohort_files(tmp_path: Path) -> None:
+  write_json(
+    tmp_path / "decision-premise-a-results.json",
+    [
+      question_with_llms("decision-premise", "q1", ["model-a"]),
+      question_with_llms("decision-premise", "q2", ["model-a"]),
+    ],
+  )
+  write_json(
+    tmp_path / "decision-premise-b-results.json",
+    [
+      question_with_llms("decision-premise", "q1", ["model-b"]),
+      question_with_llms("decision-premise", "q2", ["model-b"]),
+    ],
+  )
+
+  payload = rate_results(tmp_path).payload
+
+  assert [model["llm_id"] for model in payload["models"]] == ["model-a", "model-b"]
+
+
+def test_rate_results_averages_repeated_model_runs(tmp_path: Path) -> None:
+  write_json(
+    tmp_path / "decision-premise-a-results.json",
+    [
+      question("decision-premise", "q1", 0.4, 0.2),
+      question("decision-premise", "q2", 0.8, 0.6),
+    ],
+  )
+  write_json(
+    tmp_path / "decision-premise-b-results.json",
+    [
+      question("decision-premise", "q1", 0.4, 0.6),
+      question("decision-premise", "q2", 0.8, 1.0),
+    ],
+  )
+
+  payload = rate_results(tmp_path).payload
+
+  assert len(payload["models"]) == 1
+  model = payload["models"][0]
+  assert model["llm_id"] == "aliyun/qwen3.6-plus (0)"
+  assert model["bas"] == pytest.approx(100.0)
+  assert model["vas"] == pytest.approx(100.0)
+  assert model["srs"] == pytest.approx(100.0)
+
+
 def test_rate_results_script_reports_outputs(tmp_path: Path) -> None:
   write_json(
     tmp_path / "decision-premise-thinking-results.json",
