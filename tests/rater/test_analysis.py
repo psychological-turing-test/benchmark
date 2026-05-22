@@ -88,7 +88,10 @@ def test_rate_results_writes_analysis_json(tmp_path: Path) -> None:
   assert '"display_name": "aliyun/qwen3.6-plus (no thinking)"' in html
   assert 'input.type = "checkbox"' in html
   assert "model.questionnaires[name]?.[metric] ?? 0" in html
+  assert "grid-template-columns: minmax(0, 2fr) minmax(280px, 0.9fr)" in html
   assert 'const metrics = ["srs"];' in html
+  assert "const width = 760;" in html
+  assert "const barStart = 360;" in html
   assert "<th>Raw LLM ID</th>" not in html
   assert '<th class="srs-column">SRS</th>' in html
   assert "formatRatingCell(model.srs, tableExtrema.srs, true)" in html

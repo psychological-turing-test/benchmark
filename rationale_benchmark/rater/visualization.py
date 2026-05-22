@@ -64,7 +64,7 @@ _HTML = """<!DOCTYPE html>
     }
     .charts {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+      grid-template-columns: minmax(0, 2fr) minmax(280px, 0.9fr);
       gap: 20px;
     }
     .panel {
@@ -105,6 +105,11 @@ _HTML = """<!DOCTYPE html>
     .empty {
       color: #667085;
       padding: 24px 0;
+    }
+    @media (max-width: 820px) {
+      .charts {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
@@ -186,7 +191,8 @@ _HTML = """<!DOCTYPE html>
         return;
       }
       const metrics = ["srs"];
-      const width = 540;
+      const width = 760;
+      const barStart = 360;
       const rowHeight = 28;
       const height = 40 + models.length * metrics.length * rowHeight;
       svg.setAttribute("viewBox", `0 0 ${width} ${height}`);
@@ -199,13 +205,13 @@ _HTML = """<!DOCTYPE html>
           svg.insertAdjacentHTML("beforeend", `
             <text x="0" y="${y + 12}" font-size="11">${label}</text>
             <rect
-              x="190"
+              x="${barStart}"
               y="${y}"
               width="${barWidth}"
               height="16"
               fill="${colors[modelIndex % colors.length]}"
             ></rect>
-            <text x="${195 + barWidth}" y="${y + 12}" font-size="11">
+            <text x="${barStart + 5 + barWidth}" y="${y + 12}" font-size="11">
               ${value.toFixed(2)}
             </text>
           `);
