@@ -20,8 +20,8 @@ inside it. The rater does not scan recursively.
 
 - `analysis.json`: BAS, VAS, and SRS for each LLM, plus questionnaire-level
   details.
-- `analysis-visualize.html`: a static page that loads `analysis.json` from the
-  same directory.
+- `analysis-visualize.html`: a self-contained static page with the analysis
+  JSON embedded inline, so it can be opened directly from the filesystem.
 
 ## Supported Questionnaires
 

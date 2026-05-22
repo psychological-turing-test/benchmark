@@ -83,9 +83,15 @@ def test_rate_results_writes_analysis_json(tmp_path: Path) -> None:
   assert "decision-premise" in payload["models"][0]["questionnaires"]
   html = result.visualization_html.read_text(encoding="utf-8")
   assert result.visualization_html == tmp_path / "analysis-visualize.html"
-  assert "fetch(\"analysis.json\")" in html
+  assert "window.__RATER_ANALYSIS__" in html
+  assert "fetch(\"analysis.json\")" not in html
+  assert '"display_name": "aliyun/qwen3.6-plus (no thinking)"' in html
   assert 'input.type = "checkbox"' in html
   assert "model.questionnaires[name]?.[metric] ?? 0" in html
+  assert 'const metrics = ["srs"];' in html
+  assert "<th>Raw LLM ID</th>" not in html
+  assert '<th class="srs-column">SRS</th>' in html
+  assert "formatRatingCell(model.srs, tableExtrema.srs, true)" in html
   assert "Overall ratings" in html
   assert "Individual scores" in html
   assert "Comparison table" in html

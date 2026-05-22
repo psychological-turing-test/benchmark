@@ -2,12 +2,24 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
+from typing import Any
 
 
-def write_visualization_html(path: Path) -> None:
+def write_visualization_html(path: Path, payload: dict[str, Any]) -> None:
   """Write the dependency-free analysis visualization page."""
-  path.write_text(_HTML, encoding="utf-8")
+  data = _script_json(payload)
+  path.write_text(_HTML.replace("__ANALYSIS_JSON__", data), encoding="utf-8")
+
+
+def _script_json(payload: dict[str, Any]) -> str:
+  return (
+    json.dumps(payload, sort_keys=True)
+    .replace("<", "\\u003c")
+    .replace(">", "\\u003e")
+    .replace("&", "\\u0026")
+  )
 
 
 _HTML = """<!DOCTYPE html>
@@ -80,6 +92,16 @@ _HTML = """<!DOCTYPE html>
       font-weight: 700;
       background: #eef3f9;
     }
+    .srs-column {
+      background: #fff4d6;
+    }
+    .rating-high {
+      font-weight: 700;
+    }
+    .rating-low {
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
     .empty {
       color: #667085;
       padding: 24px 0;
@@ -112,25 +134,12 @@ _HTML = """<!DOCTYPE html>
     </section>
   </main>
   <script>
-    const state = { data: null, selected: new Set() };
+    window.__RATER_ANALYSIS__ = __ANALYSIS_JSON__;
+    const state = { data: window.__RATER_ANALYSIS__, selected: new Set() };
     const colors = ["#2563eb", "#dc2626", "#059669", "#7c3aed", "#ea580c"];
 
-    fetch("analysis.json")
-      .then((response) => response.json())
-      .then((data) => {
-        state.data = data;
-        data.models.forEach((model) => state.selected.add(model.llm_id));
-        render();
-      })
-      .catch((error) => {
-        document.body.innerHTML = `
-          <main>
-            <p class="empty">
-              Unable to load analysis.json: ${escapeHtml(String(error))}
-            </p>
-          </main>
-        `;
-      });
+    state.data.models.forEach((model) => state.selected.add(model.llm_id));
+    render();
 
     function render() {
       renderSelector();
@@ -176,7 +185,7 @@ _HTML = """<!DOCTYPE html>
         `;
         return;
       }
-      const metrics = ["srs", "bas", "vas"];
+      const metrics = ["srs"];
       const width = 540;
       const rowHeight = 28;
       const height = 40 + models.length * metrics.length * rowHeight;
@@ -268,13 +277,19 @@ _HTML = """<!DOCTYPE html>
         root.innerHTML = `<p class="empty">Select at least one model.</p>`;
         return;
       }
+      const tableExtrema = {
+        srs: columnExtrema(models, "srs"),
+        bas: columnExtrema(models, "bas"),
+        vas: columnExtrema(models, "vas"),
+      };
       const rows = models.map((model) => `
         <tr>
-          <td>${escapeHtml(model.llm_id)}</td>
           <td>${escapeHtml(model.display_name)}</td>
-          <td>${model.srs.toFixed(2)}</td>
-          <td>${model.bas.toFixed(2)}</td>
-          <td>${model.vas.toFixed(2)}</td>
+          <td class="srs-column">
+            ${formatRatingCell(model.srs, tableExtrema.srs, true)}
+          </td>
+          <td>${formatRatingCell(model.bas, tableExtrema.bas, false)}</td>
+          <td>${formatRatingCell(model.vas, tableExtrema.vas, false)}</td>
           <td>${Object.entries(model.questionnaires).map(([name, rating]) => {
             return [
               `${escapeHtml(name)}: SRS ${rating.srs.toFixed(2)}`,
@@ -288,9 +303,8 @@ _HTML = """<!DOCTYPE html>
         <table>
           <thead>
             <tr>
-              <th>Raw LLM ID</th>
               <th>Display name</th>
-              <th>SRS</th>
+              <th class="srs-column">SRS</th>
               <th>BAS</th>
               <th>VAS</th>
               <th>Questionnaires</th>
@@ -299,6 +313,28 @@ _HTML = """<!DOCTYPE html>
           <tbody>${rows}</tbody>
         </table>
       `;
+    }
+
+    function columnExtrema(models, key) {
+      const values = models.map((model) => model[key]);
+      return {
+        high: Math.max(...values),
+        low: Math.min(...values),
+      };
+    }
+
+    function formatRatingCell(value, extrema, isSrs) {
+      const classes = [];
+      if (value === extrema.high) {
+        classes.push("rating-high");
+      }
+      if (value === extrema.low) {
+        classes.push("rating-low");
+      }
+      if (isSrs) {
+        classes.push("srs-value");
+      }
+      return `<span class="${classes.join(" ")}">${value.toFixed(2)}</span>`;
     }
 
     function escapeHtml(value) {
