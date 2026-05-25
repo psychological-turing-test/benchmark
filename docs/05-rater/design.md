@@ -19,7 +19,8 @@ inside it. The rater does not scan recursively.
 ## Outputs
 
 - `analysis.json`: BAS, VAS, and SRS for each LLM, plus questionnaire-level
-  details.
+  details. For `risky-choice-framing`, details also include behavioral
+  tendency metrics for both the LLM and the human baseline.
 - `analysis-visualize.html`: a self-contained static page with the analysis
   JSON embedded inline, so it can be opened directly from the filesystem.
 
@@ -31,6 +32,13 @@ The first version supports:
 - `decision-premise`
 
 Other questionnaire IDs fail with a clear unsupported-questionnaire error.
+
+## Risky-Choice Behavioral Metrics
+
+For `risky-choice-framing`, the rater emits
+`details.behavioral_tendency_metrics` with parallel `llm` and `human`
+profiles. Each profile includes FES, RC, MS for life-scale sensitivity, KG,
+IGB, CDC, and RD, plus supporting MS/KG/IGB components and audit values.
 
 ## Model Labels
 
