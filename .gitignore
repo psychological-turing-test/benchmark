@@ -183,6 +183,7 @@ ehthumbs_vista.db
 *.lnk
 
 # Project specific
+artifacts/
 results/
 logs/
 !example-*.json
