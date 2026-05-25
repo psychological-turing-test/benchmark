@@ -14,6 +14,7 @@ from .models import (
   QuestionnaireRating,
   RaterError,
 )
+from .risky_choice_metrics import compute_risky_choice_behavioral_metrics
 
 RISK_OPTION = "B"
 CONSERVATIVE_OPTION = "A"
@@ -156,6 +157,10 @@ def _score_risky_choice_framing(
         "max_distance": max_distance,
         "vas": vas,
       },
+      "behavioral_tendency_metrics": compute_risky_choice_behavioral_metrics(
+        pairs,
+        llm_id,
+      ),
     },
   )
 

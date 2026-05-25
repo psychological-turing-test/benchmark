@@ -100,6 +100,12 @@ def test_score_risky_choice_framing() -> None:
   assert rating.details["vas"]["distance"] == pytest.approx(0.2)
   assert rating.details["vas"]["max_distance"] == pytest.approx(1.0)
   assert rating.details["vas"]["vas"] == pytest.approx(80.0)
+  metrics = rating.details["behavioral_tendency_metrics"]
+  assert metrics["human"]["profile"]["fes"] == pytest.approx(0.3)
+  assert metrics["human"]["profile"]["rc"] == pytest.approx(1.0)
+  assert metrics["llm"]["profile"]["fes"] == pytest.approx(0.1)
+  assert metrics["llm"]["profile"]["rc"] == pytest.approx(0.0)
+  assert metrics["llm"]["profile"]["ms_life"] is None
 
 
 def test_score_rejects_unsupported_questionnaire() -> None:

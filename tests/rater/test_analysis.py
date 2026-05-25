@@ -71,7 +71,7 @@ def test_rate_results_writes_analysis_json(tmp_path: Path) -> None:
   payload = json.loads(result.analysis_json.read_text(encoding="utf-8"))
 
   assert result.analysis_json == tmp_path / "analysis.json"
-  assert payload["version"] == 1
+  assert payload["version"] == 2
   assert payload["source_files"] == ["decision-premise-thinking-results.json"]
   assert payload["models"][0]["llm_id"] == "aliyun/qwen3.6-plus (0)"
   assert payload["models"][0]["display_name"] == (
@@ -102,6 +102,28 @@ def test_rate_results_writes_analysis_json(tmp_path: Path) -> None:
   assert "Overall ratings" in html
   assert "Individual scores" in html
   assert "Comparison table" in html
+
+
+def test_rate_results_includes_risky_choice_behavioral_metrics(
+  tmp_path: Path,
+) -> None:
+  write_json(
+    tmp_path / "risky-choice-framing-thinking-results.json",
+    [
+      question("risky-choice-framing", "1-P-6life", 0.4, 0.5),
+      question("risky-choice-framing", "2-N-6life", 0.7, 0.6),
+    ],
+  )
+
+  payload = rate_results(tmp_path).payload
+  questionnaire = payload["models"][0]["questionnaires"]["risky-choice-framing"]
+  metrics = questionnaire["details"]["behavioral_tendency_metrics"]
+
+  assert metrics["human"]["profile"]["fes"] == pytest.approx(0.3)
+  assert metrics["human"]["profile"]["rc"] == pytest.approx(1.0)
+  assert metrics["llm"]["profile"]["fes"] == pytest.approx(0.1)
+  assert metrics["llm"]["profile"]["rc"] == pytest.approx(0.0)
+  assert metrics["llm"]["profile"]["ms_life"] is None
 
 
 def test_rate_results_rejects_unsupported_questionnaire(tmp_path: Path) -> None:

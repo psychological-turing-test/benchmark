@@ -5,7 +5,7 @@ from rationale_benchmark.rater.models import format_model_display_name
 
 
 def test_public_constants_are_exported() -> None:
-  assert ANALYSIS_VERSION == 1
+  assert ANALYSIS_VERSION == 2
   assert SUPPORTED_QUESTIONNAIRES == {
     "decision-premise",
     "risky-choice-framing",
