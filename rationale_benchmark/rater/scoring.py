@@ -8,6 +8,9 @@ from collections import defaultdict
 from collections.abc import Iterable
 from typing import Any
 
+from .decision_premise_metrics import (
+  decision_premise_behavioral_tendency_metrics,
+)
 from .models import (
   SUPPORTED_QUESTIONNAIRES,
   EvaluatorQuestionResult,
@@ -78,20 +81,25 @@ def _score_decision_premise(
     human_trajectory,
     max_distance,
   )
+  details: dict[str, Any] = {
+    "bas_items": bas_items,
+    "vas": {
+      "labels": [scenario.question_id for scenario in scenarios],
+      "human": human_trajectory,
+      "llm": llm_trajectory,
+      "distance": distance,
+      "max_distance": max_distance,
+      "vas": vas,
+    },
+  }
+  metrics = decision_premise_behavioral_tendency_metrics(scenarios, llm_id)
+  if metrics is not None:
+    details["behavioral_tendency_metrics"] = metrics
+
   return _rating(
     bas,
     vas,
-    {
-      "bas_items": bas_items,
-      "vas": {
-        "labels": [scenario.question_id for scenario in scenarios],
-        "human": human_trajectory,
-        "llm": llm_trajectory,
-        "distance": distance,
-        "max_distance": max_distance,
-        "vas": vas,
-      },
-    },
+    details,
   )
 
 

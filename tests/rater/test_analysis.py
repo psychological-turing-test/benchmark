@@ -58,6 +58,41 @@ def write_json(path: Path, payload: list[dict]) -> None:
   path.write_text(json.dumps(payload) + "\n", encoding="utf-8")
 
 
+CANONICAL_DECISION_PREMISE_RATES = [
+  ("Pf-6life", 0.2, 0.4),
+  ("Pf-600life", 0.4, 0.6),
+  ("Py-old", 0.775, 0.5),
+  ("Py-young", 0.761904761905, 0.2),
+  ("Pm-old", 0.966666666667, 0.9),
+  ("Pm-young", 0.527777777778, 0.4),
+  ("Pu-6kin", 0.55, 0.6),
+  ("Pu-6life", 0.25, 0.3),
+  ("Pu-600life", 0.1, 0.1),
+  ("Pe-6kin", 0.677419354839, 0.8),
+  ("Pe-6life", 0.40625, 0.5),
+  ("Pe-600life", 0.294117647059, 0.2),
+  ("P-6kin", 0.7, 0.7),
+  ("P-6life", 0.64, 0.4),
+  ("P-600life", 0.4, 0.25),
+]
+
+
+def canonical_decision_premise_questions() -> list[dict]:
+  return [
+    question(
+      "decision-premise",
+      f"{index}-{key}",
+      human_b,
+      llm_b,
+      section_name=f"Scenario {key}",
+    )
+    for index, (key, human_b, llm_b) in enumerate(
+      CANONICAL_DECISION_PREMISE_RATES,
+      start=1,
+    )
+  ]
+
+
 def test_rate_results_writes_analysis_json(tmp_path: Path) -> None:
   write_json(
     tmp_path / "decision-premise-thinking-results.json",
@@ -81,6 +116,8 @@ def test_rate_results_writes_analysis_json(tmp_path: Path) -> None:
   assert payload["models"][0]["vas"] == pytest.approx(74.504871)
   assert payload["models"][0]["srs"] == pytest.approx(74.752436)
   assert "decision-premise" in payload["models"][0]["questionnaires"]
+  details = payload["models"][0]["questionnaires"]["decision-premise"]["details"]
+  assert "behavioral_tendency_metrics" not in details
   html = result.visualization_html.read_text(encoding="utf-8")
   assert result.visualization_html == tmp_path / "analysis-visualize.html"
   assert "window.__RATER_ANALYSIS__" in html
@@ -124,6 +161,23 @@ def test_rate_results_includes_risky_choice_behavioral_metrics(
   assert metrics["llm"]["profile"]["fes"] == pytest.approx(0.1)
   assert metrics["llm"]["profile"]["rc"] == pytest.approx(0.0)
   assert metrics["llm"]["profile"]["ms_life"] is None
+
+
+def test_rate_results_writes_decision_premise_metrics(tmp_path: Path) -> None:
+  write_json(
+    tmp_path / "decision-premise-thinking-results.json",
+    canonical_decision_premise_questions(),
+  )
+
+  payload = rate_results(tmp_path).payload
+
+  details = payload["models"][0]["questionnaires"]["decision-premise"]["details"]
+  metrics = details["behavioral_tendency_metrics"]
+  assert metrics["profile"]["human"]["frp"] == pytest.approx(0.3)
+  assert metrics["profile"]["llm"]["frp"] == pytest.approx(0.5)
+  assert metrics["profile"]["delta"]["frp"] == pytest.approx(0.2)
+  assert metrics["profile"]["human"]["sam"] == pytest.approx(0.425793650794)
+  assert metrics["profile"]["llm"]["sbs"] == pytest.approx(0.116666666667)
 
 
 def test_rate_results_rejects_unsupported_questionnaire(tmp_path: Path) -> None:
