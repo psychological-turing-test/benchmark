@@ -27,6 +27,41 @@ def result(
   )
 
 
+CANONICAL_DECISION_PREMISE_RATES = [
+  ("Pf-6life", 0.2, 0.4),
+  ("Pf-600life", 0.4, 0.6),
+  ("Py-old", 0.775, 0.5),
+  ("Py-young", 0.761904761905, 0.2),
+  ("Pm-old", 0.966666666667, 0.9),
+  ("Pm-young", 0.527777777778, 0.4),
+  ("Pu-6kin", 0.55, 0.6),
+  ("Pu-6life", 0.25, 0.3),
+  ("Pu-600life", 0.1, 0.1),
+  ("Pe-6kin", 0.677419354839, 0.8),
+  ("Pe-6life", 0.40625, 0.5),
+  ("Pe-600life", 0.294117647059, 0.2),
+  ("P-6kin", 0.7, 0.7),
+  ("P-6life", 0.64, 0.4),
+  ("P-600life", 0.4, 0.25),
+]
+
+
+def canonical_decision_premise_results() -> list[EvaluatorQuestionResult]:
+  return [
+    result(
+      questionnaire_id="decision-premise",
+      section_name=f"Scenario {key}",
+      question_id=f"{index}-{key}",
+      human_b=human_b,
+      llm_b=llm_b,
+    )
+    for index, (key, human_b, llm_b) in enumerate(
+      CANONICAL_DECISION_PREMISE_RATES,
+      start=1,
+    )
+  ]
+
+
 def test_score_decision_premise() -> None:
   rating = score_questionnaire(
     "decision-premise",
@@ -64,6 +99,25 @@ def test_score_decision_premise() -> None:
   )
   assert rating.details["vas"]["max_distance"] == pytest.approx(math.sqrt(2))
   assert rating.details["vas"]["vas"] == pytest.approx(74.504871)
+  assert "behavioral_tendency_metrics" not in rating.details
+
+
+def test_score_decision_premise_includes_behavioral_metrics() -> None:
+  rating = score_questionnaire(
+    "decision-premise",
+    "aliyun/qwen3.6-plus (0)",
+    canonical_decision_premise_results(),
+  )
+
+  assert "bas_items" in rating.details
+  assert "vas" in rating.details
+  metrics = rating.details["behavioral_tendency_metrics"]
+  profile = metrics["profile"]
+  assert profile["human"]["frp"] == pytest.approx(0.3)
+  assert profile["llm"]["frp"] == pytest.approx(0.5)
+  assert profile["delta"]["frp"] == pytest.approx(0.2)
+  assert profile["human"]["sbs"] == pytest.approx(0.28)
+  assert profile["llm"]["sbs"] == pytest.approx(0.116666666667)
 
 
 def test_score_risky_choice_framing() -> None:

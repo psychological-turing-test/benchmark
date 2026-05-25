@@ -7,7 +7,7 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any
 
-ANALYSIS_VERSION = 1
+ANALYSIS_VERSION = 2
 SUPPORTED_QUESTIONNAIRES = {"risky-choice-framing", "decision-premise"}
 
 
