@@ -1,0 +1,98 @@
+\section{总体相似度概览}
+
+\begin{frame}{总体评分：LLM 与人类基线的相似度}
+  \begin{block}{读图方式}
+    SRS 是社会理性综合分，整合行为对齐 BAS 与价值对齐 VAS。
+    分数越高，表示模型在当前两类社会决策范式中越接近人类基线。
+  \end{block}
+
+  \vspace{-0.4em}
+  \begin{tikzpicture}
+    \begin{axis}[
+      xbar,
+      width=0.97\textwidth,
+      height=0.70\textheight,
+      xmin=45,
+      xmax=63,
+      xlabel={SRS},
+      ytick={1,...,19},
+      yticklabels={
+        Q3.6-max,Q3.6-flash,Q3.6-35B,DS-v4-flash T,GLM-5.1 NT,
+        Q3.5-122B,Q3.6-plus NT,Q3.6-plus T,Q3.6-plus,DS-v3.2 T,
+        Q3.5-35B,GLM-5.1 T,Q3.5-flash,Q3.5-plus,Q3.5-plus T,
+        Q3.5-plus NT,Q3.5-397B,DS-v4-pro T,DS-v4-pro NT},
+      y dir=reverse,
+      tick label style={font=\scriptsize},
+      yticklabel style={font=\tiny},
+      label style={font=\small},
+      xmajorgrids,
+      grid style={BenchGray!18},
+      nodes near coords,
+      nodes near coords style={font=\tiny, anchor=west},
+      point meta=x,
+      every node near coord/.append style={
+        /pgf/number format/fixed,
+        /pgf/number format/precision=1
+      },
+    ]
+      \addplot[fill=BenchBlue!75, draw=BenchBlue] coordinates {
+        (48.6,1) (52.8,2) (53.0,3) (54.8,4) (56.5,5)
+        (56.6,6) (57.1,7) (57.3,8) (57.4,9) (57.5,10)
+        (57.8,11) (58.1,12) (58.3,13) (58.3,14) (58.6,15)
+        (58.7,16) (58.8,17) (59.1,18) (61.4,19)
+      };
+    \end{axis}
+  \end{tikzpicture}
+
+  \vspace{-0.5em}
+  \smallnote{T = 最大思考模式；NT = 非思考模式。}
+\end{frame}
+
+\begin{frame}{总体评分拆解：BAS 与 VAS 并不总是同步}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.66\textwidth}
+      \begin{tikzpicture}
+        \begin{axis}[
+          width=\textwidth,
+          height=0.72\textheight,
+          xmin=48,
+          xmax=64,
+          ymin=38,
+          ymax=67,
+          xlabel={BAS：行为对齐},
+          ylabel={VAS：价值对齐},
+          grid=both,
+          grid style={BenchGray!15},
+          legend style={at={(0.02,0.98)},anchor=north west,font=\scriptsize},
+          tick label style={font=\scriptsize},
+          label style={font=\small},
+        ]
+          \addplot[dashed, BenchGray, domain=48:64] {x};
+          \addplot+[only marks, mark=*, mark size=2pt, color=BenchGreen] coordinates {
+            (50.8,64.2) (59.4,50.2) (58.4,59.7) (57.5,65.4)
+          };
+          \addplot+[only marks, mark=square*, mark size=2pt, color=BenchOrange] coordinates {
+            (55.0,61.3) (55.2,57.9)
+          };
+          \addplot+[only marks, mark=triangle*, mark size=2pt, color=BenchBlue] coordinates {
+            (49.9,63.3) (51.8,63.8) (51.8,65.7) (52.3,64.3) (51.4,65.2)
+            (51.6,65.5) (62.3,55.1) (58.6,47.5) (58.3,47.2) (57.3,39.9)
+            (59.5,55.3) (59.9,54.8) (60.9,53.3)
+          };
+          \node[font=\scriptsize, anchor=west, text=BenchRed] at (axis cs:57.3,39.9) {Q3.6-max};
+          \node[font=\scriptsize, anchor=south, text=BenchGreen] at (axis cs:57.5,65.4) {DS-v4-pro NT};
+          \legend{BAS=VAS,DeepSeek,GLM,Qwen}
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.31\textwidth}
+      \begin{block}{观察}
+        \begin{itemize}
+          \item 总体 SRS 范围为 48.6--61.4。
+          \item 一些模型 BAS 较高但 VAS 较低，说明具体选择接近不代表趋势结构接近。
+          \item 因此后续结果分开看行为对齐与价值对齐。
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}

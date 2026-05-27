@@ -1,0 +1,61 @@
+\documentclass[aspectratio=169,10pt,UTF8,fontset=fandol]{ctexbeamer}
+
+\usetheme{Madrid}
+\usecolortheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{caption}[numbered]
+
+\usepackage{amsmath}
+\usepackage{booktabs}
+\usepackage{tabularx}
+\usepackage{array}
+\usepackage{adjustbox}
+\usepackage{tikz}
+\usetikzlibrary{arrows.meta,positioning,fit,calc}
+\usepackage{pgfplots}
+\pgfplotsset{compat=1.18}
+
+\definecolor{BenchBlue}{HTML}{1D4ED8}
+\definecolor{BenchGreen}{HTML}{047857}
+\definecolor{BenchOrange}{HTML}{C2410C}
+\definecolor{BenchRed}{HTML}{B91C1C}
+\definecolor{BenchGray}{HTML}{475569}
+\definecolor{BenchLight}{HTML}{EFF6FF}
+
+\setbeamercolor{structure}{fg=BenchBlue}
+\setbeamercolor{frametitle}{fg=white,bg=BenchBlue}
+\setbeamercolor{title}{fg=white,bg=BenchBlue}
+\setbeamercolor{block title}{fg=white,bg=BenchBlue}
+\setbeamercolor{block body}{bg=BenchLight,fg=black}
+\setbeamercolor{alerted text}{fg=BenchRed}
+
+\newcolumntype{Y}{>{\raggedright\arraybackslash}X}
+\newcommand{\metric}[1]{\textbf{\textcolor{BenchBlue}{#1}}}
+\newcommand{\smallnote}[1]{{\scriptsize\textcolor{BenchGray}{#1}}}
+\newcommand{\planA}{\textbf{方案 A}}
+\newcommand{\planB}{\textbf{方案 B}}
+
+\title[心理学版图灵测试]{大语言模型的心理学版图灵测试：\\基于社会理性的类人决策模式评估}
+\author{LLM Rationale Benchmark}
+\date{\today}
+
+\begin{document}
+
+\begin{frame}
+  \titlepage
+\end{frame}
+
+\begin{frame}{报告路线}
+  \tableofcontents
+\end{frame}
+
+\input{sections/01-intro}
+\input{sections/02-system}
+\input{sections/03-setup}
+\input{sections/03-overview}
+\input{sections/04-results-similar}
+\input{sections/05-results-different}
+\input{sections/06-results-inconsistent}
+\input{sections/07-conclusion}
+
+\end{document}

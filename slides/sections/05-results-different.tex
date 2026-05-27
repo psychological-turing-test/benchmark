@@ -1,0 +1,209 @@
+\section{结果二：哪些维度系统性不像人？}
+
+\begin{frame}{决策前提任务：LLM 的心理价值结构接近平坦}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.58\textwidth}
+      \begin{tikzpicture}
+        \begin{axis}[
+          width=\textwidth,
+          height=0.67\textheight,
+          ybar,
+          bar width=7pt,
+          ymin=-0.08,
+          ymax=0.50,
+          symbolic x coords={FRP,SAM,KP,SC,GPR,SBS},
+          xtick=data,
+          ylabel={指标值},
+          legend style={at={(0.5,1.08)},anchor=south,legend columns=2},
+          enlarge x limits=0.12,
+          tick label style={font=\small},
+        ]
+          \addplot[fill=BenchBlue!80] coordinates {
+            (FRP,0.300) (SAM,0.426) (KP,0.210) (SC,0.167) (GPR,0.159) (SBS,0.280)
+          };
+          \addplot[fill=BenchOrange!80] coordinates {
+            (FRP,0.004) (SAM,-0.019) (KP,0.001) (SC,-0.001) (GPR,0.003) (SBS,0.004)
+          };
+          \legend{人类基线, LLM 均值}
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.40\textwidth}
+      \begin{block}{读图方式}
+        数值越接近人类基线，说明 LLM 越能复现该社会线索引发的决策调制。
+      \end{block}
+      \vspace{0.4em}
+      \begin{itemize}
+        \item 六个指标中，LLM 均值几乎都在 0 附近。
+        \item 人类基线在 0.16 到 0.43 之间。
+        \item 说明模型没有稳定复现这些心理适应性差分。
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{差异维度一：公平随机化偏好 FRP}
+  \begin{block}{FRP: Fairness Randomization Preference}
+    衡量在“确定救固定人数”与“随机抽取相同人数被救”之间，选择随机方案 \planB{} 的比例。
+    接近 0 表示强烈偏好确定分配；接近 1 表示强烈偏好随机分配。
+  \end{block}
+
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{关联题项}
+        \begin{itemize}
+          \item `1-Pf-6life`：6 人感染；\planA{} 确定救 2 人；\planB{} 随机选 2 人被救。
+          \item `2-Pf-600life`：600 人感染；\planA{} 确定救 200 人；\planB{} 随机选 200 人被救。
+          \item 人类 \planB{} 比例分别为 0.20 与 0.40。
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.47\textwidth}
+      \begin{tikzpicture}
+        \begin{axis}[
+          xbar,
+          width=0.93\textwidth,
+          height=0.42\textheight,
+          xmin=0,
+          xmax=0.36,
+          xlabel={FRP},
+          ytick={1,2},
+          yticklabels={LLM 均值, 人类基线},
+          tick label style={font=\small},
+          xmajorgrids,
+          grid style={BenchGray!18},
+          nodes near coords={\pgfmathprintnumber[fixed,precision=3]{\pgfplotspointmeta}},
+          nodes near coords style={font=\scriptsize, anchor=west},
+          point meta=x,
+        ]
+          \addplot[fill=BenchOrange!80, draw=BenchOrange] coordinates {(0.004,1)};
+          \addplot[fill=BenchBlue!80, draw=BenchBlue] coordinates {(0.300,2)};
+        \end{axis}
+      \end{tikzpicture}
+      \smallnote{LLM 范围为 [0.000, 0.080]。}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{差异维度二：亲缘、规模、收益变化的敏感性}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.62\textwidth}
+      \begin{tikzpicture}
+        \begin{axis}[
+          width=\textwidth,
+          height=0.62\textheight,
+          ybar,
+          bar width=10pt,
+          ymin=-0.05,
+          ymax=0.32,
+          symbolic x coords={KP,SC,GPR,SBS},
+          xtick=data,
+          ylabel={指标值},
+          legend style={at={(0.5,1.10)},anchor=south,legend columns=2,font=\scriptsize},
+          ymajorgrids,
+          grid style={BenchGray!18},
+        ]
+          \addplot[fill=BenchBlue!80] coordinates {(KP,0.210) (SC,0.167) (GPR,0.159) (SBS,0.280)};
+          \addplot[fill=BenchOrange!80] coordinates {(KP,0.001) (SC,-0.001) (GPR,0.003) (SBS,0.004)};
+          \legend{人类基线, LLM 均值}
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.35\textwidth}
+      \begin{itemize}
+        \item KP：亲缘溢价几乎消失。
+        \item SC：群体规模几乎不改变保守性。
+        \item GPR：赌博收益提高几乎不改变选择。
+        \item SBS：确定收益提高几乎不抑制 \planB{}。
+      \end{itemize}
+      \smallnote{四个指标的 LLM 均值都接近 0。}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{差异维度三：响应确定性 RD 远高于人类}
+  \begin{block}{RD: Response Determinism}
+    衡量题项层面的选择分布有多接近确定性。
+    接近 1 表示几乎所有模拟被试选择同一选项；接近 0 表示最大随机性。
+  \end{block}
+
+  \vspace{0.2em}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.55\textwidth}
+      \begin{tikzpicture}
+        \begin{axis}[
+          xbar,
+          width=0.90\textwidth,
+          height=0.45\textheight,
+          xmin=0,
+          xmax=1.12,
+          xlabel={RD},
+          ytick={1,2,3,4},
+          yticklabels={LLM 最大, LLM 均值, LLM 最小, 人类基线},
+          y dir=reverse,
+          tick label style={font=\small},
+          xmajorgrids,
+          grid style={BenchGray!18},
+          nodes near coords={\pgfmathprintnumber[fixed,precision=2]{\pgfplotspointmeta}},
+          nodes near coords style={font=\scriptsize, anchor=west},
+          point meta=x,
+        ]
+          \addplot[fill=BenchOrange!50, draw=BenchOrange] coordinates {(0.961,1) (0.712,2) (0.498,3)};
+          \addplot[fill=BenchBlue!80, draw=BenchBlue] coordinates {(0.092,4)};
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \begin{itemize}
+        \item 高 RD 会让某些模型看起来很“稳定”，但这种稳定不一定像人。
+        \item 当模型在每个题项上接近单一选择，FES、MS、KG 等趋势指标也会更脆弱。
+        \item 这解释了为什么要同时报告 BAS 与 VAS。
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{差异维度四：生命规模敏感性 MS-L}
+  \begin{block}{MS-L: Magnitude Sensitivity (life)}
+    衡量生命数量从 6、60、600 到 6000 时，\planB{} 选择率如何变化。
+    负值表示规模越大越保守；接近 0 表示对规模不敏感；正值表示规模越大越冒险。
+  \end{block}
+
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.47\textwidth}
+      \begin{block}{关联题项}
+        生命规模依次为 6、60、600、6000。
+        正框架题项为 `1/3/5/7-P-life`；
+        负框架题项为 `2/4/6/8-N-life`。
+      \end{block}
+      \begin{itemize}
+        \item 人类 MS-L = -0.060：规模越大越保守。
+        \item LLM 均值 = 0.015：整体更接近规模不敏感或反向变化。
+        \item LLM 范围为 [-0.008, 0.143]。
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.50\textwidth}
+      \begin{tikzpicture}
+        \begin{axis}[
+          xbar,
+          width=0.82\textwidth,
+          height=0.42\textheight,
+          xmin=-0.08,
+          xmax=0.06,
+          xlabel={MS-L},
+          scaled x ticks=false,
+          xtick={-0.06,0,0.06},
+          xticklabel style={font=\small,/pgf/number format/fixed,/pgf/number format/precision=2},
+          ytick={1,2},
+          yticklabels={LLM 均值, 人类基线},
+          tick label style={font=\small},
+          xmajorgrids,
+          grid style={BenchGray!18},
+        ]
+          \addplot[fill=BenchOrange!80, draw=BenchOrange] coordinates {(0.015,1)};
+          \addplot[fill=BenchBlue!80, draw=BenchBlue] coordinates {(-0.060,2)};
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+  \end{columns}
+\end{frame}

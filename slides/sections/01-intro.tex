@@ -1,0 +1,68 @@
+\section{研究问题}
+
+\begin{frame}{为什么需要“心理学版图灵测试”？}
+  \begin{block}{核心问题}
+    当前 LLM 评测多关注规范正确性、任务准确率或通用能力表现。
+    但社会心理学中的许多经典现象并不是“标准答案”问题，而是人类在有限理性与社会情境下形成的稳定行为模式。
+  \end{block}
+
+  \vspace{0.6em}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.48\textwidth}
+      \textbf{传统基准更容易回答}
+      \begin{itemize}
+        \item 模型是否答对？
+        \item 模型是否遵循规范推理？
+        \item 模型是否在任务上更强？
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{本工作关注}
+      \begin{itemize}
+        \item 模型是否做得像人类？
+        \item 模型是否对社会线索敏感？
+        \item 模型是否具有相似的心理价值权重？
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{目标：检验 LLM 的社会理性}
+  \begin{block}{社会理性}
+    本文将社会理性理解为：在具有心理适应性机制的社会决策情境中，决策者对亲缘关系、群体规模、收益变化、身份线索与自我相关前提等因素表现出的系统性敏感性。
+  \end{block}
+
+  \vspace{0.7em}
+  \begin{itemize}
+    \item 不是问 LLM 是否给出“最优”答案。
+    \item 而是问 LLM 是否复现人类在经典范式中的\metric{类人决策模式}。
+    \item 评估对象从单题准确率转向\metric{行为分布}与\metric{条件变化下的趋势结构}。
+  \end{itemize}
+\end{frame}
+
+\begin{frame}{本文的基准尝试弥补什么空缺？}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.50\textwidth}
+      \begin{block}{现有评测的不足}
+        \begin{itemize}
+          \item 较少覆盖人类非规范性判断。
+          \item 较少显式比较情境敏感性。
+          \item 较少把社会认知偏差转化为可复现指标。
+        \end{itemize}
+      \end{block}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \begin{block}{本框架的定位}
+        \begin{itemize}
+          \item 复现经典社会心理学范式。
+          \item 将人类基线写入结构化问卷。
+          \item 自动生成问卷特定的行为指标与可视化。
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.8em}
+  \centering
+  \Large\metric{从“能不能答对”转向“是不是像人类那样判断”。}
+\end{frame}

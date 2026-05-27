@@ -1,0 +1,75 @@
+\section{初步实验设置}
+
+\begin{frame}{实验材料与模型}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.48\textwidth}
+      \begin{block}{两类社会决策范式}
+        \begin{itemize}
+          \item \metric{风险决策框架任务}
+          \item \metric{心理适应性决策前提任务}
+        \end{itemize}
+      \end{block}
+
+      \vspace{0.5em}
+      \begin{itemize}
+        \item 当前配置中，风险决策框架问卷含 36 个题项，按正/负框架成对组织。
+        \item 决策前提问卷含 15 个题项，聚合为 6 个心理适应性维度。
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \begin{block}{中国 LLM 初步验证}
+        \begin{itemize}
+          \item 共 19 个 LLM 版本。
+          \item DeepSeek: 4 个版本。
+          \item GLM: 2 个版本。
+          \item Qwen: 13 个版本。
+          \item 包含思考模式与非思考模式变体。
+        \end{itemize}
+      \end{block}
+    \end{column}
+  \end{columns}
+
+  \vspace{0.4em}
+  \smallnote{每个问卷默认以 population-level 方式收集 LLM 模拟被试答案；本次问卷配置默认 population 为 50。}
+\end{frame}
+
+\begin{frame}{风险决策框架任务：同一结果的两种描述}
+  \begin{block}{题目结构}
+    每个条件有正框架与负框架两个版本。
+    \planB{} 是风险方案；指标关注 LLM 选择 \planB{} 的比例。
+  \end{block}
+
+  \vspace{0.4em}
+  \begin{tabularx}{\textwidth}{lYY}
+    \toprule
+    条件 & 正框架 P & 负框架 N \\
+    \midrule
+    600 人感染致命疾病 &
+    \planA{}：200 人会被救。 \newline
+    \planB{}：$1/3$ 概率 600 人全被救，$2/3$ 概率无人被救。 &
+    \planA{}：400 人会死亡。 \newline
+    \planB{}：$1/3$ 概率无人死亡，$2/3$ 概率 600 人全部死亡。 \\
+    \bottomrule
+  \end{tabularx}
+
+  \vspace{0.4em}
+  \smallnote{对应题项示例：`5-P-600life` 与 `6-N-600life`。}
+\end{frame}
+
+\begin{frame}{决策前提任务：让社会线索发生变化}
+  \begin{tabularx}{\textwidth}{lYl}
+    \toprule
+    指标 & 题项如何形成差分 & 人类基线含义 \\
+    \midrule
+    FRP & 确定救 2/200 人 vs 随机抽取 2/200 人被救 & 对公平随机化的偏好 \\
+    SAM & 年轻/中年参与者前提下，救老人 vs 救年轻人的差异 & 自我年龄相关调制 \\
+    KP & 家庭成员群体 vs 匿名人群，在同等规模下比较 & 亲缘关系是否提高风险方案选择 \\
+    SC & 6 人 vs 600 人，在同一前提下比较 & 群体规模是否改变保守性 \\
+    GPR & 风险方案收益从 $1/3$ 全救提高到 $2/3$ 全救 & 对赌博收益提高的响应 \\
+    SBS & 确定方案从救 2 人提高到救 4 人 & 对确定收益提高的响应 \\
+    \bottomrule
+  \end{tabularx}
+
+  \vspace{0.4em}
+  \smallnote{这些指标不是单题分数，而是跨一组题项的条件差分。}
+\end{frame}

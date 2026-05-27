@@ -1,0 +1,195 @@
+\section{结果三：哪里出现显著不一致？}
+
+\begin{frame}{框架效应：不同 LLM 的行为差异很大}
+  \begin{block}{FES 与 RC}
+    \metric{FES} 衡量负框架相对正框架使 \planB{} 选择率增加多少。
+    \metric{RC} 衡量有多少条件符合“收益框架更保守、损失框架更冒险”的经典反射模式。
+  \end{block}
+
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.60\textwidth}
+      \begin{tikzpicture}
+        \begin{axis}[
+          width=\textwidth,
+          height=0.50\textheight,
+          ybar,
+          bar width=9pt,
+          ymin=0,
+          ymax=1,
+          symbolic x coords={FES,RC},
+          xtick=data,
+          ylabel={指标值},
+          legend style={at={(0.5,1.12)},anchor=south,legend columns=4,font=\scriptsize},
+          ymajorgrids,
+          grid style={BenchGray!18},
+        ]
+          \addplot[fill=BenchBlue!80] coordinates {(FES,0.147) (RC,0.444)};
+          \addplot[fill=BenchOrange!80] coordinates {(FES,0.300) (RC,0.269)};
+          \addplot[fill=BenchGray!35] coordinates {(FES,0.011) (RC,0.000)};
+          \addplot[fill=BenchRed!60] coordinates {(FES,0.761) (RC,0.944)};
+          \legend{人类, LLM 均值, LLM 最小, LLM 最大}
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.37\textwidth}
+      \begin{itemize}
+        \item FES 范围为 0.011--0.761。
+        \item RC 范围为 0.000--0.944。
+        \item 有的模型几乎框架中性，有的模型框架效应远强于人类。
+      \end{itemize}
+    \end{column}
+  \end{columns}
+
+  \smallnote{因此，LLM 之间的差异不是简单的“更像/不像”，而是心理错误结构不同。}
+\end{frame}
+
+\begin{frame}{框架效应示例：同一条件下的模型分化}
+  \begin{tikzpicture}
+    \begin{axis}[
+      width=\textwidth,
+      height=0.62\textheight,
+      ybar,
+      bar width=7pt,
+      ymin=0,
+      ymax=0.92,
+      ylabel={\planB{} 选择比例},
+      symbolic x coords={人类,Q3.5+,Q3.6+,Q3.6-max,DS-v4-pro NT,DS-v4-pro T},
+      xtick=data,
+      x tick label style={rotate=20,anchor=east,font=\scriptsize},
+      legend style={at={(0.5,1.10)},anchor=south,legend columns=2,font=\scriptsize},
+      ymajorgrids,
+      grid style={BenchGray!18},
+    ]
+      \addplot[fill=BenchBlue!75] coordinates {
+        (人类,0.40) (Q3.5+,0.00) (Q3.6+,0.00) (Q3.6-max,0.00) (DS-v4-pro NT,0.06) (DS-v4-pro T,0.02)
+      };
+      \addplot[fill=BenchOrange!80] coordinates {
+        (人类,0.68) (Q3.5+,0.01) (Q3.6+,0.45) (Q3.6-max,0.83) (DS-v4-pro NT,0.46) (DS-v4-pro T,0.68)
+      };
+      \legend{正框架, 负框架}
+    \end{axis}
+  \end{tikzpicture}
+
+  \vspace{0.4em}
+  \smallnote{同样是 600 人感染的正/负框架题，不同模型呈现出从框架中性到过强框架效应的连续差异。}
+\end{frame}
+
+\begin{frame}{思考模式不是简单优势}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.66\textwidth}
+      \begin{tikzpicture}
+        \begin{axis}[
+          xbar,
+          width=0.94\textwidth,
+          height=0.58\textheight,
+          xmin=-12,
+          xmax=13,
+          xlabel={$\Delta$ SRS：非思考模式 - 最大思考模式},
+          ytick={1,2,3,4},
+          yticklabels={DS-v4-pro,GLM-5.1,Qwen3.5+,Qwen3.6+},
+          y dir=reverse,
+          tick label style={font=\scriptsize},
+          legend style={at={(0.5,1.12)},anchor=south,legend columns=2,font=\scriptsize},
+          xmajorgrids,
+          grid style={BenchGray!18},
+        ]
+          \addplot[fill=BenchBlue!75, draw=BenchBlue] coordinates {
+            (3.76,1) (2.02,2) (10.44,3) (10.17,4)
+          };
+          \addplot[fill=BenchOrange!80, draw=BenchOrange] coordinates {
+            (0.95,1) (-5.21,2) (-10.13,3) (-10.73,4)
+          };
+          \addplot[BenchGray, sharp plot] coordinates {(0,0.5) (0,4.5)};
+          \legend{决策前提, 风险框架}
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.31\textwidth}
+      \begin{itemize}
+        \item 非思考模式在决策前提问卷上常更接近人类。
+        \item 但在风险框架问卷上常更差。
+        \item 思考模式改变的是误差结构，而非单调提高类人一致性。
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{同一公司模型的版本变化：Qwen 示例}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.62\textwidth}
+      \begin{tikzpicture}
+        \begin{axis}[
+          width=\textwidth,
+          height=0.58\textheight,
+          ymin=45,
+          ymax=68,
+          ylabel={SRS},
+          xtick={1,2,3,4,5,6,7},
+          xticklabels={3.5+,3.5+T,3.5+NT,3.6+,3.6+T,3.6+NT,3.6-max},
+          x tick label style={rotate=30,anchor=east,font=\scriptsize},
+          legend style={at={(0.5,1.12)},anchor=south,legend columns=2,font=\scriptsize},
+          ymajorgrids,
+          grid style={BenchGray!18},
+        ]
+          \addplot+[mark=*, color=BenchBlue, thick] coordinates {
+            (1,51.0) (2,51.1) (3,61.6) (4,50.0) (5,50.1) (6,60.3) (7,46.7)
+          };
+          \addplot+[mark=square*, color=BenchOrange, thick] coordinates {
+            (1,65.7) (2,66.0) (3,55.8) (4,64.8) (5,64.6) (6,53.9) (7,50.5)
+          };
+          \legend{决策前提, 风险框架}
+        \end{axis}
+      \end{tikzpicture}
+    \end{column}
+    \begin{column}{0.35\textwidth}
+      \begin{tikzpicture}
+        \begin{axis}[
+          ybar,
+          width=\textwidth,
+          height=0.38\textheight,
+          ymin=0,
+          ymax=0.85,
+          ylabel={FES},
+          xtick={1,2,3,4,5,6,7},
+          xticklabels={3.5+,T,NT,3.6+,T,NT,max},
+          x tick label style={rotate=35,anchor=east,font=\tiny},
+          ymajorgrids,
+          grid style={BenchGray!18},
+          tick label style={font=\scriptsize},
+        ]
+          \addplot[fill=BenchGreen!70, draw=BenchGreen] coordinates {
+            (1,0.011) (2,0.014) (3,0.452) (4,0.452) (5,0.482) (6,0.494) (7,0.761)
+          };
+        \end{axis}
+      \end{tikzpicture}
+      \vspace{0.2em}
+      \begin{block}{观察}
+        框架效应相关指标增强；
+        但两类问卷的 SRS 没有同步提升。
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{模型家族之间也不是同一种“类人性”}
+  \begin{columns}[T,totalwidth=\textwidth]
+    \begin{column}{0.50\textwidth}
+      \begin{block}{DeepSeek-v4-pro}
+        非思考模式总体 SRS 最高：61.4。
+        但最大思考模式在框架效应上更强，FES 从 0.077 升至 0.340。
+      \end{block}
+      \begin{block}{Qwen3.6-max-preview}
+        FES = 0.761，RC = 0.889。
+        它高度呈现经典框架效应，但综合 SRS 只有 48.6。
+      \end{block}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \begin{block}{GLM-5.1}
+        非思考模式在决策前提上略高，但风险框架 SRS 低于最大思考模式。
+      \end{block}
+      \begin{block}{Qwen3.5-plus}
+        最大思考模式几乎框架中性；非思考模式恢复部分人类式框架效应，却损失风险框架综合对齐。
+      \end{block}
+    \end{column}
+  \end{columns}
+\end{frame}
