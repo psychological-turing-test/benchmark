@@ -333,6 +333,7 @@ def test_thinking_config_keeps_reasoning_levels_as_distinct_models(
   assert configs["aliyun/qwen3.6-plus (-1)"].default_params == {
     "enable_thinking": True,
   }
+  assert configs["aliyun/qwen3.5-plus (-1)"].timeout_seconds == 120
 
 
 def test_deepseek_config_defaults_to_runnable_models(monkeypatch):
@@ -371,6 +372,22 @@ def test_default_llms_does_not_set_a_global_temperature(monkeypatch):
 
   assert configs
   assert all(config.temperature is None for config in configs.values())
+
+
+def test_bundled_llm_configs_use_extended_timeout(monkeypatch):
+  monkeypatch.setenv("DASHSCOPE_API_KEY", "token")
+  loader = ConnectorConfigLoader()
+
+  mismatches = []
+  for path in sorted(Path("config/llms").glob("*.yaml")):
+    configs = loader.load(path, merge_default=False)
+    mismatches.extend(
+      (path.name, selector, config.timeout_seconds)
+      for selector, config in configs.items()
+      if config.timeout_seconds != 120
+    )
+
+  assert mismatches == []
 
 
 def test_zero_timeout_means_no_client_side_timeout(tmp_path):
