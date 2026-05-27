@@ -128,17 +128,53 @@ def test_rate_results_writes_analysis_json(tmp_path: Path) -> None:
   assert 'selectorButton("Select all"' in html
   assert 'selectorButton("Deselect all"' in html
   assert 'input.type = "checkbox"' in html
-  assert "model.questionnaires[name]?.[metric] ?? 0" in html
-  assert "grid-template-columns: minmax(0, 2fr) minmax(280px, 0.9fr)" in html
   assert 'const metrics = ["srs"];' in html
   assert "const width = 760;" in html
   assert "const barStart = 360;" in html
+  assert "QUESTIONNAIRE_METRICS" in html
+  assert '"risky-choice-framing": {' in html
+  assert '"decision-premise": {' in html
+  assert 'acronym: "FES"' in html
+  assert 'acronym: "MS-L"' in html
+  assert 'acronym: "FRP"' in html
+  assert 'const HUMAN_BASELINE_LABEL = "Human baseline";' in html
+  assert "renderBehavioralProfiles(models)" in html
+  assert "renderQuestionnaireMetricPanel(questionnaireId, models)" in html
+  assert "renderMetricBarChart(metric, series)" in html
+  assert "renderMetricBarRow(metric, item, scale)" in html
+  assert "barFillStyle(ratio)" in html
+  assert "questionnaire-risky-choice-framing" in html
+  assert "questionnaire-decision-premise" in html
+  assert "cssSafeId(questionnaireId)" in html
+  assert "<strong>Interpretation:</strong>" in html
+  assert "Around 0 means frame-neutral" in html
+  assert "values near 0 are identity-neutral" in html
+  assert "The human reference is about 0.30" in html
+  assert "the improved sure outcome is ignored" in html
+  assert "renderMetricTables(models)" in html
+  assert 'if (questionnaireId === "risky-choice-framing")' in html
+  assert 'if (questionnaireId === "decision-premise")' in html
+  assert "return metrics[agent]?.profile ?? null;" in html
+  assert "return metrics.profile?.[agent] ?? null;" in html
+  assert 'scale: "signed"' in html
+  assert "max: 0.2" in html
+  assert "baselineMetricScale(metric, series)" in html
+  assert "normalizedMetricValue(value, scale)" in html
+  assert "baselineMetricRatio(value, scale)" in html
+  assert "signedBaselineDifference(value, scale)" in html
+  assert "signed difference from human baseline:" in html
+  assert 'class="metric-bar-track"' in html
+  assert 'id="metric-charts"' in html
+  assert 'id="radar-charts"' not in html
+  assert 'id="comparison-tables"' in html
   assert "<th>Raw LLM ID</th>" not in html
   assert '<th class="srs-column">SRS</th>' in html
-  assert "formatRatingCell(model.srs, tableExtrema.srs, true)" in html
+  assert "formatRatingValue(questionnaire?.srs)" in html
+  assert "model.questionnaires[name]?.[metric] ?? 0" not in html
   assert "Overall ratings" in html
-  assert "Individual scores" in html
-  assert "Comparison table" in html
+  assert "Behavioral metric bars" in html
+  assert "Questionnaire metric tables" in html
+  assert "Individual scores" not in html
 
 
 def test_rate_results_includes_risky_choice_behavioral_metrics(
