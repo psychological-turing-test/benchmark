@@ -141,8 +141,10 @@ def test_rate_results_writes_analysis_json(tmp_path: Path) -> None:
   assert "renderBehavioralProfiles(models)" in html
   assert "renderQuestionnaireMetricPanel(questionnaireId, models)" in html
   assert "renderMetricBarChart(metric, series)" in html
+  assert "renderAbsoluteZeroMarker(scale)" in html
   assert "renderMetricBarRow(metric, item, scale)" in html
   assert "barFillStyle(ratio)" in html
+  assert "absoluteZeroPosition(scale)" in html
   assert "questionnaire-risky-choice-framing" in html
   assert "questionnaire-decision-premise" in html
   assert "cssSafeId(questionnaireId)" in html
@@ -164,6 +166,9 @@ def test_rate_results_writes_analysis_json(tmp_path: Path) -> None:
   assert "signedBaselineDifference(value, scale)" in html
   assert "signed difference from human baseline:" in html
   assert 'class="metric-bar-track"' in html
+  assert 'class="metric-zero-marker"' in html
+  assert 'class="metric-bar-absolute-zero"' in html
+  assert "Absolute metric value: 0" in html
   assert 'id="metric-charts"' in html
   assert 'id="radar-charts"' not in html
   assert 'id="comparison-tables"' in html

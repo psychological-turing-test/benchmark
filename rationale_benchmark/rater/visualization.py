@@ -156,6 +156,25 @@ _HTML = """<!DOCTYPE html>
       margin-top: 8px;
       font-size: 12px;
     }
+    .metric-zero-marker-row {
+      display: grid;
+      grid-template-columns: minmax(110px, 0.9fr) minmax(120px, 1.4fr) 86px;
+      gap: 8px;
+      align-items: end;
+      margin-top: 4px;
+      font-size: 11px;
+      color: #475467;
+    }
+    .metric-zero-marker-track {
+      position: relative;
+      height: 14px;
+    }
+    .metric-zero-marker {
+      position: absolute;
+      transform: translateX(-50%);
+      font-weight: 700;
+      line-height: 1;
+    }
     .metric-bar-label {
       overflow: hidden;
       text-overflow: ellipsis;
@@ -174,6 +193,12 @@ _HTML = """<!DOCTYPE html>
       top: 0;
       bottom: 0;
       border-left: 1px solid #98a2b3;
+    }
+    .metric-bar-absolute-zero {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      border-left: 2px dashed #475467;
     }
     .metric-bar-fill {
       position: absolute;
@@ -575,10 +600,28 @@ _HTML = """<!DOCTYPE html>
         </p>
       `;
       const scale = baselineMetricScale(metric, series);
+      card.append(renderAbsoluteZeroMarker(scale));
       series.forEach((item) => {
         card.append(renderMetricBarRow(metric, item, scale));
       });
       return card;
+    }
+
+    function renderAbsoluteZeroMarker(scale) {
+      const absoluteZero = absoluteZeroPosition(scale);
+      const row = document.createElement("div");
+      row.className = "metric-zero-marker-row";
+      row.innerHTML = `
+        <span></span>
+        <div class="metric-zero-marker-track">
+          <span
+            class="metric-zero-marker"
+            style="left: ${absoluteZero}%;"
+          >0</span>
+        </div>
+        <span></span>
+      `;
+      return row;
     }
 
     function renderMetricBarRow(metric, item, scale) {
@@ -586,6 +629,7 @@ _HTML = """<!DOCTYPE html>
       const signedDifference = signedBaselineDifference(value, scale);
       const ratio = baselineMetricRatio(value, scale);
       const fill = barFillStyle(ratio);
+      const absoluteZero = absoluteZeroPosition(scale);
       const row = document.createElement("div");
       row.className = "metric-bar-row";
       row.title = [
@@ -595,7 +639,12 @@ _HTML = """<!DOCTYPE html>
       row.innerHTML = `
         <div class="metric-bar-label">${escapeHtml(item.label)}</div>
         <div class="metric-bar-track">
-          <span class="metric-bar-zero"></span>
+          <span class="metric-bar-zero" title="Human baseline difference: 0"></span>
+          <span
+            class="metric-bar-absolute-zero"
+            title="Absolute metric value: 0"
+            style="left: ${absoluteZero}%;"
+          ></span>
           <span
             class="metric-bar-fill"
             style="left: ${fill.left}%; width: ${fill.width}%; background: ${item.color};"
@@ -616,6 +665,10 @@ _HTML = """<!DOCTYPE html>
         left: Math.min(center, end),
         width: Math.abs(end - center),
       };
+    }
+
+    function absoluteZeroPosition(scale) {
+      return 50 + baselineMetricRatio(0, scale) * 50;
     }
 
     function renderMetricTables(models) {
