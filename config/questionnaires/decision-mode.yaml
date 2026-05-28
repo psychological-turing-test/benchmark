@@ -12,24 +12,25 @@ questionnaire:
     author: "Benchmark Curation Team"
     source: "config/questionnaires/Turing-Test-Materials.xlsx, DecisionMode sheet"
     response_type: "Option & Rating"
-    scoring: "Question distributions encode human emotional, rational, and overall choice rates; section human averages store the overall Plan/Option B choice rate."
+    scoring: "Question distributions encode human emotional, rational, and overall choice rates; each section contains a single question and the section human average stores its Plan/Option B choice rate."
     notes: "The source protocol asks for 7-point overall preference ratings, but the current questionnaire schema represents the available Human_OVERresponse columns as overall choice distributions."
   sections:
-    - name: "Life-death scenario (terrorist attack with 600 lives at stake)-Pdm-600life"
+    - name: "Pdm-600life-emotional"
       human:
-        average: 0.352941176471
+        average: 0.4625
         population: 80
       instructions: |
-        Imagine that the U.S. has been attacked by an unusual and deadly disease spread by terrorists. Without treatment, 600 infected people will die. Two alternative rescue plans have been proposed. Assume that the exact scientific estimates of the consequences of the plans are as follows:
-        If Plan A is adopted, 300 people will be saved.
-        If Plan B is adopted, there is a 50% chance that all 600 people will be saved and a 50% chance that none of them will be saved.
-
         Choose according to the decision mode named in each question.
         There is no right or wrong answer. Please answer directly without explanations.
       questions:
         - id: "pdm_600life_emotional"
           type: "choice"
-          prompt: "Based on your emotional reaction, which plan would you choose?"
+          prompt: |
+            Imagine that the U.S. has been attacked by an unusual and deadly disease spread by terrorists. Without treatment, 600 infected people will die. Two alternative rescue plans have been proposed. Assume that the exact scientific estimates of the consequences of the plans are as follows:
+            If Plan A is adopted, 300 people will be saved.
+            If Plan B is adopted, there is a 50% chance that all 600 people will be saved and a 50% chance that none of them will be saved.
+
+            Based on your emotional reaction, which plan would you choose?
           output_schema:
             properties:
               answer:
@@ -43,9 +44,22 @@ questionnaire:
             distribution:
               A: 0.5375
               B: 0.4625
+    - name: "Pdm-600life-rational"
+      human:
+        average: 0.3625
+        population: 80
+      instructions: |
+        Choose according to the decision mode named in each question.
+        There is no right or wrong answer. Please answer directly without explanations.
+      questions:
         - id: "pdm_600life_rational"
           type: "choice"
-          prompt: "Based on your rational assessment, which plan would you choose?"
+          prompt: |
+            Imagine that the U.S. has been attacked by an unusual and deadly disease spread by terrorists. Without treatment, 600 infected people will die. Two alternative rescue plans have been proposed. Assume that the exact scientific estimates of the consequences of the plans are as follows:
+            If Plan A is adopted, 300 people will be saved.
+            If Plan B is adopted, there is a 50% chance that all 600 people will be saved and a 50% chance that none of them will be saved.
+
+            Based on your rational assessment, which plan would you choose?
           output_schema:
             properties:
               answer:
@@ -59,9 +73,22 @@ questionnaire:
             distribution:
               A: 0.6375
               B: 0.3625
+    - name: "Pdm-600life-overall"
+      human:
+        average: 0.352941176471
+        population: 80
+      instructions: |
+        Choose according to the decision mode named in each question.
+        There is no right or wrong answer. Please answer directly without explanations.
+      questions:
         - id: "pdm_600life_overall"
           type: "choice"
-          prompt: "Considering your overall preference, which plan do you prefer?"
+          prompt: |
+            Imagine that the U.S. has been attacked by an unusual and deadly disease spread by terrorists. Without treatment, 600 infected people will die. Two alternative rescue plans have been proposed. Assume that the exact scientific estimates of the consequences of the plans are as follows:
+            If Plan A is adopted, 300 people will be saved.
+            If Plan B is adopted, there is a 50% chance that all 600 people will be saved and a 50% chance that none of them will be saved.
+
+            Considering your overall preference, which plan do you prefer?
           output_schema:
             properties:
               answer:
@@ -75,21 +102,22 @@ questionnaire:
             distribution:
               A: 0.647058823529
               B: 0.352941176471
-    - name: "Life-death scenario (terrorist attack with 600 lives at stake)-Ndm-600life"
+    - name: "Ndm-600life-emotional"
       human:
-        average: 0.611940298507
+        average: 0.75
         population: 80
       instructions: |
-        Imagine that the US has been attacked by an unusual and deadly disease spread by terrorists. Without treatment, 600 infected people will die. Two alternative rescue plans have been proposed. Assume that the exact scientific estimates of the consequences of the plans are as follows:
-        If Plan A is adopted, 300 people will be killed.
-        If Plan B is adopted, there is a 50% chance that all 600 people will be killed and a 50% chance that none of them will be killed.
-
         Choose according to the decision mode named in each question.
         There is no right or wrong answer. Please answer directly without explanations.
       questions:
         - id: "ndm_600life_emotional"
           type: "choice"
-          prompt: "Based on your emotional reaction, which plan would you choose?"
+          prompt: |
+            Imagine that the US has been attacked by an unusual and deadly disease spread by terrorists. Without treatment, 600 infected people will die. Two alternative rescue plans have been proposed. Assume that the exact scientific estimates of the consequences of the plans are as follows:
+            If Plan A is adopted, 300 people will be killed.
+            If Plan B is adopted, there is a 50% chance that all 600 people will be killed and a 50% chance that none of them will be killed.
+
+            Based on your emotional reaction, which plan would you choose?
           output_schema:
             properties:
               answer:
@@ -103,9 +131,22 @@ questionnaire:
             distribution:
               A: 0.25
               B: 0.75
+    - name: "Ndm-600life-rational"
+      human:
+        average: 0.4125
+        population: 80
+      instructions: |
+        Choose according to the decision mode named in each question.
+        There is no right or wrong answer. Please answer directly without explanations.
+      questions:
         - id: "ndm_600life_rational"
           type: "choice"
-          prompt: "Based on your rational assessment, which plan would you choose?"
+          prompt: |
+            Imagine that the US has been attacked by an unusual and deadly disease spread by terrorists. Without treatment, 600 infected people will die. Two alternative rescue plans have been proposed. Assume that the exact scientific estimates of the consequences of the plans are as follows:
+            If Plan A is adopted, 300 people will be killed.
+            If Plan B is adopted, there is a 50% chance that all 600 people will be killed and a 50% chance that none of them will be killed.
+
+            Based on your rational assessment, which plan would you choose?
           output_schema:
             properties:
               answer:
@@ -119,9 +160,22 @@ questionnaire:
             distribution:
               A: 0.5875
               B: 0.4125
+    - name: "Ndm-600life-overall"
+      human:
+        average: 0.611940298507
+        population: 80
+      instructions: |
+        Choose according to the decision mode named in each question.
+        There is no right or wrong answer. Please answer directly without explanations.
+      questions:
         - id: "ndm_600life_overall"
           type: "choice"
-          prompt: "Considering your overall preference, which plan do you prefer?"
+          prompt: |
+            Imagine that the US has been attacked by an unusual and deadly disease spread by terrorists. Without treatment, 600 infected people will die. Two alternative rescue plans have been proposed. Assume that the exact scientific estimates of the consequences of the plans are as follows:
+            If Plan A is adopted, 300 people will be killed.
+            If Plan B is adopted, there is a 50% chance that all 600 people will be killed and a 50% chance that none of them will be killed.
+
+            Considering your overall preference, which plan do you prefer?
           output_schema:
             properties:
               answer:
@@ -135,21 +189,22 @@ questionnaire:
             distribution:
               A: 0.388059701493
               B: 0.611940298507
-    - name: "Life-death scenario (infectious disease with 6 family members at stake)-Pdm-6kin"
+    - name: "Pdm-6kin-emotional"
       human:
-        average: 0.459016393443
+        average: 0.6125
         population: 80
       instructions: |
-        Imagine that 6 of your family members (e.g., your parents, grandparents, siblings, and offspring) are infected with fatal bacteria, and without any treatment, they will die. There are only two medical plans available:
-        If Plan A is adopted, 3 of them will be saved.
-        If Plan B is adopted, there is a 50% chance that all of them will be saved and a 50% chance that none will be saved.
-
         Choose according to the decision mode named in each question.
         There is no right or wrong answer. Please answer directly without explanations.
       questions:
         - id: "pdm_6kin_emotional"
           type: "choice"
-          prompt: "Based on your emotional reaction, which plan would you choose?"
+          prompt: |
+            Imagine that 6 of your family members (e.g., your parents, grandparents, siblings, and offspring) are infected with fatal bacteria, and without any treatment, they will die. There are only two medical plans available:
+            If Plan A is adopted, 3 of them will be saved.
+            If Plan B is adopted, there is a 50% chance that all of them will be saved and a 50% chance that none will be saved.
+
+            Based on your emotional reaction, which plan would you choose?
           output_schema:
             properties:
               answer:
@@ -163,9 +218,22 @@ questionnaire:
             distribution:
               A: 0.3875
               B: 0.6125
+    - name: "Pdm-6kin-rational"
+      human:
+        average: 0.45
+        population: 80
+      instructions: |
+        Choose according to the decision mode named in each question.
+        There is no right or wrong answer. Please answer directly without explanations.
+      questions:
         - id: "pdm_6kin_rational"
           type: "choice"
-          prompt: "Based on your rational assessment, which plan would you choose?"
+          prompt: |
+            Imagine that 6 of your family members (e.g., your parents, grandparents, siblings, and offspring) are infected with fatal bacteria, and without any treatment, they will die. There are only two medical plans available:
+            If Plan A is adopted, 3 of them will be saved.
+            If Plan B is adopted, there is a 50% chance that all of them will be saved and a 50% chance that none will be saved.
+
+            Based on your rational assessment, which plan would you choose?
           output_schema:
             properties:
               answer:
@@ -179,9 +247,22 @@ questionnaire:
             distribution:
               A: 0.55
               B: 0.45
+    - name: "Pdm-6kin-overall"
+      human:
+        average: 0.459016393443
+        population: 80
+      instructions: |
+        Choose according to the decision mode named in each question.
+        There is no right or wrong answer. Please answer directly without explanations.
+      questions:
         - id: "pdm_6kin_overall"
           type: "choice"
-          prompt: "Considering your overall preference, which plan do you prefer?"
+          prompt: |
+            Imagine that 6 of your family members (e.g., your parents, grandparents, siblings, and offspring) are infected with fatal bacteria, and without any treatment, they will die. There are only two medical plans available:
+            If Plan A is adopted, 3 of them will be saved.
+            If Plan B is adopted, there is a 50% chance that all of them will be saved and a 50% chance that none will be saved.
+
+            Considering your overall preference, which plan do you prefer?
           output_schema:
             properties:
               answer:
@@ -195,21 +276,22 @@ questionnaire:
             distribution:
               A: 0.540983606557
               B: 0.459016393443
-    - name: "Life-death scenario (infectious disease with 6 family members at stake)-Ndm-6kin"
+    - name: "Ndm-6kin-emotional"
       human:
-        average: 0.681818181818
+        average: 0.825
         population: 80
       instructions: |
-        Imagine that 6 of your family members (e.g., your parents, grandparents, siblings, and offspring) are infected with fatal bacteria, and without any treatment, they will die. There are only two medical plans available:
-        If Plan A is adopted, 3 of them will die.
-        If Plan B is adopted, there is a 50% chance that no one will die and a 50% chance that all of them will die.
-
         Choose according to the decision mode named in each question.
         There is no right or wrong answer. Please answer directly without explanations.
       questions:
         - id: "ndm_6kin_emotional"
           type: "choice"
-          prompt: "Based on your emotional reaction, which plan would you choose?"
+          prompt: |
+            Imagine that 6 of your family members (e.g., your parents, grandparents, siblings, and offspring) are infected with fatal bacteria, and without any treatment, they will die. There are only two medical plans available:
+            If Plan A is adopted, 3 of them will die.
+            If Plan B is adopted, there is a 50% chance that no one will die and a 50% chance that all of them will die.
+
+            Based on your emotional reaction, which plan would you choose?
           output_schema:
             properties:
               answer:
@@ -223,9 +305,22 @@ questionnaire:
             distribution:
               A: 0.175
               B: 0.825
+    - name: "Ndm-6kin-rational"
+      human:
+        average: 0.5875
+        population: 80
+      instructions: |
+        Choose according to the decision mode named in each question.
+        There is no right or wrong answer. Please answer directly without explanations.
+      questions:
         - id: "ndm_6kin_rational"
           type: "choice"
-          prompt: "Based on your rational assessment, which plan would you choose?"
+          prompt: |
+            Imagine that 6 of your family members (e.g., your parents, grandparents, siblings, and offspring) are infected with fatal bacteria, and without any treatment, they will die. There are only two medical plans available:
+            If Plan A is adopted, 3 of them will die.
+            If Plan B is adopted, there is a 50% chance that no one will die and a 50% chance that all of them will die.
+
+            Based on your rational assessment, which plan would you choose?
           output_schema:
             properties:
               answer:
@@ -239,9 +334,22 @@ questionnaire:
             distribution:
               A: 0.4125
               B: 0.5875
+    - name: "Ndm-6kin-overall"
+      human:
+        average: 0.681818181818
+        population: 80
+      instructions: |
+        Choose according to the decision mode named in each question.
+        There is no right or wrong answer. Please answer directly without explanations.
+      questions:
         - id: "ndm_6kin_overall"
           type: "choice"
-          prompt: "Considering your overall preference, which plan do you prefer?"
+          prompt: |
+            Imagine that 6 of your family members (e.g., your parents, grandparents, siblings, and offspring) are infected with fatal bacteria, and without any treatment, they will die. There are only two medical plans available:
+            If Plan A is adopted, 3 of them will die.
+            If Plan B is adopted, there is a 50% chance that no one will die and a 50% chance that all of them will die.
+
+            Considering your overall preference, which plan do you prefer?
           output_schema:
             properties:
               answer:
@@ -255,21 +363,22 @@ questionnaire:
             distribution:
               A: 0.318181818182
               B: 0.681818181818
-    - name: "Monetary scenario: 400 dollars-Pdm-400dollar"
+    - name: "Pdm-400dollar-emotional"
       human:
-        average: 0.246575342466
+        average: 0.5
         population: 80
       instructions: |
-        Imagine that you are given $200 and have to choose one of the following options:
-        If Option A is adopted, you will receive an additional $100.
-        If Option B is adopted, a fair coin is tossed. If heads, you receive an additional $200. If tails, you receive no additional money.
-
         Choose according to the decision mode named in each question.
         There is no right or wrong answer. Please answer directly without explanations.
       questions:
         - id: "pdm_400dollar_emotional"
           type: "choice"
-          prompt: "Based on your emotional reaction, which option would you choose?"
+          prompt: |
+            Imagine that you are given $200 and have to choose one of the following options:
+            If Option A is adopted, you will receive an additional $100.
+            If Option B is adopted, a fair coin is tossed. If heads, you receive an additional $200. If tails, you receive no additional money.
+
+            Based on your emotional reaction, which option would you choose?
           output_schema:
             properties:
               answer:
@@ -283,9 +392,22 @@ questionnaire:
             distribution:
               A: 0.5
               B: 0.5
+    - name: "Pdm-400dollar-rational"
+      human:
+        average: 0.2625
+        population: 80
+      instructions: |
+        Choose according to the decision mode named in each question.
+        There is no right or wrong answer. Please answer directly without explanations.
+      questions:
         - id: "pdm_400dollar_rational"
           type: "choice"
-          prompt: "Based on your rational assessment, which option would you choose?"
+          prompt: |
+            Imagine that you are given $200 and have to choose one of the following options:
+            If Option A is adopted, you will receive an additional $100.
+            If Option B is adopted, a fair coin is tossed. If heads, you receive an additional $200. If tails, you receive no additional money.
+
+            Based on your rational assessment, which option would you choose?
           output_schema:
             properties:
               answer:
@@ -299,9 +421,22 @@ questionnaire:
             distribution:
               A: 0.7375
               B: 0.2625
+    - name: "Pdm-400dollar-overall"
+      human:
+        average: 0.246575342466
+        population: 80
+      instructions: |
+        Choose according to the decision mode named in each question.
+        There is no right or wrong answer. Please answer directly without explanations.
+      questions:
         - id: "pdm_400dollar_overall"
           type: "choice"
-          prompt: "Considering your overall preference, which option do you prefer?"
+          prompt: |
+            Imagine that you are given $200 and have to choose one of the following options:
+            If Option A is adopted, you will receive an additional $100.
+            If Option B is adopted, a fair coin is tossed. If heads, you receive an additional $200. If tails, you receive no additional money.
+
+            Considering your overall preference, which option do you prefer?
           output_schema:
             properties:
               answer:
@@ -315,21 +450,22 @@ questionnaire:
             distribution:
               A: 0.753424657534
               B: 0.246575342466
-    - name: "Monetary scenario: 400 dollars-Ndm-400dollar"
+    - name: "Ndm-400dollar-emotional"
       human:
-        average: 0.380281690141
+        average: 0.5875
         population: 80
       instructions: |
-        Imagine that you are given $400 and have to choose one of the following penalty options:
-        If Option A is adopted, you must return $100.
-        If Option B is adopted, a fair coin is tossed. If heads, you must return $200. If tails, you may keep all the money received.
-
         Choose according to the decision mode named in each question.
         There is no right or wrong answer. Please answer directly without explanations.
       questions:
         - id: "ndm_400dollar_emotional"
           type: "choice"
-          prompt: "Based on your emotional reaction, which option would you choose?"
+          prompt: |
+            Imagine that you are given $400 and have to choose one of the following penalty options:
+            If Option A is adopted, you must return $100.
+            If Option B is adopted, a fair coin is tossed. If heads, you must return $200. If tails, you may keep all the money received.
+
+            Based on your emotional reaction, which option would you choose?
           output_schema:
             properties:
               answer:
@@ -343,9 +479,22 @@ questionnaire:
             distribution:
               A: 0.4125
               B: 0.5875
+    - name: "Ndm-400dollar-rational"
+      human:
+        average: 0.3125
+        population: 80
+      instructions: |
+        Choose according to the decision mode named in each question.
+        There is no right or wrong answer. Please answer directly without explanations.
+      questions:
         - id: "ndm_400dollar_rational"
           type: "choice"
-          prompt: "Based on your rational assessment, which option would you choose?"
+          prompt: |
+            Imagine that you are given $400 and have to choose one of the following penalty options:
+            If Option A is adopted, you must return $100.
+            If Option B is adopted, a fair coin is tossed. If heads, you must return $200. If tails, you may keep all the money received.
+
+            Based on your rational assessment, which option would you choose?
           output_schema:
             properties:
               answer:
@@ -359,9 +508,22 @@ questionnaire:
             distribution:
               A: 0.6875
               B: 0.3125
+    - name: "Ndm-400dollar-overall"
+      human:
+        average: 0.380281690141
+        population: 80
+      instructions: |
+        Choose according to the decision mode named in each question.
+        There is no right or wrong answer. Please answer directly without explanations.
+      questions:
         - id: "ndm_400dollar_overall"
           type: "choice"
-          prompt: "Considering your overall preference, which option do you prefer?"
+          prompt: |
+            Imagine that you are given $400 and have to choose one of the following penalty options:
+            If Option A is adopted, you must return $100.
+            If Option B is adopted, a fair coin is tossed. If heads, you must return $200. If tails, you may keep all the money received.
+
+            Considering your overall preference, which option do you prefer?
           output_schema:
             properties:
               answer:
@@ -375,24 +537,25 @@ questionnaire:
             distribution:
               A: 0.619718309859
               B: 0.380281690141
-    - name: "Moral scenario-druggist"
+    - name: "druggist-emotional"
       human:
-        average: 0.805555555556
+        average: 0.425
         population: 80
       instructions: |
-        Imagine that your mother is near death from a special kind of cancer. There is one drug the doctors think might save her. It has recently been discovered by a local druggist. The drug is expensive to make, and the druggist is charging ten times what it costs him.
-        You go to everyone you know to borrow the money but can only get together $1000, which is half of what the drug costs. You tell the druggist that your mother is dying and ask him to sell it cheaper or let you pay later. The druggist says, "No, I discovered the drug, and I am going to make money from it."
-        You have three options to consider:
-        Option A: You break into the druggist's store and attempt to steal the drug.
-        Option B: You continue to look for money and return daily to the druggist, hoping he will change his mind.
-        Option C: You allow your mother's illness to run its course without the help of the new drug.
-
         Choose according to the decision mode named in each question.
         There is no right or wrong answer. Please answer directly without explanations.
       questions:
         - id: "druggist_emotional"
           type: "choice"
-          prompt: "Based on your emotional reaction, which option would you choose?"
+          prompt: |
+            Imagine that your mother is near death from a special kind of cancer. There is one drug the doctors think might save her. It has recently been discovered by a local druggist. The drug is expensive to make, and the druggist is charging ten times what it costs him.
+            You go to everyone you know to borrow the money but can only get together $1000, which is half of what the drug costs. You tell the druggist that your mother is dying and ask him to sell it cheaper or let you pay later. The druggist says, "No, I discovered the drug, and I am going to make money from it."
+            You have three options to consider:
+            Option A: You break into the druggist's store and attempt to steal the drug.
+            Option B: You continue to look for money and return daily to the druggist, hoping he will change his mind.
+            Option C: You allow your mother's illness to run its course without the help of the new drug.
+
+            Based on your emotional reaction, which option would you choose?
           output_schema:
             properties:
               answer:
@@ -408,9 +571,25 @@ questionnaire:
               A: 0.525
               B: 0.425
               C: 0.05
+    - name: "druggist-rational"
+      human:
+        average: 0.875
+        population: 80
+      instructions: |
+        Choose according to the decision mode named in each question.
+        There is no right or wrong answer. Please answer directly without explanations.
+      questions:
         - id: "druggist_rational"
           type: "choice"
-          prompt: "Based on your rational assessment, which option would you choose?"
+          prompt: |
+            Imagine that your mother is near death from a special kind of cancer. There is one drug the doctors think might save her. It has recently been discovered by a local druggist. The drug is expensive to make, and the druggist is charging ten times what it costs him.
+            You go to everyone you know to borrow the money but can only get together $1000, which is half of what the drug costs. You tell the druggist that your mother is dying and ask him to sell it cheaper or let you pay later. The druggist says, "No, I discovered the drug, and I am going to make money from it."
+            You have three options to consider:
+            Option A: You break into the druggist's store and attempt to steal the drug.
+            Option B: You continue to look for money and return daily to the druggist, hoping he will change his mind.
+            Option C: You allow your mother's illness to run its course without the help of the new drug.
+
+            Based on your rational assessment, which option would you choose?
           output_schema:
             properties:
               answer:
@@ -426,9 +605,25 @@ questionnaire:
               A: 0.0375
               B: 0.875
               C: 0.0875
+    - name: "druggist-overall"
+      human:
+        average: 0.805555555556
+        population: 80
+      instructions: |
+        Choose according to the decision mode named in each question.
+        There is no right or wrong answer. Please answer directly without explanations.
+      questions:
         - id: "druggist_overall"
           type: "choice"
-          prompt: "Considering your overall preference, which option do you prefer?"
+          prompt: |
+            Imagine that your mother is near death from a special kind of cancer. There is one drug the doctors think might save her. It has recently been discovered by a local druggist. The drug is expensive to make, and the druggist is charging ten times what it costs him.
+            You go to everyone you know to borrow the money but can only get together $1000, which is half of what the drug costs. You tell the druggist that your mother is dying and ask him to sell it cheaper or let you pay later. The druggist says, "No, I discovered the drug, and I am going to make money from it."
+            You have three options to consider:
+            Option A: You break into the druggist's store and attempt to steal the drug.
+            Option B: You continue to look for money and return daily to the druggist, hoping he will change his mind.
+            Option C: You allow your mother's illness to run its course without the help of the new drug.
+
+            Considering your overall preference, which option do you prefer?
           output_schema:
             properties:
               answer:
@@ -444,23 +639,24 @@ questionnaire:
               A: 0.138888888889
               B: 0.805555555556
               C: 0.055555555556
-    - name: "Moral scenario-trolley"
+    - name: "trolley-emotional"
       human:
-        average: 0.915254237288
+        average: 0.8375
         population: 80
       instructions: |
-        Imagine that a trolley is hurtling down the tracks. The brakes of the trolley have failed. There are five innocent people on the track ahead, and they will be killed if the trolley continues going straight.
-        A spur of track is leading off to the side, with one innocent person standing on it. You are a bystander (not a railroad employee or public official, etc.), but you know there is a switch next to you that can be activated to cause the trolley to go to the side spur.
-        The consequences of the two options are as follows:
-        Option A: You do not throw the switch. The one innocent person on the spur will survive, but the five on the track ahead will not.
-        Option B: You throw the switch. The five innocent people on the track ahead will survive, and the one on the spur will not.
-
         Choose according to the decision mode named in each question.
         There is no right or wrong answer. Please answer directly without explanations.
       questions:
         - id: "trolley_emotional"
           type: "choice"
-          prompt: "Based on your emotional reaction, which option would you choose?"
+          prompt: |
+            Imagine that a trolley is hurtling down the tracks. The brakes of the trolley have failed. There are five innocent people on the track ahead, and they will be killed if the trolley continues going straight.
+            A spur of track is leading off to the side, with one innocent person standing on it. You are a bystander (not a railroad employee or public official, etc.), but you know there is a switch next to you that can be activated to cause the trolley to go to the side spur.
+            The consequences of the two options are as follows:
+            Option A: You do not throw the switch. The one innocent person on the spur will survive, but the five on the track ahead will not.
+            Option B: You throw the switch. The five innocent people on the track ahead will survive, and the one on the spur will not.
+
+            Based on your emotional reaction, which option would you choose?
           output_schema:
             properties:
               answer:
@@ -474,9 +670,24 @@ questionnaire:
             distribution:
               A: 0.1625
               B: 0.8375
+    - name: "trolley-rational"
+      human:
+        average: 0.8
+        population: 80
+      instructions: |
+        Choose according to the decision mode named in each question.
+        There is no right or wrong answer. Please answer directly without explanations.
+      questions:
         - id: "trolley_rational"
           type: "choice"
-          prompt: "Based on your rational assessment, which option would you choose?"
+          prompt: |
+            Imagine that a trolley is hurtling down the tracks. The brakes of the trolley have failed. There are five innocent people on the track ahead, and they will be killed if the trolley continues going straight.
+            A spur of track is leading off to the side, with one innocent person standing on it. You are a bystander (not a railroad employee or public official, etc.), but you know there is a switch next to you that can be activated to cause the trolley to go to the side spur.
+            The consequences of the two options are as follows:
+            Option A: You do not throw the switch. The one innocent person on the spur will survive, but the five on the track ahead will not.
+            Option B: You throw the switch. The five innocent people on the track ahead will survive, and the one on the spur will not.
+
+            Based on your rational assessment, which option would you choose?
           output_schema:
             properties:
               answer:
@@ -490,9 +701,24 @@ questionnaire:
             distribution:
               A: 0.2
               B: 0.8
+    - name: "trolley-overall"
+      human:
+        average: 0.915254237288
+        population: 80
+      instructions: |
+        Choose according to the decision mode named in each question.
+        There is no right or wrong answer. Please answer directly without explanations.
+      questions:
         - id: "trolley_overall"
           type: "choice"
-          prompt: "Considering your overall preference, which option do you prefer?"
+          prompt: |
+            Imagine that a trolley is hurtling down the tracks. The brakes of the trolley have failed. There are five innocent people on the track ahead, and they will be killed if the trolley continues going straight.
+            A spur of track is leading off to the side, with one innocent person standing on it. You are a bystander (not a railroad employee or public official, etc.), but you know there is a switch next to you that can be activated to cause the trolley to go to the side spur.
+            The consequences of the two options are as follows:
+            Option A: You do not throw the switch. The one innocent person on the spur will survive, but the five on the track ahead will not.
+            Option B: You throw the switch. The five innocent people on the track ahead will survive, and the one on the spur will not.
+
+            Considering your overall preference, which option do you prefer?
           output_schema:
             properties:
               answer:
