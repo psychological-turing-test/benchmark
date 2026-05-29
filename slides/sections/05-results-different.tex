@@ -40,6 +40,8 @@
       \end{itemize}
     \end{column}
   \end{columns}
+
+  \smallnote{FRP = Fairness Randomization Preference；SAM = Self-Age Modulation；KP = Kinship Premium；SC = Scale Conservatism；GPR = Gamble Payoff Responsiveness；SBS = Sure Benefit Sensitivity。}
 \end{frame}
 
 \begin{frame}{差异维度一：公平随机化偏好 FRP}
@@ -116,7 +118,7 @@
         \item GPR：赌博收益提高几乎不改变选择。
         \item SBS：确定收益提高几乎不抑制 \planB{}。
       \end{itemize}
-      \smallnote{四个指标的 LLM 均值都接近 0。}
+      \smallnote{KP = Kinship Premium；SC = Scale Conservatism；GPR = Gamble Payoff Responsiveness；SBS = Sure Benefit Sensitivity。四个指标的 LLM 均值都接近 0。}
     \end{column}
   \end{columns}
 \end{frame}
@@ -156,9 +158,10 @@
     \begin{column}{0.42\textwidth}
       \begin{itemize}
         \item 高 RD 会让某些模型看起来很“稳定”，但这种稳定不一定像人。
-        \item 当模型在每个题项上接近单一选择，FES、MS、KG 等趋势指标也会更脆弱。
+        \item 当模型在每个题项上接近单一选择，FES、MS-L、KG 等趋势指标也会更脆弱。
         \item 这解释了为什么要同时报告 BAS 与 VAS。
       \end{itemize}
+      \smallnote{RD = Response Determinism；FES = Framing Effect Size；MS-L = Magnitude Sensitivity (life)；KG = Kinship Gradient；BAS = Behavioral Alignment Score；VAS = Value Alignment Score。}
     \end{column}
   \end{columns}
 \end{frame}

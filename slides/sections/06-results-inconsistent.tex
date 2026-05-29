@@ -1,7 +1,7 @@
 \section{结果三：哪里出现显著不一致？}
 
 \begin{frame}{框架效应：不同 LLM 的行为差异很大}
-  \begin{block}{FES 与 RC}
+  \begin{block}{FES: Framing Effect Size；RC: Reflection Consistency}
     \metric{FES} 衡量负框架相对正框架使 \planB{} 选择率增加多少。
     \metric{RC} 衡量有多少条件符合“收益框架更保守、损失框架更冒险”的经典反射模式。
   \end{block}
@@ -40,7 +40,7 @@
     \end{column}
   \end{columns}
 
-  \smallnote{因此，LLM 之间的差异不是简单的“更像/不像”，而是心理错误结构不同。}
+  \smallnote{FES = Framing Effect Size；RC = Reflection Consistency。因此，LLM 之间的差异不是简单的“更像/不像”，而是心理错误结构不同。}
 \end{frame}
 
 \begin{frame}{框架效应示例：同一条件下的模型分化}
@@ -106,12 +106,14 @@
     \end{column}
     \begin{column}{0.31\textwidth}
       \begin{itemize}
-        \item 非思考模式在决策前提问卷上常更接近人类。
-        \item 但在风险框架问卷上常更差。
+        \item 非思考模式在决策前提行为测试上常更接近人类。
+        \item 但在风险框架行为测试上常更差。
         \item 思考模式改变的是误差结构，而非单调提高类人一致性。
       \end{itemize}
     \end{column}
   \end{columns}
+
+  \smallnote{SRS = Social Rationality Score；$\Delta$ SRS 表示非思考模式相对于最大思考模式的综合分变化。}
 \end{frame}
 
 \begin{frame}{同一公司模型的版本变化：Qwen 示例}
@@ -165,8 +167,9 @@
       \vspace{0.2em}
       \begin{block}{观察}
         框架效应相关指标增强；
-        但两类问卷的 SRS 没有同步提升。
+        但两类行为测试的 SRS 没有同步提升。
       \end{block}
+      \smallnote{SRS = Social Rationality Score；FES = Framing Effect Size。}
     \end{column}
   \end{columns}
 \end{frame}
@@ -192,4 +195,6 @@
       \end{block}
     \end{column}
   \end{columns}
+
+  \smallnote{SRS = Social Rationality Score；FES = Framing Effect Size；RC = Reflection Consistency。}
 \end{frame}

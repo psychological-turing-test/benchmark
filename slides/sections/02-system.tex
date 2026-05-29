@@ -7,7 +7,7 @@
     box/.style={draw=BenchBlue, very thick, rounded corners=2pt, align=center, minimum width=2.8cm, minimum height=0.9cm, fill=BenchLight},
     arrow/.style={-Latex, thick, draw=BenchGray}
   ]
-    \node[box] (q) {问卷配置\\\small YAML + 人类基线};
+    \node[box] (q) {行为测试配置\\\small YAML + 人类基线};
     \node[box, right=of q] (l) {LLM 配置\\\small provider/model};
     \node[box, right=of l] (r) {并行查询\\\small population runs};
     \node[box, below=of r] (e) {评估器\\\small BAS / VAS / SRS};
@@ -23,10 +23,12 @@
 
   \vspace{0.8em}
   \begin{itemize}
-    \item 新模型通过 LLM 配置加入；新范式通过问卷配置加入。
+    \item 新模型通过 LLM 配置加入；新范式通过行为测试配置加入。
     \item 运行阶段并行查询多个模型、多个模拟被试与多个独立 section。
-    \item 分析阶段按问卷自动生成行为对齐、价值对齐与心理指标画像。
+    \item 分析阶段按行为测试自动生成行为对齐、价值对齐与心理指标画像。
   \end{itemize}
+
+  \smallnote{BAS = Behavioral Alignment Score；VAS = Value Alignment Score；SRS = Social Rationality Score。}
 \end{frame}
 
 \begin{frame}{扩展新 LLM：只增加结构化配置}
@@ -55,8 +57,8 @@
   \smallnote{本次实验中，分析文件包含 19 个中国 LLM：DeepSeek、GLM 与 Qwen 系列。}
 \end{frame}
 
-\begin{frame}{扩展新问卷：题项、输出格式、人类基线放在一起}
-  \begin{block}{问卷配置包含}
+\begin{frame}{扩展新行为测试：题项、输出格式、人类基线放在一起}
+  \begin{block}{行为测试配置包含}
     \begin{itemize}
       \item 被试说明与题目文本。
       \item 结构化输出 schema，例如只允许回答 \texttt{A} 或 \texttt{B}。
@@ -70,7 +72,7 @@
     \begin{column}{0.48\textwidth}
       \textbf{研究者要做的事}
       \begin{itemize}
-        \item 添加一个 YAML 问卷。
+        \item 添加一个 YAML 行为测试。
         \item 填入题项和人类基线。
         \item 定义题目类型与答案空间。
       \end{itemize}
@@ -78,9 +80,9 @@
     \begin{column}{0.48\textwidth}
       \textbf{系统自动完成}
       \begin{itemize}
-        \item 并行发放问卷。
+        \item 并行运行行为测试。
         \item 汇总 LLM 答案分布。
-        \item 生成问卷特定指标与图表。
+        \item 生成测试特定指标与图表。
       \end{itemize}
     \end{column}
   \end{columns}
@@ -89,7 +91,7 @@
 \begin{frame}{评分：行为对齐与价值对齐}
   \begin{columns}[T,totalwidth=\textwidth]
     \begin{column}{0.48\textwidth}
-      \begin{block}{\metric{BAS}: 行为对齐}
+      \begin{block}{\metric{BAS}: Behavioral Alignment Score}
         衡量每个具体决策结果的 LLM 答案分布与人类答案分布有多接近。
 
         \vspace{0.4em}
@@ -99,7 +101,7 @@
       \end{block}
     \end{column}
     \begin{column}{0.48\textwidth}
-      \begin{block}{\metric{VAS}: 价值对齐}
+      \begin{block}{\metric{VAS}: Value Alignment Score}
         衡量 LLM 在条件变化下的趋势、敏感性与心理价值结构是否接近人类。
 
         \vspace{0.4em}
@@ -111,30 +113,33 @@
   \end{columns}
 
   \vspace{0.5em}
-  \begin{block}{\metric{SRS}: 社会理性综合分}
+  \begin{block}{\metric{SRS}: Social Rationality Score}
     \[
       SRS = \frac{BAS + VAS}{2}
     \]
-    \smallnote{本报告中的 BAS、VAS、SRS 数值均来自 `artifacts/analysis.json`。}
+    \smallnote{BAS 表示行为对齐；VAS 表示价值对齐；SRS 表示社会理性综合分。数值均来自 `artifacts/analysis.json`。}
   \end{block}
 \end{frame}
 
-\begin{frame}{为什么需要问卷特定指标？}
+\begin{frame}{为什么需要测试特定指标？}
   \begin{itemize}
     \item 单题答案只能说明“这一题像不像”。
     \item 心理学范式关心的是条件变化后的\metric{差分结构}：框架、规模、亲缘、身份、收益、确定收益。
-    \item 因此每份问卷会生成一组行为维度，用于比较 LLM 与人类的心理价值结构。
+    \item 因此每个行为测试会生成一组行为维度，用于比较 LLM 与人类的心理价值结构。
   \end{itemize}
 
   \vspace{0.8em}
   \begin{tabularx}{\textwidth}{lY}
     \toprule
-    问卷 & 自动生成的核心指标 \\
+    行为测试 & 自动生成的核心指标 \\
     \midrule
     风险决策框架任务 &
-    FES、RC、MS-L、KG、IGB、CDC、RD，用于描述框架效应、规模敏感性、亲缘梯度、内群体偏差与响应确定性。 \\
+    FES、RC、MS-L、KG、IGB、RD，用于描述框架效应、规模敏感性、亲缘梯度、内群体偏差与响应确定性。 \\
     决策前提任务 &
     FRP、SAM、KP、SC、GPR、SBS，用于描述公平随机化、自我年龄调制、亲缘溢价、规模保守性、赌博收益响应与确定收益敏感性。 \\
     \bottomrule
   \end{tabularx}
+
+  \vspace{0.3em}
+  \smallnote{FES = Framing Effect Size；RC = Reflection Consistency；MS-L = Magnitude Sensitivity (life)；KG = Kinship Gradient；IGB = In-group Bias；RD = Response Determinism；FRP = Fairness Randomization Preference；SAM = Self-Age Modulation；KP = Kinship Premium；SC = Scale Conservatism；GPR = Gamble Payoff Responsiveness；SBS = Sure Benefit Sensitivity。}
 \end{frame}
