@@ -123,8 +123,8 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{差异维度三：响应确定性 RD 远高于人类}
-  \begin{block}{RD: Response Determinism}
+\begin{frame}{差异维度三：响应确定性 RDI 远高于人类}
+  \begin{block}{RDI: Response Determinism Index}
     衡量题项层面的选择分布有多接近确定性。
     接近 1 表示几乎所有模拟被试选择同一选项；接近 0 表示最大随机性。
   \end{block}
@@ -139,7 +139,7 @@
           height=0.45\textheight,
           xmin=0,
           xmax=1.12,
-          xlabel={RD},
+          xlabel={RDI},
           ytick={1,2,3,4},
           yticklabels={LLM 最大, LLM 均值, LLM 最小, 人类基线},
           y dir=reverse,
@@ -157,11 +157,11 @@
     \end{column}
     \begin{column}{0.42\textwidth}
       \begin{itemize}
-        \item 高 RD 会让某些模型看起来很“稳定”，但这种稳定不一定像人。
+        \item 高 RDI 会让某些模型看起来很“稳定”，但这种稳定不一定像人。
         \item 当模型在每个题项上接近单一选择，FES、MS-L、KG 等趋势指标也会更脆弱。
         \item 这解释了为什么要同时报告 BAS 与 VAS。
       \end{itemize}
-      \smallnote{RD = Response Determinism；FES = Framing Effect Size；MS-L = Magnitude Sensitivity (life)；KG = Kinship Gradient；BAS = Behavioral Alignment Score；VAS = Value Alignment Score。}
+      \smallnote{RDI = Response Determinism Index；FES = Framing Effect Size；MS-L = Magnitude Sensitivity (life)；KG = Kinship Gradient；BAS = Behavioral Alignment Score；VAS = Value Alignment Score。}
     \end{column}
   \end{columns}
 \end{frame}
