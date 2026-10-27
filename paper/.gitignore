@@ -1,0 +1,12 @@
+# Track authoring sources and reference inputs only.
+/*
+!/.gitignore
+!/*.md
+!/*.py
+!/english_abstract.txt
+!/references_verified.json
+!/reference_review.json
+!/references/
+
+# Generated DOCX files, figures/, data_audit.json, review_verification.json,
+# and temporary previews remain local and can be rebuilt from the sources.

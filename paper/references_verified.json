@@ -1,0 +1,497 @@
+[
+  {
+    "id": "turing1950",
+    "authors": [
+      "Turing, A. M."
+    ],
+    "year": 1950,
+    "title": "Computing machinery and intelligence",
+    "container": "Mind",
+    "volume": "59",
+    "issue": "236",
+    "pages": "433–460",
+    "doi": "10.1093/mind/LIX.236.433",
+    "url": "https://doi.org/10.1093/mind/LIX.236.433",
+    "evidence_url": "https://academic.oup.com/mind/article/LIX/236/433/986238",
+    "note": "Historical grounding for operational behavioral assessment of machines. Behavioral similarity does not establish shared psychological mechanisms. Original publisher title includes the section prefix I.—; volume LIX is normalized to 59. Metadata checked against Oxford Academic and Crossref."
+  },
+  {
+    "id": "simon1955",
+    "authors": [
+      "Simon, H. A."
+    ],
+    "year": 1955,
+    "title": "A behavioral model of rational choice",
+    "container": "The Quarterly Journal of Economics",
+    "volume": "69",
+    "issue": "1",
+    "pages": "99–118",
+    "doi": "10.2307/1884852",
+    "url": "https://doi.org/10.2307/1884852",
+    "evidence_url": "https://academic.oup.com/qje/article-abstract/69/1/99/1919737",
+    "note": "Supports bounded rationality under limits on information and computation. Define the normative standard and task conditions before labeling choices irrational. Crossref records only first page; full page range verified on Oxford Academic."
+  },
+  {
+    "id": "kahneman1979",
+    "authors": [
+      "Kahneman, D.",
+      "Tversky, A."
+    ],
+    "year": 1979,
+    "title": "Prospect theory: An analysis of decision under risk",
+    "container": "Econometrica",
+    "volume": "47",
+    "issue": "2",
+    "pages": "263–291",
+    "doi": "10.2307/1914185",
+    "url": "https://doi.org/10.2307/1914185",
+    "evidence_url": "https://www.jstor.org/stable/1914185",
+    "note": "Descriptive alternative to expected utility theory, including reference-dependent valuation of gains and losses. Does not imply that all risk aversion or risk seeking is irrational. Authors, title, year, volume, issue, and DOI verified via Crossref; page range cross-checked with the journal's bibliographic indexes."
+  },
+  {
+    "id": "tversky1981",
+    "authors": [
+      "Tversky, A.",
+      "Kahneman, D."
+    ],
+    "year": 1981,
+    "title": "The framing of decisions and the psychology of choice",
+    "container": "Science",
+    "volume": "211",
+    "issue": "4481",
+    "pages": "453–458",
+    "doi": "10.1126/science.7455683",
+    "url": "https://doi.org/10.1126/science.7455683",
+    "evidence_url": "https://pubmed.ncbi.nlm.nih.gov/7455683/",
+    "note": "Direct classic source for preference shifts when equivalent decision problems are framed differently. Metadata and abstract verified through PubMed and Science."
+  },
+  {
+    "id": "binz2023",
+    "authors": [
+      "Binz, M.",
+      "Schulz, E."
+    ],
+    "year": 2023,
+    "title": "Using cognitive psychology to understand GPT-3",
+    "container": "Proceedings of the National Academy of Sciences",
+    "volume": "120",
+    "issue": "6",
+    "pages": "Article e2218523120",
+    "doi": "10.1073/pnas.2218523120",
+    "url": "https://doi.org/10.1073/pnas.2218523120",
+    "evidence_url": "https://pubmed.ncbi.nlm.nih.gov/36730192/",
+    "note": "Uses cognitive psychology tasks to study GPT-3 decision-making, information search, deliberation, and causal reasoning. Shows abilities together with perturbation sensitivity and specific failures. Findings are model- and task-specific. Verified against PubMed, PMC full text, and Crossref."
+  },
+  {
+    "id": "dillion2023",
+    "authors": [
+      "Dillion, D.",
+      "Tandon, N.",
+      "Gu, Y.",
+      "Gray, K."
+    ],
+    "year": 2023,
+    "title": "Can AI language models replace human participants?",
+    "container": "Trends in Cognitive Sciences",
+    "volume": "27",
+    "issue": "7",
+    "pages": "597–600",
+    "doi": "10.1016/j.tics.2023.04.008",
+    "url": "https://doi.org/10.1016/j.tics.2023.04.008",
+    "evidence_url": "https://pubmed.ncbi.nlm.nih.gov/37173156/",
+    "note": "Review of possibilities and caveats of AI participants, not evidence for universal replacement of human subjects. First author's surname is Dillion, not Dillon. Full metadata verified in PubMed and Crossref."
+  },
+  {
+    "id": "argyle2023",
+    "authors": [
+      "Argyle, L. P.",
+      "Busby, E. C.",
+      "Fulda, N.",
+      "Gubler, J. R.",
+      "Rytting, C.",
+      "Wingate, D."
+    ],
+    "year": 2023,
+    "title": "Out of one, many: Using language models to simulate human samples",
+    "container": "Political Analysis",
+    "volume": "31",
+    "issue": "3",
+    "pages": "337–351",
+    "doi": "10.1017/pan.2023.2",
+    "url": "https://doi.org/10.1017/pan.2023.2",
+    "evidence_url": "https://www.cambridge.org/core/journals/political-analysis/article/out-of-one-many-using-language-models-to-simulate-human-samples/035D7C8A55B237942FB6DBAD7CAA4E49",
+    "note": "Shows demographic conditioning of GPT-3 to emulate response distributions in specific human samples. Does not validate arbitrary populations or tasks. All six authors and publication metadata verified in Cambridge Core and Crossref."
+  },
+  {
+    "id": "aher2023",
+    "authors": [
+      "Aher, G. V.",
+      "Arriaga, R. I.",
+      "Kalai, A. T."
+    ],
+    "year": 2023,
+    "title": "Using large language models to simulate multiple humans and replicate human subject studies",
+    "container": "Proceedings of the 40th International Conference on Machine Learning",
+    "volume": "202",
+    "issue": null,
+    "pages": "337–371",
+    "doi": null,
+    "url": "https://proceedings.mlr.press/v202/aher23a.html",
+    "evidence_url": "https://proceedings.mlr.press/v202/aher23a.html",
+    "editors": [
+      "Krause, A.",
+      "Brunskill, E.",
+      "Cho, K.",
+      "Engelhardt, B.",
+      "Sabato, S.",
+      "Scarlett, J."
+    ],
+    "publisher": "PMLR",
+    "note": "Introduces Turing Experiments to measure which aspects of human behavior a model reproduces or systematically distorts. Official PMLR record supplies no DOI; use the proceedings URL. The arXiv DOI identifies a different publication version."
+  },
+  {
+    "id": "demszky2023",
+    "authors": [
+      "Demszky, D.",
+      "Yang, D.",
+      "Yeager, D. S.",
+      "Bryan, C. J.",
+      "Clapper, M.",
+      "Chandhok, S.",
+      "Eichstaedt, J. C.",
+      "Hecht, C.",
+      "Jamieson, J.",
+      "Johnson, M.",
+      "Jones, M.",
+      "Krettek-Cobb, D.",
+      "Lai, L.",
+      "JonesMitchell, N.",
+      "Ong, D. C.",
+      "Dweck, C. S.",
+      "Gross, J. J.",
+      "Pennebaker, J. W."
+    ],
+    "year": 2023,
+    "title": "Using large language models in psychology",
+    "container": "Nature Reviews Psychology",
+    "volume": "2",
+    "issue": "11",
+    "pages": "688–701",
+    "doi": "10.1038/s44159-023-00241-5",
+    "url": "https://doi.org/10.1038/s44159-023-00241-5",
+    "evidence_url": "https://www.nature.com/articles/s44159-023-00241-5",
+    "note": "Review of LLM applications and limitations in psychological measurement, experimentation, and practice. All 18 authors verified against Crossref and first-author publication page. Spellings include Meghann Johnson and Nirel JonesMitchell. APA 7 lists all 18 authors. Crossref's record lacks final volume/pages; publisher confirms volume 2 and pages 688–701, with November issue 11 cross-checked against journal bibliographies."
+  },
+  {
+    "id": "grossmann2023",
+    "authors": [
+      "Grossmann, I.",
+      "Feinberg, M.",
+      "Parker, D. C.",
+      "Christakis, N. A.",
+      "Tetlock, P. E.",
+      "Cunningham, W. A."
+    ],
+    "year": 2023,
+    "title": "AI and the transformation of social science research",
+    "container": "Science",
+    "volume": "380",
+    "issue": "6650",
+    "pages": "1108–1109",
+    "doi": "10.1126/science.adi1778",
+    "url": "https://doi.org/10.1126/science.adi1778",
+    "evidence_url": "https://humannaturelab.net/paper/ai-and-the-transformation-of-social-science-research",
+    "note": "Perspective on AI's role in social science, emphasizing bias management and data fidelity. Not an empirical demonstration of a specific model's capabilities. Full metadata cross-checked against Yale author-lab record and PubMed."
+  },
+  {
+    "id": "cohen1960",
+    "authors": [
+      "Cohen, J."
+    ],
+    "year": 1960,
+    "title": "A coefficient of agreement for nominal scales",
+    "container": "Educational and Psychological Measurement",
+    "volume": "20",
+    "issue": "1",
+    "pages": "37–46",
+    "doi": "10.1177/001316446002000104",
+    "url": "https://doi.org/10.1177/001316446002000104",
+    "evidence_url": "https://journals.sagepub.com/doi/full/10.1177/001316446002000104",
+    "note": "Source for chance-corrected agreement between two raters on nominal categories. Do not treat Cohen's kappa as a universal reliability or validity measure. Include only if the paper actually discusses or computes this measure. Verified against SAGE and Crossref."
+  },
+  {
+    "id": "turpin2023",
+    "authors": [
+      "Turpin, M.",
+      "Michael, J.",
+      "Perez, E.",
+      "Bowman, S. R."
+    ],
+    "year": 2023,
+    "title": "Language models don’t always say what they think: Unfaithful explanations in chain-of-thought prompting",
+    "container": "Advances in Neural Information Processing Systems",
+    "volume": "36",
+    "issue": null,
+    "pages": "74952–74965",
+    "doi": "10.52202/075280-3275",
+    "url": "https://doi.org/10.52202/075280-3275",
+    "evidence_url": "https://proceedings.neurips.cc/paper_files/paper/2023/hash/ed3fea9033a80fea1376299fa7863f4a-Abstract.html",
+    "editors": [
+      "Oh, A.",
+      "Naumann, T.",
+      "Globerson, A.",
+      "Saenko, K.",
+      "Hardt, M.",
+      "Levine, S."
+    ],
+    "publisher": "Curran Associates",
+    "note": "Demonstrates that explanations may omit input features that systematically influence predictions; observed rationale text is not automatically a measure of internal reasoning mechanisms. Tests involved GPT-3.5 and Claude 1.0 in specific tasks. Official NeurIPS page verifies DOI; official PDF uses Samuel R. Bowman; proceedings.com verifies pages."
+  },
+  {
+    "id": "cui2026",
+    "authors": [
+      "Cui, J.",
+      "Wagenmakers, D.",
+      "van Doorn, G. S.",
+      "Hasselman, F.",
+      "Lichtwarck-Aschoff, A."
+    ],
+    "year": 2026,
+    "title": "Analyzing multidimensional formal dynamic models in psychology: A tutorial using graphical tools",
+    "container": "Behavior Research Methods",
+    "volume": "58",
+    "issue": "8",
+    "pages": "Article 206",
+    "doi": "10.3758/s13428-026-03077-y",
+    "url": "https://doi.org/10.3758/s13428-026-03077-y",
+    "evidence_url": "https://link.springer.com/article/10.3758/s13428-026-03077-y",
+    "note": "Structural tutorial exemplar: conceptual foundations and graphical overview followed by two worked models and discussion. Not substantive evidence about LLMs or benchmark validity; omit from the paper bibliography unless its methods or tutorial design are explicitly discussed. Verified against local PDF, Springer, and Crossref."
+  },
+  {
+    "id": "glaser2026",
+    "authors": [
+      "Glaser, B. D.",
+      "Kang, H.",
+      "Audunsdottir, K.",
+      "Sartorius, A. I.",
+      "Quintana, D. S."
+    ],
+    "year": 2026,
+    "title": "A tutorial for calculating field-specific effect size distributions",
+    "container": "Behavior Research Methods",
+    "volume": "58",
+    "issue": "6",
+    "pages": "Article 146",
+    "doi": "10.3758/s13428-026-03003-2",
+    "url": "https://doi.org/10.3758/s13428-026-03003-2",
+    "evidence_url": "https://pubmed.ncbi.nlm.nih.gov/42056646/",
+    "note": "Structural tutorial exemplar: motivating limitations, software/data overview, basic operations, bias correction, robustness, and interpretation. Do not import its effect-size benchmarks as benchmark scoring criteria without a separate rationale. Omit if used only as a writing template. Verified against local PDF, PubMed, and Crossref."
+  },
+  {
+    "id": "wilson1927",
+    "authors": [
+      "Wilson, E. B."
+    ],
+    "year": 1927,
+    "title": "Probable inference, the law of succession, and statistical inference",
+    "container": "Journal of the American Statistical Association",
+    "volume": "22",
+    "issue": "158",
+    "pages": "209–212",
+    "doi": "10.1080/01621459.1927.10502953",
+    "url": "https://doi.org/10.1080/01621459.1927.10502953",
+    "evidence_url": "https://www.tandfonline.com/doi/abs/10.1080/01621459.1927.10502953",
+    "note": "Original source for the Wilson score interval for a binomial proportion. Nominal 95% coverage uses the chosen normal quantile; it is not a guarantee for dependent repeated outputs or a substitute for design-aware uncertainty estimation. Author is Edwin B. Wilson. Publisher's 2012 online date reflects digitization; cite 1927. Original PDF also inspected at https://jhanley.biostat.mcgill.ca/c607/ch08/wilson_jasa_1927.pdf."
+  },
+  {
+    "id": "binz2025",
+    "authors": [
+      "Binz, M.",
+      "Akata, E.",
+      "Bethge, M.",
+      "Brändle, F.",
+      "Callaway, F.",
+      "Coda-Forno, J.",
+      "Dayan, P.",
+      "Demircan, C.",
+      "Eckstein, M. K.",
+      "Éltető, N.",
+      "Griffiths, T. L.",
+      "Haridi, S.",
+      "Jagadish, A. K.",
+      "Ji-An, L.",
+      "Kipnis, A.",
+      "Kumar, S.",
+      "Ludwig, T.",
+      "Mathony, M.",
+      "Mattar, M.",
+      "Modirshanechi, A.",
+      "Nath, S. S.",
+      "Peterson, J. C.",
+      "Rmus, M.",
+      "Russek, E. M.",
+      "Saanum, T.",
+      "Schubert, J. A.",
+      "Schulze Buschoff, L. M.",
+      "Singhi, N.",
+      "Sui, X.",
+      "Thalmann, M.",
+      "Theis, F. J.",
+      "Truong, V.",
+      "Udandarao, V.",
+      "Voudouris, K.",
+      "Wilson, R.",
+      "Witte, K.",
+      "Wu, S.",
+      "Wulff, D. U.",
+      "Xiong, H.",
+      "Schulz, E."
+    ],
+    "year": 2025,
+    "title": "A foundation model to predict and capture human cognition",
+    "container": "Nature",
+    "volume": "644",
+    "issue": "8078",
+    "pages": "1002–1009",
+    "doi": "10.1038/s41586-025-09215-4",
+    "url": "https://doi.org/10.1038/s41586-025-09215-4",
+    "evidence_url": "https://www.nature.com/articles/s41586-025-09215-4",
+    "note": "Centaur is Llama 3.1 70B fine-tuned on Psych-101 human choices, not an unadapted general-purpose model. Supports recent progress on behavioral prediction and held-out generalization. Authors identify WEIRD population bias, learning/decision-making concentration, missing individual-difference data, and selection against nontext experiments. Behavioral prediction is not itself an explanatory cognitive theory. All 40 authors verified on Nature/PubMed; APA 7 rendering uses first 19 authors, an ellipsis, and final author Schulz without an ampersand before the last author. Published online July 2, 2025; issue date August 28, 2025."
+  },
+  {
+    "id": "wang1996a",
+    "authors": [
+      "Wang, X. T."
+    ],
+    "year": "1996a",
+    "title": "Domain-specific rationality in human choices: violations of utility axioms and social contexts",
+    "container": "Cognition",
+    "volume": "60",
+    "issue": "1",
+    "pages": "31–63",
+    "doi": "10.1016/0010-0277(95)00700-8",
+    "url": "https://doi.org/10.1016/0010-0277(95)00700-8",
+    "evidence_url": "https://api.crossref.org/works/10.1016%2F0010-0277%2895%2900700-8",
+    "note": "2026-10-26: Bibliographic metadata checked against Crossref. Listed in the project workbook Human_data_ref column; item-level correspondence to original article tables, participants, and counts is NOT verified. Retained as a source lead, not validation of the human baseline."
+  },
+  {
+    "id": "wang2001",
+    "authors": [
+      "Wang, X. T.",
+      "Simons, F.",
+      "Brédart, S."
+    ],
+    "year": 2001,
+    "title": "Social cues and verbal framing in risky choice",
+    "container": "Journal of Behavioral Decision Making",
+    "volume": "14",
+    "issue": "1",
+    "pages": "1–15",
+    "doi": "10.1002/1099-0771(200101)14:1<1::aid-bdm361>3.0.co;2-n",
+    "url": "https://doi.org/10.1002/1099-0771(200101)14:1%3C1::aid-bdm361%3E3.0.co;2-n",
+    "evidence_url": "https://api.crossref.org/works/10.1002%2F1099-0771%28200101%2914%3A1%3C1%3A%3Aaid-bdm361%3E3.0.co%3B2-n",
+    "note": "2026-10-26: Bibliographic metadata checked against Crossref. Listed in the project workbook Human_data_ref column; item-level correspondence to original article tables, participants, and counts is NOT verified. Retained as a source lead, not validation of the human baseline."
+  },
+  {
+    "id": "wang1996c",
+    "authors": [
+      "Wang, X. T."
+    ],
+    "year": "1996c",
+    "title": "Framing Effects: Dynamics and Task Domains",
+    "container": "Organizational Behavior and Human Decision Processes",
+    "volume": "68",
+    "issue": "2",
+    "pages": "145–157",
+    "doi": "10.1006/obhd.1996.0095",
+    "url": "https://doi.org/10.1006/obhd.1996.0095",
+    "evidence_url": "https://api.crossref.org/works/10.1006%2Fobhd.1996.0095",
+    "note": "2026-10-26: Bibliographic metadata checked against Crossref. Listed in the project workbook Human_data_ref column; item-level correspondence to original article tables, participants, and counts is NOT verified. Retained as a source lead, not validation of the human baseline."
+  },
+  {
+    "id": "wang1996b",
+    "authors": [
+      "Wang, X. T."
+    ],
+    "year": "1996b",
+    "title": "Evolutionary hypotheses of risk-sensitive choice: Age differences and perspective change",
+    "container": "Ethology and Sociobiology",
+    "volume": "17",
+    "issue": "1",
+    "pages": "1–15",
+    "doi": "10.1016/0162-3095(95)00103-4",
+    "url": "https://doi.org/10.1016/0162-3095(95)00103-4",
+    "evidence_url": "https://api.crossref.org/works/10.1016%2F0162-3095%2895%2900103-4",
+    "note": "2026-10-26: Bibliographic metadata checked against Crossref. Listed in the project workbook Human_data_ref column; item-level correspondence to original article tables, participants, and counts is NOT verified. Retained as a source lead, not validation of the human baseline."
+  },
+  {
+    "id": "wang2002",
+    "authors": [
+      "Wang, X. T."
+    ],
+    "year": 2002,
+    "title": "Risk as reproductive variance",
+    "container": "Evolution and Human Behavior",
+    "volume": "23",
+    "issue": "1",
+    "pages": "35–57",
+    "doi": "10.1016/s1090-5138(01)00091-5",
+    "url": "https://doi.org/10.1016/s1090-5138(01)00091-5",
+    "evidence_url": "https://api.crossref.org/works/10.1016%2Fs1090-5138%2801%2900091-5",
+    "note": "2026-10-26: Bibliographic metadata checked against Crossref. Listed in the project workbook Human_data_ref column; item-level correspondence to original article tables, participants, and counts is NOT verified. Retained as a source lead, not validation of the human baseline."
+  },
+  {
+    "id": "noy2023",
+    "authors": [
+      "Noy, S.",
+      "Zhang, W."
+    ],
+    "year": 2023,
+    "title": "Experimental evidence on the productivity effects of generative artificial intelligence",
+    "container": "Science",
+    "volume": "381",
+    "issue": "6654",
+    "pages": "187–192",
+    "doi": "10.1126/science.adh2586",
+    "url": "https://doi.org/10.1126/science.adh2586",
+    "evidence_url": "https://pubmed.ncbi.nlm.nih.gov/37440646/",
+    "note": "Verified 2026-10-27 against PubMed bibliographic record and abstract. Preregistered experiment on professional writing with ChatGPT assistance supports shorter completion time and improved output quality. It does not establish autonomous labor replacement or similarity of decision preferences."
+  },
+  {
+    "id": "brynjolfsson2025",
+    "authors": [
+      "Brynjolfsson, E.",
+      "Li, D.",
+      "Raymond, L."
+    ],
+    "year": 2025,
+    "title": "Generative AI at work",
+    "container": "The Quarterly Journal of Economics",
+    "volume": "140",
+    "issue": "2",
+    "pages": "889–942",
+    "doi": "10.1093/qje/qjae044",
+    "url": "https://doi.org/10.1093/qje/qjae044",
+    "evidence_url": "https://academic.oup.com/qje/article/140/2/889/7990658",
+    "note": "Verified 2026-10-27 against final publisher record, abstract, and introduction. AI assistance improved productivity among 5,172 customer-support agents; the final article reports 15%, not the earlier working-paper figures. Manuscript cites only the qualitative efficiency finding. Human agents retained responsibility; this is not evidence of independent model decisions or preference equivalence."
+  },
+  {
+    "id": "mei2024",
+    "authors": [
+      "Mei, Q.",
+      "Xie, Y.",
+      "Yuan, W.",
+      "Jackson, M. O."
+    ],
+    "year": 2024,
+    "title": "A Turing test of whether AI chatbots are behaviorally similar to humans",
+    "container": "Proceedings of the National Academy of Sciences",
+    "volume": "121",
+    "issue": "9",
+    "pages": "Article e2313925121",
+    "doi": "10.1073/pnas.2313925121",
+    "url": "https://doi.org/10.1073/pnas.2313925121",
+    "evidence_url": "https://www.pnas.org/doi/10.1073/pnas.2313925121",
+    "note": "Verified 2026-10-27 against primary PNAS metadata, methods, and results. Examines GPT-3.5-Turbo and GPT-4 with personality measures and behavioral games. Supports task-specific behavioral comparison, with similarities alongside more concentrated or cooperative choices. Its distribution-based discrimination test differs from the present descriptive scores and does not validate this tool. DOI 10.1073/pnas.2401336121 is a commentary by Juanjuan Meng, not a correction."
+  }
+]

@@ -1,0 +1,188 @@
+{
+  "review_date": "2026-10-26",
+  "scope": "18 cited references; prior notes in references_verified.json are historical, not all independently revalidated in full",
+  "references": [
+    {
+      "id": "turing1950",
+      "title": "Computing machinery and intelligence",
+      "url": "https://doi.org/10.1093/mind/LIX.236.433",
+      "metadata_evidence": "https://api.crossref.org/works/10.1093%2Fmind%2FLIX.236.433",
+      "claim_check_scope": "bibliographic metadata; abstract where supplied by Crossref",
+      "limitation": "No universal substitution or shared-mechanism inference warranted; not all full texts available"
+    },
+    {
+      "id": "simon1955",
+      "title": "A behavioral model of rational choice",
+      "url": "https://doi.org/10.2307/1884852",
+      "metadata_evidence": "https://api.crossref.org/works/10.2307%2F1884852",
+      "claim_check_scope": "bibliographic metadata; abstract where supplied by Crossref",
+      "limitation": "No universal substitution or shared-mechanism inference warranted; not all full texts available"
+    },
+    {
+      "id": "kahneman1979",
+      "title": "Prospect theory: An analysis of decision under risk",
+      "url": "https://doi.org/10.2307/1914185",
+      "metadata_evidence": "https://api.crossref.org/works/10.2307%2F1914185",
+      "claim_check_scope": "bibliographic metadata; abstract where supplied by Crossref",
+      "limitation": "No universal substitution or shared-mechanism inference warranted; not all full texts available"
+    },
+    {
+      "id": "tversky1981",
+      "title": "The framing of decisions and the psychology of choice",
+      "url": "https://doi.org/10.1126/science.7455683",
+      "metadata_evidence": "https://api.crossref.org/works/10.1126%2Fscience.7455683",
+      "claim_check_scope": "bibliographic metadata; abstract where supplied by Crossref",
+      "limitation": "No universal substitution or shared-mechanism inference warranted; not all full texts available"
+    },
+    {
+      "id": "binz2023",
+      "title": "Using cognitive psychology to understand GPT-3",
+      "url": "https://doi.org/10.1073/pnas.2218523120",
+      "metadata_evidence": "https://api.crossref.org/works/10.1073%2Fpnas.2218523120",
+      "claim_check_scope": "bibliographic metadata; abstract where supplied by Crossref",
+      "limitation": "No universal substitution or shared-mechanism inference warranted; not all full texts available"
+    },
+    {
+      "id": "dillion2023",
+      "title": "Can AI language models replace human participants?",
+      "url": "https://doi.org/10.1016/j.tics.2023.04.008",
+      "metadata_evidence": "https://api.crossref.org/works/10.1016%2Fj.tics.2023.04.008",
+      "claim_check_scope": "bibliographic metadata; abstract where supplied by Crossref",
+      "limitation": "No universal substitution or shared-mechanism inference warranted; not all full texts available"
+    },
+    {
+      "id": "argyle2023",
+      "title": "Out of one, many: Using language models to simulate human samples",
+      "url": "https://doi.org/10.1017/pan.2023.2",
+      "metadata_evidence": "https://api.crossref.org/works/10.1017%2Fpan.2023.2",
+      "claim_check_scope": "bibliographic metadata; abstract where supplied by Crossref",
+      "limitation": "No universal substitution or shared-mechanism inference warranted; not all full texts available"
+    },
+    {
+      "id": "aher2023",
+      "title": "Using large language models to simulate multiple humans and replicate human subject studies",
+      "url": "https://proceedings.mlr.press/v202/aher23a.html",
+      "metadata_evidence": "https://proceedings.mlr.press/v202/aher23a.html",
+      "claim_check_scope": "publisher abstract and bibliographic record; full accessible article for binz2025",
+      "limitation": "No universal substitution or shared-mechanism inference warranted; not all full texts available"
+    },
+    {
+      "id": "demszky2023",
+      "title": "Using large language models in psychology",
+      "url": "https://doi.org/10.1038/s44159-023-00241-5",
+      "metadata_evidence": "https://www.nature.com/articles/s44159-023-00241-5",
+      "claim_check_scope": "publisher abstract and bibliographic record; full accessible article for binz2025",
+      "limitation": "No universal substitution or shared-mechanism inference warranted; not all full texts available"
+    },
+    {
+      "id": "grossmann2023",
+      "title": "AI and the transformation of social science research",
+      "url": "https://doi.org/10.1126/science.adi1778",
+      "metadata_evidence": "https://api.crossref.org/works/10.1126%2Fscience.adi1778",
+      "claim_check_scope": "bibliographic metadata; abstract where supplied by Crossref",
+      "limitation": "No universal substitution or shared-mechanism inference warranted; not all full texts available"
+    },
+    {
+      "id": "turpin2023",
+      "title": "Language models don’t always say what they think: Unfaithful explanations in chain-of-thought prompting",
+      "url": "https://doi.org/10.52202/075280-3275",
+      "metadata_evidence": "https://proceedings.neurips.cc/paper_files/paper/2023/hash/ed3fea9033a80fea1376299fa7863f4a-Abstract.html",
+      "claim_check_scope": "publisher abstract and bibliographic record; full accessible article for binz2025",
+      "limitation": "No universal substitution or shared-mechanism inference warranted; not all full texts available"
+    },
+    {
+      "id": "wilson1927",
+      "title": "Probable inference, the law of succession, and statistical inference",
+      "url": "https://doi.org/10.1080/01621459.1927.10502953",
+      "metadata_evidence": "https://api.crossref.org/works/10.1080%2F01621459.1927.10502953",
+      "claim_check_scope": "bibliographic metadata; abstract where supplied by Crossref",
+      "limitation": "No universal substitution or shared-mechanism inference warranted; not all full texts available"
+    },
+    {
+      "id": "binz2025",
+      "title": "A foundation model to predict and capture human cognition",
+      "url": "https://doi.org/10.1038/s41586-025-09215-4",
+      "metadata_evidence": "https://www.nature.com/articles/s41586-025-09215-4",
+      "claim_check_scope": "publisher abstract and bibliographic record; full accessible article for binz2025",
+      "limitation": "No universal substitution or shared-mechanism inference warranted; not all full texts available"
+    },
+    {
+      "id": "wang1996a",
+      "title": "Domain-specific rationality in human choices: violations of utility axioms and social contexts",
+      "url": "https://doi.org/10.1016/0010-0277(95)00700-8",
+      "metadata_evidence": "https://api.crossref.org/works/10.1016%2F0010-0277%2895%2900700-8",
+      "claim_check_scope": "bibliographic metadata; abstract where supplied by Crossref",
+      "limitation": "Workbook source lead only; original item values not verified"
+    },
+    {
+      "id": "wang2001",
+      "title": "Social cues and verbal framing in risky choice",
+      "url": "https://doi.org/10.1002/1099-0771(200101)14:1%3C1::aid-bdm361%3E3.0.co;2-n",
+      "metadata_evidence": "https://api.crossref.org/works/10.1002%2F1099-0771%28200101%2914%3A1%3C1%3A%3Aaid-bdm361%3E3.0.co%3B2-n",
+      "claim_check_scope": "bibliographic metadata; abstract where supplied by Crossref",
+      "limitation": "Workbook source lead only; original item values not verified"
+    },
+    {
+      "id": "wang1996c",
+      "title": "Framing Effects: Dynamics and Task Domains",
+      "url": "https://doi.org/10.1006/obhd.1996.0095",
+      "metadata_evidence": "https://api.crossref.org/works/10.1006%2Fobhd.1996.0095",
+      "claim_check_scope": "bibliographic metadata; abstract where supplied by Crossref",
+      "limitation": "Workbook source lead only; original item values not verified"
+    },
+    {
+      "id": "wang1996b",
+      "title": "Evolutionary hypotheses of risk-sensitive choice: Age differences and perspective change",
+      "url": "https://doi.org/10.1016/0162-3095(95)00103-4",
+      "metadata_evidence": "https://api.crossref.org/works/10.1016%2F0162-3095%2895%2900103-4",
+      "claim_check_scope": "bibliographic metadata; abstract where supplied by Crossref",
+      "limitation": "Workbook source lead only; original item values not verified"
+    },
+    {
+      "id": "wang2002",
+      "title": "Risk as reproductive variance",
+      "url": "https://doi.org/10.1016/s1090-5138(01)00091-5",
+      "metadata_evidence": "https://api.crossref.org/works/10.1016%2Fs1090-5138%2801%2900091-5",
+      "claim_check_scope": "bibliographic metadata; abstract where supplied by Crossref",
+      "limitation": "Workbook source lead only; original item values not verified"
+    }
+  ],
+  "access_limits": [
+    "Search connector returned an error; used direct publisher and Crossref access.",
+    "PubMed returned browser-check pages, not usable abstracts.",
+    "Some Crossref requests were rate limited; retried relevant records or used publisher records.",
+    "Crossref Simon record supplies first page only; full page range not newly verified."
+  ],
+  "revision_2026_10_27": {
+    "review_date": "2026-10-27",
+    "scope": "Three new cited references verified for the prose revision; the 2026-10-26 review and access limits above remain historical. Earlier sources were not all reread this turn. Current cited reference count: 21.",
+    "references": [
+      {
+        "id": "noy2023",
+        "title": "Experimental evidence on the productivity effects of generative artificial intelligence",
+        "url": "https://doi.org/10.1126/science.adh2586",
+        "metadata_evidence": "https://pubmed.ncbi.nlm.nih.gov/37440646/",
+        "claim_check_scope": "Verified 2026-10-27 against PubMed bibliographic record and abstract. Preregistered experiment on professional writing with ChatGPT assistance supports shorter completion time and improved output quality. It does not establish autonomous labor replacement or similarity of decision preferences."
+      },
+      {
+        "id": "brynjolfsson2025",
+        "title": "Generative AI at work",
+        "url": "https://doi.org/10.1093/qje/qjae044",
+        "metadata_evidence": "https://academic.oup.com/qje/article/140/2/889/7990658",
+        "claim_check_scope": "Verified 2026-10-27 against final publisher record, abstract, and introduction. AI assistance improved productivity among 5,172 customer-support agents; the final article reports 15%, not the earlier working-paper figures. Manuscript cites only the qualitative efficiency finding. Human agents retained responsibility; this is not evidence of independent model decisions or preference equivalence."
+      },
+      {
+        "id": "mei2024",
+        "title": "A Turing test of whether AI chatbots are behaviorally similar to humans",
+        "url": "https://doi.org/10.1073/pnas.2313925121",
+        "metadata_evidence": "https://www.pnas.org/doi/10.1073/pnas.2313925121",
+        "claim_check_scope": "Verified 2026-10-27 against primary PNAS metadata, methods, and results. Examines GPT-3.5-Turbo and GPT-4 with personality measures and behavioral games. Supports task-specific behavioral comparison, with similarities alongside more concentrated or cooperative choices. Its distribution-based discrimination test differs from the present descriptive scores and does not validate this tool. DOI 10.1073/pnas.2401336121 is a commentary by Juanjuan Meng, not a correction."
+      }
+    ],
+    "access_limits": [
+      "Science paper checked via PubMed bibliographic record and abstract, not full text.",
+      "Oxford publisher page redirected to its article-minimal page; metadata, abstract and introduction were accessible.",
+      "PMC browser check was not used as evidence; primary PNAS page was accessible."
+    ]
+  }
+}
