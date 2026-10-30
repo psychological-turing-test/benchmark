@@ -386,14 +386,14 @@ def sensitivity(audit: dict[str, Any]) -> dict[str, Any]:
   table_ax.axis("off")
   archived = {m["llm_id"]: m for m in audit["model_table"]}
   revised = audit["sensitivity"]["exclude_four_age_items"]["models"]
-  ordered = sorted(revised, key=lambda m: archived[m["llm_id"]]["overall_srs_rank"])
+  ordered = sorted(revised, key=lambda m: archived[m["llm_id"]]["overall_pas_rank"])
   rows = []
   labels = []
   for index, item in enumerate(ordered):
     y = 18 - index
     model_id = item["llm_id"]
-    before = archived[model_id]["overall"]["srs"]
-    after = item["revised_overall"]["srs"]
+    before = archived[model_id]["overall"]["pas"]
+    after = item["revised_overall"]["pas"]
     ax.plot([before, after], [y, y], color="0.65", linewidth=1.2, zorder=1)
     ax.scatter(before, y, s=25, facecolors="white", edgecolors=GRAY,
                linewidths=0.85, marker="o", zorder=3)
@@ -402,15 +402,15 @@ def sensitivity(audit: dict[str, Any]) -> dict[str, Any]:
     labels.append(label)
     rows.append({
       "panel": "A", "llm_id": model_id, "short_label": label,
-      "score_scope": "overall", "archived_srs": before,
-      "alternative_srs": after, "delta_srs": after - before,
-      "archived_rank": archived[model_id]["overall_srs_rank"],
+      "score_scope": "overall", "archived_pas": before,
+      "alternative_pas": after, "delta_pas": after - before,
+      "archived_rank": archived[model_id]["overall_pas_rank"],
       "alternative_rank": item["revised_overall_rank"],
       "alternative_rule": "exclude four Py/Pm age-labelled items",
     })
   ax.set(yticks=range(19), yticklabels=list(reversed(labels)),
          ylim=(-0.7, 18.7), xlim=(47, 67), xticks=[50, 55, 60, 65])
-  ax.set_xlabel("等权总 SRS", labelpad=8)
+  ax.set_xlabel("等权总 PAS", labelpad=8)
   ax.tick_params(axis="y", length=0, pad=6, labelsize=8.2)
   ax.spines["left"].set_visible(False)
   ax.xaxis.grid(True, color=LIGHT, linewidth=0.45, zorder=0)
@@ -440,20 +440,20 @@ def sensitivity(audit: dict[str, Any]) -> dict[str, Any]:
     else:
       old = duplicate["source_equal_distribution_scores"][scope]
       new = duplicate["count_pooled_scores"][scope]
-    delta = new["srs"] - old["srs"]
+    delta = new["pas"] - old["pas"]
     delta_text = "0.000000" if abs(delta) < 0.0000005 else f"{delta:+.6f}"
     table_ax.text(0, y, label, fontsize=9, va="top")
-    table_ax.text(0, y - 0.063, f"{old['srs']:.6f} → {new['srs']:.6f}",
+    table_ax.text(0, y - 0.063, f"{old['pas']:.6f} → {new['pas']:.6f}",
                   fontsize=8.7, va="top")
-    table_ax.text(0, y - 0.119, f"Δ SRS = {delta_text}", fontsize=8.7, va="top")
+    table_ax.text(0, y - 0.119, f"Δ PAS = {delta_text}", fontsize=8.7, va="top")
     table_ax.plot([0, 1], [y - 0.165, y - 0.165], color=LIGHT, linewidth=0.6)
     rows.append({
       "panel": "B", "llm_id": duplicate["llm_id"],
       "short_label": "DS-v4-pro / T", "score_scope": scope,
-      "archived_srs": old["srs"], "alternative_srs": new["srs"],
-      "delta_srs": delta, "alternative_rule": "pool source answer counts",
+      "archived_pas": old["pas"], "alternative_pas": new["pas"],
+      "delta_pas": delta, "alternative_rule": "pool source answer counts",
       "archived_bas": old["bas"], "alternative_bas": new["bas"],
-      "archived_vas": old["vas"], "alternative_vas": new["vas"],
+      "archived_fas": old["fas"], "alternative_fas": new["fas"],
     })
   table_ax.text(0, 0.143, "原评分标度为0–100\n未放大小差异；总体排序不变",
                 fontsize=8.4, va="top", linespacing=1.6)
@@ -463,9 +463,9 @@ def sensitivity(audit: dict[str, Any]) -> dict[str, Any]:
     "number": 4,
     "caption": (
       "图4　题项构成与跨文件汇总规则的事后敏感性分析。A：空心圆为存档"
-      "全量评分，深色菱形为移除决策前提四年龄题后重算的等权总SRS；"
+      "全量评分，深色菱形为移除决策前提四年龄题后重算的等权总PAS；"
       "模型按原总分排序，移除题项改变测量范围，不能补救原操纵。"
-      "B：DeepSeek-v4-pro思考配置按源分布等权与按有效计数合并的SRS比较；"
+      "B：DeepSeek-v4-pro思考配置按源分布等权与按有效计数合并的PAS比较；"
       "差异以原0–100分标度列示，未放大微小变化。T和NT分别表示配置中"
       "显式标记的思考与非思考；无后缀配置不推断其模式。"
     ),

@@ -74,15 +74,15 @@ def build_analysis_payload(
       continue
 
     bas = _mean([rating["bas"] for rating in questionnaires.values()])
-    vas = _mean([rating["vas"] for rating in questionnaires.values()])
-    srs = _mean([rating["srs"] for rating in questionnaires.values()])
+    fas = _mean([rating["fas"] for rating in questionnaires.values()])
+    pas = _mean([rating["pas"] for rating in questionnaires.values()])
     models.append(
       {
         "llm_id": llm_id,
         "display_name": format_model_display_name(llm_id),
         "bas": bas,
-        "vas": vas,
-        "srs": srs,
+        "fas": fas,
+        "pas": pas,
         "questionnaires": questionnaires,
       }
     )

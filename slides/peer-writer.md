@@ -1,7 +1,7 @@
 # Writing styles
 
 Write in concise academic Chinese for a conference-style research talk.
-Use the terms from the abstract consistently: "心理学版图灵测试", "社会理性", "行为对齐", "价值对齐", "类人决策模式", "人类基线", "思考模式", and "非思考模式".
+Use the terms from the abstract consistently: "心理学版图灵测试", "社会理性", "行为对齐", "功能对齐", "类人决策模式", "人类基线", "思考模式", and "非思考模式".
 Prefer short claims supported by concrete metrics from the benchmark outputs.
 When presenting results, distinguish descriptive similarity from normative superiority.
 
@@ -9,7 +9,7 @@ When presenting results, distinguish descriptive similarity from normative super
 
 This project is a LaTeX Beamer slide deck.
 Keep each slide focused on one point, with compact bullets, small tables, or one simple figure.
-Use Chinese punctuation and avoid long English passages except for metric acronyms such as BAS, VAS, SRS, FES, and RC.
+Use Chinese punctuation and avoid long English passages except for metric acronyms such as BAS, FAS, PAS, FES, and RC.
 Use `ctexbeamer` with `xelatex` through `latexmk`.
 Put section content in `sections/*.tex`; keep `main.tex` as the entry point.
 

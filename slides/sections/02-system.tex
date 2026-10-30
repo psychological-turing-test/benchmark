@@ -10,7 +10,7 @@
     \node[box] (q) {行为测试配置\\\small YAML + 人类基线};
     \node[box, right=of q] (l) {LLM 配置\\\small provider/model};
     \node[box, right=of l] (r) {并行查询\\\small population runs};
-    \node[box, below=of r] (e) {评估器\\\small BAS / VAS / SRS};
+    \node[box, below=of r] (e) {评估器\\\small BAS / FAS / PAS};
     \node[box, left=of e] (v) {可视化\\\small 指标表 + 图};
     \node[box, left=of v] (a) {分析结论\\\small 社会理性画像};
 
@@ -25,10 +25,10 @@
   \begin{itemize}
     \item 新模型通过 LLM 配置加入；新范式通过行为测试配置加入。
     \item 运行阶段并行查询多个模型、多个模拟被试与多个独立 section。
-    \item 分析阶段按行为测试自动生成行为对齐、价值对齐与心理指标画像。
+    \item 分析阶段按行为测试自动生成行为对齐、功能对齐与心理指标画像。
   \end{itemize}
 
-  \smallnote{BAS = Behavioral Alignment Score；VAS = Value Alignment Score；SRS = Social Rationality Score。}
+  \smallnote{BAS = Behavioral Alignment Score；FAS = Functional Alignment Score；PAS = Psychological Alignment Score。}
 \end{frame}
 
 \begin{frame}{扩展新 LLM：只增加结构化配置}
@@ -88,7 +88,7 @@
   \end{columns}
 \end{frame}
 
-\begin{frame}{评分：行为对齐与价值对齐}
+\begin{frame}{评分：行为对齐与功能对齐}
   \begin{columns}[T,totalwidth=\textwidth]
     \begin{column}{0.48\textwidth}
       \begin{block}{\metric{BAS}: Behavioral Alignment Score}
@@ -97,7 +97,7 @@
       \end{block}
     \end{column}
     \begin{column}{0.48\textwidth}
-      \begin{block}{\metric{VAS}: Value Alignment Score}
+      \begin{block}{\metric{FAS}: Functional Alignment Score}
         关注同一行为维度下多个 scenario 组成的变化轨迹。
         它衡量 LLM 是否像人类一样随社会线索变化而系统性调整决策模式。
       \end{block}
@@ -105,11 +105,11 @@
   \end{columns}
 
   \vspace{0.8em}
-  \begin{block}{\metric{SRS}: Social Rationality Score}
+  \begin{block}{\metric{PAS}: Psychological Alignment Score}
     \[
-      SRS = \frac{BAS + VAS}{2}
+      PAS = \frac{BAS + FAS}{2}
     \]
-    \smallnote{VAS 的具体实现基于按心理梯度排序的轨迹向量，并用标准化距离转换为百分制分数。}
+    \smallnote{FAS 的具体实现基于按心理梯度排序的轨迹向量，并用标准化距离转换为百分制分数。}
   \end{block}
 \end{frame}
 

@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-The BAS / VAS / SRS scores defined in [rating.md](rating.md) measure how
+The BAS / FAS / PAS scores defined in [rating.md](rating.md) measure how
 closely an LLM's outputs match human results. This document supplements those
 scores with **Behavioral Tendency Metrics (BTMs)** for the
 DecisionPremise questionnaire.
@@ -257,6 +257,6 @@ For each agent, emit a DecisionPremise behavioral profile:
 | GPR       | 0.16            | Responsiveness to improved gamble payoff |
 | SBS       | 0.28            | Responsiveness to improved sure benefit |
 
-These BTMs complement the BAS / VAS / SRS scores in [rating.md](rating.md):
-BAS / VAS describe how close the agent is to humans, while BTMs describe the
+These BTMs complement the BAS / FAS / PAS scores in [rating.md](rating.md):
+BAS / FAS describe how close the agent is to humans, while BTMs describe the
 shape of the agent's decision-premise profile.

@@ -23,7 +23,7 @@ HTML/CSS/vanilla JavaScript.
   display-name formatting, and `RaterError`.
 - Create `rationale_benchmark/rater/loader.py`: flat-directory discovery and
   evaluator JSON validation.
-- Create `rationale_benchmark/rater/scoring.py`: BAS/VAS/SRS calculations for
+- Create `rationale_benchmark/rater/scoring.py`: BAS/FAS/PAS calculations for
   `risky-choice-framing` and `decision-premise`.
 - Create `rationale_benchmark/rater/analysis.py`: orchestration, top-level
   model averaging, and `analysis.json` writing.
@@ -143,11 +143,11 @@ class EvaluatorQuestionResult:
 
 @dataclass(frozen=True)
 class QuestionnaireRating:
-  """BAS, VAS, SRS, and trace details for one questionnaire/model pair."""
+  """BAS, FAS, PAS, and trace details for one questionnaire/model pair."""
 
   bas: float
-  vas: float
-  srs: float
+  fas: float
+  pas: float
   details: dict[str, Any]
 
 
@@ -626,10 +626,10 @@ def test_score_decision_premise() -> None:
   )
 
   assert rating.bas == pytest.approx(75.0)
-  assert rating.vas == pytest.approx(74.504871)
-  assert rating.srs == pytest.approx(74.752436)
+  assert rating.fas == pytest.approx(74.504871)
+  assert rating.pas == pytest.approx(74.752436)
   assert [item["label"] for item in rating.details["bas_items"]] == ["q1", "q2"]
-  assert rating.details["vas"]["labels"] == ["q1", "q2"]
+  assert rating.details["fas"]["labels"] == ["q1", "q2"]
 
 
 def test_score_risky_choice_framing() -> None:
@@ -655,10 +655,10 @@ def test_score_risky_choice_framing() -> None:
   )
 
   assert rating.bas == pytest.approx(90.0)
-  assert rating.vas == pytest.approx(80.0)
-  assert rating.srs == pytest.approx(85.0)
+  assert rating.fas == pytest.approx(80.0)
+  assert rating.pas == pytest.approx(85.0)
   assert rating.details["bas_items"][0]["label"] == "6life"
-  assert rating.details["vas"]["labels"] == ["6life"]
+  assert rating.details["fas"]["labels"] == ["6life"]
 
 
 def test_score_rejects_unsupported_questionnaire() -> None:
@@ -698,7 +698,7 @@ Expected: FAIL with import errors for `rationale_benchmark.rater.scoring`.
 Create `rationale_benchmark/rater/scoring.py`:
 
 ```python
-"""BAS, VAS, and SRS scoring for evaluator result data."""
+"""BAS, FAS, and PAS scoring for evaluator result data."""
 
 from __future__ import annotations
 
@@ -775,9 +775,9 @@ def _score_decision_premise(
 
   if not bas_items:
     raise RaterError("No decision-premise scenarios available to rate")
-  vas_detail = _trajectory_vas(labels, human_trajectory, llm_trajectory)
+  fas_detail = _trajectory_fas(labels, human_trajectory, llm_trajectory)
   bas = sum(item["bas"] for item in bas_items) / len(bas_items)
-  return _rating(bas=bas, vas_detail=vas_detail, bas_items=bas_items)
+  return _rating(bas=bas, fas_detail=fas_detail, bas_items=bas_items)
 
 
 def _score_risky_choice_framing(
@@ -838,9 +838,9 @@ def _score_risky_choice_framing(
 
   if not bas_items:
     raise RaterError("No risky-choice framing pairs available to rate")
-  vas_detail = _trajectory_vas(labels, human_trajectory, llm_trajectory)
+  fas_detail = _trajectory_fas(labels, human_trajectory, llm_trajectory)
   bas = sum(item["bas"] for item in bas_items) / len(bas_items)
-  return _rating(bas=bas, vas_detail=vas_detail, bas_items=bas_items)
+  return _rating(bas=bas, fas_detail=fas_detail, bas_items=bas_items)
 
 
 def _frame_and_key(item: EvaluatorQuestionResult) -> tuple[str, str]:
@@ -877,37 +877,37 @@ def _option_percentage(
   return distribution[option]
 
 
-def _trajectory_vas(
+def _trajectory_fas(
   labels: list[str],
   human: list[float],
   llm: list[float],
 ) -> dict[str, Any]:
   distance = _euclidean(llm, human)
   max_distance = math.sqrt(len(labels))
-  vas = _clamp_score(100 * (1 - distance / max_distance))
+  fas = _clamp_score(100 * (1 - distance / max_distance))
   return {
     "labels": labels,
     "human": human,
     "llm": llm,
     "distance": distance,
     "max_distance": max_distance,
-    "vas": vas,
+    "fas": fas,
   }
 
 
 def _rating(
   *,
   bas: float,
-  vas_detail: dict[str, Any],
+  fas_detail: dict[str, Any],
   bas_items: list[dict[str, Any]],
 ) -> QuestionnaireRating:
   clamped_bas = _clamp_score(bas)
-  clamped_vas = _clamp_score(vas_detail["vas"])
+  clamped_fas = _clamp_score(fas_detail["fas"])
   return QuestionnaireRating(
     bas=clamped_bas,
-    vas=clamped_vas,
-    srs=(clamped_bas + clamped_vas) / 2,
-    details={"bas_items": bas_items, "vas": vas_detail},
+    fas=clamped_fas,
+    pas=(clamped_bas + clamped_fas) / 2,
+    details={"bas_items": bas_items, "fas": fas_detail},
   )
 
 
@@ -1069,8 +1069,8 @@ def test_rate_results_writes_analysis_json(tmp_path: Path) -> None:
     "aliyun/qwen3.6-plus (no thinking)"
   )
   assert payload["models"][0]["bas"] == pytest.approx(75.0)
-  assert payload["models"][0]["vas"] == pytest.approx(74.504871)
-  assert payload["models"][0]["srs"] == pytest.approx(74.752436)
+  assert payload["models"][0]["fas"] == pytest.approx(74.504871)
+  assert payload["models"][0]["pas"] == pytest.approx(74.752436)
   assert "decision-premise" in payload["models"][0]["questionnaires"]
 
 
@@ -1174,15 +1174,15 @@ def build_analysis_payload(
       continue
 
     bas = _mean([rating["bas"] for rating in questionnaires.values()])
-    vas = _mean([rating["vas"] for rating in questionnaires.values()])
-    srs = _mean([rating["srs"] for rating in questionnaires.values()])
+    fas = _mean([rating["fas"] for rating in questionnaires.values()])
+    pas = _mean([rating["pas"] for rating in questionnaires.values()])
     models.append(
       {
         "llm_id": llm_id,
         "display_name": format_model_display_name(llm_id),
         "bas": bas,
-        "vas": vas,
-        "srs": srs,
+        "fas": fas,
+        "pas": pas,
         "questionnaires": questionnaires,
       }
     )
@@ -1471,7 +1471,7 @@ _HTML = """<!DOCTYPE html>
         svg.innerHTML = `<text x="10" y="32" class="empty">Select at least one model.</text>`;
         return;
       }
-      const metrics = ["srs", "bas", "vas"];
+      const metrics = ["pas", "bas", "fas"];
       const width = 520;
       const rowHeight = 28;
       const height = 40 + models.length * metrics.length * rowHeight;
@@ -1499,7 +1499,7 @@ _HTML = """<!DOCTYPE html>
         return;
       }
       const axes = Array.from(new Set(models.flatMap((model) =>
-        Object.keys(model.questionnaires).flatMap((name) => [`${name} BAS`, `${name} VAS`])
+        Object.keys(model.questionnaires).flatMap((name) => [`${name} BAS`, `${name} FAS`])
       )));
       const center = 160;
       const radius = 110;
@@ -1536,17 +1536,17 @@ _HTML = """<!DOCTYPE html>
       const rows = models.map((model) => `
         <tr>
           <td>${model.display_name}<br><small>${model.llm_id}</small></td>
-          <td>${model.srs.toFixed(2)}</td>
+          <td>${model.pas.toFixed(2)}</td>
           <td>${model.bas.toFixed(2)}</td>
-          <td>${model.vas.toFixed(2)}</td>
+          <td>${model.fas.toFixed(2)}</td>
           <td>${Object.entries(model.questionnaires).map(([name, rating]) =>
-            `${name}: SRS ${rating.srs.toFixed(2)}, BAS ${rating.bas.toFixed(2)}, VAS ${rating.vas.toFixed(2)}`
+            `${name}: PAS ${rating.pas.toFixed(2)}, BAS ${rating.bas.toFixed(2)}, FAS ${rating.fas.toFixed(2)}`
           ).join("<br>")}</td>
         </tr>
       `).join("");
       root.innerHTML = `
         <table>
-          <thead><tr><th>Model</th><th>SRS</th><th>BAS</th><th>VAS</th><th>Questionnaires</th></tr></thead>
+          <thead><tr><th>Model</th><th>PAS</th><th>BAS</th><th>FAS</th><th>Questionnaires</th></tr></thead>
           <tbody>${rows}</tbody>
         </table>
       `;
@@ -1727,7 +1727,7 @@ inside it. The rater does not scan recursively.
 
 ## Outputs
 
-- `analysis.json`: BAS, VAS, and SRS for each LLM, plus questionnaire-level
+- `analysis.json`: BAS, FAS, and PAS for each LLM, plus questionnaire-level
   details.
 - `analysis-visualize.html`: a static page that loads `analysis.json` from the
   same directory.
@@ -1830,10 +1830,10 @@ Run:
 
 ```bash
 python -m json.tool /tmp/rater-analysis-sample/analysis.json >/tmp/rater-analysis-sample/analysis.pretty.json
-rg '"display_name"|"risky-choice-framing"|"srs"' /tmp/rater-analysis-sample/analysis.pretty.json
+rg '"display_name"|"risky-choice-framing"|"pas"' /tmp/rater-analysis-sample/analysis.pretty.json
 ```
 
-Expected: output includes display names, `risky-choice-framing`, and `srs`
+Expected: output includes display names, `risky-choice-framing`, and `pas`
 fields.
 
 - [ ] **Step 4: Run targeted test suite**

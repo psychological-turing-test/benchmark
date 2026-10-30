@@ -237,7 +237,7 @@ _HTML = """<!DOCTYPE html>
       font-weight: 700;
       background: #eef3f9;
     }
-    .srs-column {
+    .pas-column {
       background: #fff4d6;
     }
     .rating-high {
@@ -487,7 +487,7 @@ _HTML = """<!DOCTYPE html>
         `;
         return;
       }
-      const metrics = ["srs"];
+      const metrics = ["pas"];
       const width = 760;
       const barStart = 360;
       const rowHeight = 28;
@@ -721,9 +721,9 @@ _HTML = """<!DOCTYPE html>
           <thead>
             <tr>
               <th>Display name</th>
-              <th class="srs-column">SRS</th>
+              <th class="pas-column">PAS</th>
               <th>BAS</th>
-              <th>VAS</th>
+              <th>FAS</th>
               ${metadata.metrics.map((metric) => `
                 <th title="${escapeHtml(metric.note)}">
                   ${escapeHtml(metric.acronym)}
@@ -746,9 +746,9 @@ _HTML = """<!DOCTYPE html>
       return `
         <tr>
           <td>${escapeHtml(label)}</td>
-          <td class="srs-column">${formatRatingValue(questionnaire?.srs)}</td>
+          <td class="pas-column">${formatRatingValue(questionnaire?.pas)}</td>
           <td>${formatRatingValue(questionnaire?.bas)}</td>
-          <td>${formatRatingValue(questionnaire?.vas)}</td>
+          <td>${formatRatingValue(questionnaire?.fas)}</td>
           ${metricCells}
         </tr>
       `;

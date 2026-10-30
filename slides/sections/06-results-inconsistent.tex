@@ -84,7 +84,7 @@
           height=0.58\textheight,
           xmin=-12,
           xmax=13,
-          xlabel={$\Delta$ SRS：非思考模式 - 最大思考模式},
+          xlabel={$\Delta$ PAS：非思考模式 - 最大思考模式},
           ytick={1,2,3,4},
           yticklabels={DS-v4-pro,GLM-5.1,Qwen3.5+,Qwen3.6+},
           y dir=reverse,
@@ -113,7 +113,7 @@
     \end{column}
   \end{columns}
 
-  \smallnote{SRS = Social Rationality Score；$\Delta$ SRS 表示非思考模式相对于最大思考模式的综合分变化。}
+  \smallnote{PAS = Psychological Alignment Score；$\Delta$ PAS 表示非思考模式相对于最大思考模式的综合分变化。}
 \end{frame}
 
 \begin{frame}{同一公司模型的版本变化：Qwen 示例}
@@ -125,7 +125,7 @@
           height=0.58\textheight,
           ymin=45,
           ymax=68,
-          ylabel={SRS},
+          ylabel={PAS},
           xtick={1,2,3,4,5,6,7},
           xticklabels={3.5+,3.5+T,3.5+NT,3.6+,3.6+T,3.6+NT,3.6-max},
           x tick label style={rotate=30,anchor=east,font=\scriptsize},
@@ -167,9 +167,9 @@
       \vspace{0.2em}
       \begin{block}{观察}
         框架效应相关指标增强；
-        但两类行为测试的 SRS 没有同步提升。
+        但两类行为测试的 PAS 没有同步提升。
       \end{block}
-      \smallnote{SRS = Social Rationality Score；FES = Framing Effect Size。}
+      \smallnote{PAS = Psychological Alignment Score；FES = Framing Effect Size。}
     \end{column}
   \end{columns}
 \end{frame}
@@ -178,17 +178,17 @@
   \begin{columns}[T,totalwidth=\textwidth]
     \begin{column}{0.50\textwidth}
       \begin{block}{DeepSeek-v4-pro}
-        非思考模式总体 SRS 最高：61.4。
+        非思考模式总体 PAS 最高：61.4。
         但最大思考模式在框架效应上更强，FES 从 0.077 升至 0.340。
       \end{block}
       \begin{block}{Qwen3.6-max-preview}
         FES = 0.761，RC = 0.889。
-        它高度呈现经典框架效应，但综合 SRS 只有 48.6。
+        它高度呈现经典框架效应，但综合 PAS 只有 48.6。
       \end{block}
     \end{column}
     \begin{column}{0.46\textwidth}
       \begin{block}{GLM-5.1}
-        非思考模式在决策前提上略高，但风险框架 SRS 低于最大思考模式。
+        非思考模式在决策前提上略高，但风险框架 PAS 低于最大思考模式。
       \end{block}
       \begin{block}{Qwen3.5-plus}
         最大思考模式几乎框架中性；非思考模式恢复部分人类式框架效应，却损失风险框架综合对齐。
@@ -196,5 +196,5 @@
     \end{column}
   \end{columns}
 
-  \smallnote{SRS = Social Rationality Score；FES = Framing Effect Size；RC = Reflection Consistency。}
+  \smallnote{PAS = Psychological Alignment Score；FES = Framing Effect Size；RC = Reflection Consistency。}
 \end{frame}

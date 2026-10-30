@@ -286,20 +286,20 @@ def equation(key: str) -> None:
   elif key == "delta":
     nodes = [var("δ", "a,j"), mr("="), var("p", "a,N,j"), mr("−"),
              var("p", "a,P,j"), mr("     a∈{L,H}")]
-  elif key == "vas_framing":
+  elif key == "fas_framing":
     diff = [var("δ", "L,j"), mr("−"), var("δ", "H,j")]
-    nodes = [var("VAS", "F"), mr("=C(100[1−"), radical([
+    nodes = [var("FAS", "F"), mr("=C(100[1−"), radical([
       fraction([mr("1")], [mr("J")]),
       summation("j=1", "J", [power([mr("(")] + diff + [mr(")")])])]), mr("])")]
-  elif key == "vas_premise":
-    nodes = [var("VAS", "D"), mr("=100[1−"), radical([
+  elif key == "fas_premise":
+    nodes = [var("FAS", "D"), mr("=100[1−"), radical([
       fraction([mr("1")], [mr("I")]),
       summation("i=1", "I", [power([mr("(")] + error("i") + [mr(")")])])]), mr("]")]
-  elif key == "srs":
-    nodes = [var("SRS", "q"), mr("="),
-             fraction([var("BAS", "q"), mr("+"), var("VAS", "q")], [mr("2")]),
-             mr("   ;   SRS="), fraction(
-               [var("SRS", "F"), mr("+"), var("SRS", "D")], [mr("2")])]
+  elif key == "pas":
+    nodes = [var("PAS", "q"), mr("="),
+             fraction([var("BAS", "q"), mr("+"), var("FAS", "q")], [mr("2")]),
+             mr("   ;   PAS="), fraction(
+               [var("PAS", "F"), mr("+"), var("PAS", "D")], [mr("2")])]
   else:
     raise ValueError(key)
   p = DOC.add_paragraph()
@@ -398,16 +398,16 @@ def table_by_name(key: str) -> None:
       "注：表中为研究设计建议，不表示本稿已经完成相应推论检验。B在框架任务中为概率方案；决策前提任务的B含义随题项定义。")
   elif key == "scores":
     rows = []
-    for item in sorted(DATA["model_table"], key=lambda x: x["overall_srs_rank"]):
+    for item in sorted(DATA["model_table"], key=lambda x: x["overall_pas_rank"]):
       name = short_name(item["llm_id"])
       q = item["questionnaires"]
-      rows.append([name, f'{q["risky-choice-framing"]["srs"]:.2f}',
-                   f'{q["decision-premise"]["srs"]:.2f}',
-                   f'{item["overall"]["srs"]:.2f}'])
+      rows.append([name, f'{q["risky-choice-framing"]["pas"]:.2f}',
+                   f'{q["decision-premise"]["pas"]:.2f}',
+                   f'{item["overall"]["pas"]:.2f}'])
     three_line_table(
-      ["模型配置", "框架SRS", "前提SRS", "总体SRS"], rows,
+      ["模型配置", "框架PAS", "前提PAS", "总体PAS"], rows,
       [3.40, 1.00, 1.00, 1.00], "表3 存档规则下19个模型配置的评分",
-      "注：按未四舍五入的总体SRS排序；两任务等权平均。思考与非思考仅在存档标识明确时标注，未标注配置的历史思考设置不作推定。分数无推论性名次区间。")
+      "注：按未四舍五入的总体PAS排序；两任务等权平均。思考与非思考仅在存档标识明确时标注，未标注配置的历史思考设置不作推定。分数无推论性名次区间。")
   else:
     raise ValueError(key)
 
@@ -423,7 +423,7 @@ def figure(key: str) -> None:
     "workflow": ("图1 类人决策研究的设计与解释流程", "注：先确定研究问题与参照人群，再组织材料、施测和行为比较；各环节共同限定结论范围。"),
     "framing": ("图2 600人疾病题的框架选择分布", "注：点为B选择率，误差线为95% Wilson边际区间；各条件的有效n见图内标注。人类为项目参考数据，模型为各自单一来源文件的有效回答。区间以条件内独立二项采样为前提，不是框架差值或人机差值的置信区间。"),
     "profiles": ("图3 决策前提任务的行为画像", "注：灰点为19个模型配置，纵向错开仅为避免重叠；深色圆点为配置等权均值，空心菱形为人类参考。FRP为B选择比例，其余为条件差分；横轴单位均为概率或概率差，不表示同一心理构念。"),
-    "sensitivity": ("图4 题项范围与汇总规则的敏感性", "注：DS为DeepSeek，Q为Qwen，T为思考、NT为非思考。A比较全部题项与移除四个未落实自我年龄操纵题项后的总体SRS，框架任务不变，两任务仍等权；B比较DeepSeek v4 pro思考配置的源文件等权与按有效计数合并结果。此为事后描述性检查，不能替代修正材料后的新实验。"),
+    "sensitivity": ("图4 题项范围与汇总规则的敏感性", "注：DS为DeepSeek，Q为Qwen，T为思考、NT为非思考。A比较全部题项与移除四个未落实自我年龄操纵题项后的总体PAS，框架任务不变，两任务仍等权；B比较DeepSeek v4 pro思考配置的源文件等权与按有效计数合并结果。此为事后描述性检查，不能替代修正材料后的新实验。"),
   }
   p = DOC.add_paragraph()
   p.paragraph_format.first_line_indent = Pt(0)

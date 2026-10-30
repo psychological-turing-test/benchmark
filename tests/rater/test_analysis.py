@@ -113,8 +113,8 @@ def test_rate_results_writes_analysis_json(tmp_path: Path) -> None:
     "aliyun/qwen3.6-plus (no thinking)"
   )
   assert payload["models"][0]["bas"] == pytest.approx(75.0)
-  assert payload["models"][0]["vas"] == pytest.approx(74.504871)
-  assert payload["models"][0]["srs"] == pytest.approx(74.752436)
+  assert payload["models"][0]["fas"] == pytest.approx(74.504871)
+  assert payload["models"][0]["pas"] == pytest.approx(74.752436)
   assert "decision-premise" in payload["models"][0]["questionnaires"]
   details = payload["models"][0]["questionnaires"]["decision-premise"]["details"]
   assert "behavioral_tendency_metrics" not in details
@@ -128,7 +128,7 @@ def test_rate_results_writes_analysis_json(tmp_path: Path) -> None:
   assert 'selectorButton("Select all"' in html
   assert 'selectorButton("Deselect all"' in html
   assert 'input.type = "checkbox"' in html
-  assert 'const metrics = ["srs"];' in html
+  assert 'const metrics = ["pas"];' in html
   assert "const width = 760;" in html
   assert "const barStart = 360;" in html
   assert "QUESTIONNAIRE_METRICS" in html
@@ -173,8 +173,8 @@ def test_rate_results_writes_analysis_json(tmp_path: Path) -> None:
   assert 'id="radar-charts"' not in html
   assert 'id="comparison-tables"' in html
   assert "<th>Raw LLM ID</th>" not in html
-  assert '<th class="srs-column">SRS</th>' in html
-  assert "formatRatingValue(questionnaire?.srs)" in html
+  assert '<th class="pas-column">PAS</th>' in html
+  assert "formatRatingValue(questionnaire?.pas)" in html
   assert "model.questionnaires[name]?.[metric] ?? 0" not in html
   assert "Overall ratings" in html
   assert "Behavioral metric bars" in html
@@ -289,8 +289,8 @@ def test_rate_results_averages_repeated_model_runs(tmp_path: Path) -> None:
   model = payload["models"][0]
   assert model["llm_id"] == "aliyun/qwen3.6-plus (0)"
   assert model["bas"] == pytest.approx(100.0)
-  assert model["vas"] == pytest.approx(100.0)
-  assert model["srs"] == pytest.approx(100.0)
+  assert model["fas"] == pytest.approx(100.0)
+  assert model["pas"] == pytest.approx(100.0)
 
 
 def test_rate_results_script_reports_outputs(tmp_path: Path) -> None:

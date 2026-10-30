@@ -85,20 +85,20 @@ def test_score_decision_premise() -> None:
   )
 
   assert rating.bas == pytest.approx(75.0)
-  assert rating.vas == pytest.approx(74.504871)
-  assert rating.srs == pytest.approx(74.752436)
+  assert rating.fas == pytest.approx(74.504871)
+  assert rating.pas == pytest.approx(74.752436)
   assert [item["label"] for item in rating.details["bas_items"]] == ["q1", "q2"]
   assert rating.details["bas_items"][0]["label"] == "q1"
   assert rating.details["bas_items"][0]["distance"] == pytest.approx(
     math.sqrt(0.3**2 + 0.3**2)
   )
   assert rating.details["bas_items"][0]["bas"] == pytest.approx(70.0)
-  assert rating.details["vas"]["labels"] == ["q1", "q2"]
-  assert rating.details["vas"]["distance"] == pytest.approx(
+  assert rating.details["fas"]["labels"] == ["q1", "q2"]
+  assert rating.details["fas"]["distance"] == pytest.approx(
     math.sqrt(0.3**2 + 0.2**2)
   )
-  assert rating.details["vas"]["max_distance"] == pytest.approx(math.sqrt(2))
-  assert rating.details["vas"]["vas"] == pytest.approx(74.504871)
+  assert rating.details["fas"]["max_distance"] == pytest.approx(math.sqrt(2))
+  assert rating.details["fas"]["fas"] == pytest.approx(74.504871)
   assert "behavioral_tendency_metrics" not in rating.details
 
 
@@ -110,7 +110,7 @@ def test_score_decision_premise_includes_behavioral_metrics() -> None:
   )
 
   assert "bas_items" in rating.details
-  assert "vas" in rating.details
+  assert "fas" in rating.details
   metrics = rating.details["behavioral_tendency_metrics"]
   profile = metrics["profile"]
   assert profile["human"]["frp"] == pytest.approx(0.3)
@@ -143,17 +143,17 @@ def test_score_risky_choice_framing() -> None:
   )
 
   assert rating.bas == pytest.approx(90.0)
-  assert rating.vas == pytest.approx(80.0)
-  assert rating.srs == pytest.approx(85.0)
+  assert rating.fas == pytest.approx(80.0)
+  assert rating.pas == pytest.approx(85.0)
   assert rating.details["bas_items"][0]["label"] == "6life"
   assert rating.details["bas_items"][0]["distance"] == pytest.approx(
     math.sqrt(0.1**2 + 0.1**2)
   )
   assert rating.details["bas_items"][0]["bas"] == pytest.approx(90.0)
-  assert rating.details["vas"]["labels"] == ["6life"]
-  assert rating.details["vas"]["distance"] == pytest.approx(0.2)
-  assert rating.details["vas"]["max_distance"] == pytest.approx(1.0)
-  assert rating.details["vas"]["vas"] == pytest.approx(80.0)
+  assert rating.details["fas"]["labels"] == ["6life"]
+  assert rating.details["fas"]["distance"] == pytest.approx(0.2)
+  assert rating.details["fas"]["max_distance"] == pytest.approx(1.0)
+  assert rating.details["fas"]["fas"] == pytest.approx(80.0)
   metrics = rating.details["behavioral_tendency_metrics"]
   assert metrics["human"]["profile"]["fes"] == pytest.approx(0.3)
   assert metrics["human"]["profile"]["rc"] == pytest.approx(1.0)

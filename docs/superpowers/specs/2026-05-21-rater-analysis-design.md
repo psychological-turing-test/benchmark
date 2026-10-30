@@ -5,7 +5,7 @@
 Add a dedicated rater module and script that consume evaluator result JSON files
 from one flat directory and produce:
 
-- `analysis.json`: machine-readable BAS, VAS, and SRS ratings for each LLM.
+- `analysis.json`: machine-readable BAS, FAS, and PAS ratings for each LLM.
 - `analysis-visualize.html`: a static comparison page that loads
   `analysis.json` from the same directory.
 
@@ -32,7 +32,7 @@ questionnaire configuration and evaluator result fixtures.
 Add `rationale_benchmark/rater/` as a new package with focused modules for:
 
 - Loading and validating evaluator result JSON files.
-- Computing questionnaire-level BAS, VAS, and SRS.
+- Computing questionnaire-level BAS, FAS, and PAS.
 - Combining questionnaire-level scores into model-level scores.
 - Rendering `analysis.json`.
 - Rendering the static HTML visualization.
@@ -52,8 +52,8 @@ batch of evaluator result files and compares models across questionnaires.
    `questionnaire_id`, `section_name`, `question_id`, `human`, and `llms`.
 3. Group entries by questionnaire ID and LLM ID.
 4. Reject unsupported questionnaire IDs with a clear rater error.
-5. Compute questionnaire-level BAS, VAS, and SRS for each LLM.
-6. Average each model's questionnaire-level BAS, VAS, and SRS into top-level
+5. Compute questionnaire-level BAS, FAS, and PAS for each LLM.
+6. Average each model's questionnaire-level BAS, FAS, and PAS into top-level
    metrics.
 7. Write deterministic `analysis.json`.
 8. Write `analysis-visualize.html`, which fetches `analysis.json` from the same
@@ -98,7 +98,7 @@ BAS:
 - Convert to a `0..100` score with `100 * (1 - distance / sqrt(2))`.
 - Average pair-level BAS values.
 
-VAS:
+FAS:
 
 - For each pair, compute `RD = N_risk - P_risk`.
 - Build human and LLM RD trajectories across all pairs.
@@ -119,14 +119,14 @@ BAS:
 - Convert to `0..100`.
 - Average scenario-level BAS values.
 
-VAS:
+FAS:
 
 - Build human and LLM trajectories of `B_percentage` across all scenarios.
 - Compute Euclidean distance between trajectories.
 - Normalize by `sqrt(n)`, where `n` is the number of scenarios.
 - Convert to `0..100`.
 
-For both questionnaires, `SRS = (BAS + VAS) / 2`.
+For both questionnaires, `PAS = (BAS + FAS) / 2`.
 
 ## Output Schema
 
@@ -141,13 +141,13 @@ For both questionnaires, `SRS = (BAS + VAS) / 2`.
       "llm_id": "aliyun/qwen3.6-plus (0)",
       "display_name": "aliyun/qwen3.6-plus (no thinking)",
       "bas": 72.1,
-      "vas": 68.4,
-      "srs": 70.25,
+      "fas": 68.4,
+      "pas": 70.25,
       "questionnaires": {
         "decision-premise": {
           "bas": 70.0,
-          "vas": 66.0,
-          "srs": 68.0,
+          "fas": 66.0,
+          "pas": 68.0,
           "details": {}
         }
       }
@@ -160,8 +160,8 @@ For both questionnaires, `SRS = (BAS + VAS) / 2`.
 
 - `bas_items`: ordered per-pair or per-scenario records with human proportions,
   LLM proportions, Euclidean distance, and BAS contribution.
-- `vas`: trajectory labels, human trajectory, LLM trajectory, Euclidean
-  distance, normalization maximum, and VAS contribution.
+- `fas`: trajectory labels, human trajectory, LLM trajectory, Euclidean
+  distance, normalization maximum, and FAS contribution.
 
 ## Visualization
 
@@ -171,9 +171,9 @@ For both questionnaires, `SRS = (BAS + VAS) / 2`.
 The page contains:
 
 - Top: checkbox-based multi-select for models, using `display_name`.
-- Middle-left: bar chart for selected models' overall BAS, VAS, and SRS.
+- Middle-left: bar chart for selected models' overall BAS, FAS, and PAS.
 - Middle-right: radar chart for selected models' questionnaire-level BAS and
-  VAS axes.
+  FAS axes.
 - Bottom: side-by-side comparison table with raw model ID, display name,
   overall metrics, and questionnaire breakdowns.
 
@@ -201,8 +201,8 @@ Add `tests/rater/` with focused pytest coverage for:
 - Flat-directory input discovery.
 - Evaluator JSON parsing and validation.
 - Aliyun display-name rewriting, including the no-suffix no-op case.
-- Risky-choice framing BAS, VAS, and SRS.
-- Decision-premise BAS, VAS, and SRS.
+- Risky-choice framing BAS, FAS, and PAS.
+- Decision-premise BAS, FAS, and PAS.
 - Top-level averaging across questionnaires.
 - Writing `analysis.json` and `analysis-visualize.html`.
 - Unsupported questionnaire errors.

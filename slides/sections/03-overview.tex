@@ -2,7 +2,7 @@
 
 \begin{frame}{总体评分：LLM 与人类基线的相似度}
   \begin{block}{读图方式}
-    SRS 是社会理性综合分，整合行为对齐 BAS 与价值对齐 VAS。
+    PAS 是心理对齐分数，整合行为对齐 BAS 与功能对齐 FAS。
     分数越高，表示模型在当前两类社会决策范式中越接近人类基线。
   \end{block}
 
@@ -14,7 +14,7 @@
       height=0.66\textheight,
       xmin=45,
       xmax=63,
-      xlabel={SRS},
+      xlabel={PAS},
       ytick={1,...,19},
       yticklabels={
         Q3.6-max,Q3.6-flash,Q3.6-35B,DS-v4-flash T,GLM-5.1 NT,
@@ -45,10 +45,10 @@
   \end{tikzpicture}
 
   \vspace{-0.7em}
-  \smallnote{SRS = Social Rationality Score；BAS = Behavioral Alignment Score；VAS = Value Alignment Score；T = 最大思考模式；NT = 非思考模式。}
+  \smallnote{PAS = Psychological Alignment Score；BAS = Behavioral Alignment Score；FAS = Functional Alignment Score；T = 最大思考模式；NT = 非思考模式。}
 \end{frame}
 
-\begin{frame}{总体评分拆解：BAS 与 VAS 并不总是同步}
+\begin{frame}{总体评分拆解：BAS 与 FAS 并不总是同步}
   \begin{columns}[T,totalwidth=\textwidth]
     \begin{column}{0.66\textwidth}
       \begin{tikzpicture}
@@ -60,7 +60,7 @@
           ymin=38,
           ymax=67,
           xlabel={BAS：行为对齐},
-          ylabel={VAS：价值对齐},
+          ylabel={FAS：功能对齐},
           grid=both,
           grid style={BenchGray!15},
           legend style={at={(0.02,0.98)},anchor=north west,font=\scriptsize},
@@ -81,20 +81,20 @@
           };
           \node[font=\scriptsize, anchor=west, text=BenchRed] at (axis cs:57.3,39.9) {Q3.6-max};
           \node[font=\scriptsize, anchor=south, text=BenchGreen] at (axis cs:57.5,65.4) {DS-v4-pro NT};
-          \legend{BAS=VAS,DeepSeek,GLM,Qwen}
+          \legend{BAS=FAS,DeepSeek,GLM,Qwen}
         \end{axis}
       \end{tikzpicture}
     \end{column}
     \begin{column}{0.31\textwidth}
       \begin{block}{观察}
         \begin{itemize}
-          \item 总体 SRS 范围为 48.6--61.4。
-          \item 一些模型 BAS 较高但 VAS 较低，说明具体选择接近不代表趋势结构接近。
-          \item 因此后续结果分开看行为对齐与价值对齐。
+          \item 总体 PAS 范围为 48.6--61.4。
+          \item 一些模型 BAS 较高但 FAS 较低，说明具体选择接近不代表趋势结构接近。
+          \item 因此后续结果分开看行为对齐与功能对齐。
         \end{itemize}
       \end{block}
     \end{column}
   \end{columns}
 
-  \smallnote{BAS = Behavioral Alignment Score；VAS = Value Alignment Score；SRS = Social Rationality Score。}
+  \smallnote{BAS = Behavioral Alignment Score；FAS = Functional Alignment Score；PAS = Psychological Alignment Score。}
 \end{frame}

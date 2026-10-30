@@ -29,11 +29,11 @@ class EvaluatorQuestionResult:
 
 @dataclass(frozen=True)
 class QuestionnaireRating:
-  """BAS, VAS, SRS, and trace details for one questionnaire/model pair."""
+  """BAS, FAS, PAS, and trace details for one questionnaire/model pair."""
 
   bas: float
-  vas: float
-  srs: float
+  fas: float
+  pas: float
   details: dict[str, Any]
 
 

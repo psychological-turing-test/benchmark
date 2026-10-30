@@ -18,7 +18,7 @@ inside it. The rater does not scan recursively.
 
 ## Outputs
 
-- `analysis.json`: BAS, VAS, and SRS for each LLM, plus questionnaire-level
+- `analysis.json`: BAS, FAS, and PAS for each LLM, plus questionnaire-level
   details. For `risky-choice-framing`, details also include behavioral
   tendency metrics for both the LLM and the human baseline.
 - `analysis-visualize.html`: a self-contained static page with the analysis

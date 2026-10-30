@@ -24,7 +24,7 @@ from rationale_benchmark.rater.loader import discover_result_files, load_results
 from rationale_benchmark.rater.models import EvaluatorQuestionResult
 from rationale_benchmark.rater.scoring import score_questionnaire
 
-SCORE_KEYS = ("bas", "vas", "srs")
+SCORE_KEYS = ("bas", "fas", "pas")
 AGE_IDS = {"1-Py-old", "2-Py-young", "1-Pm-old", "2-Pm-young"}
 
 
@@ -44,7 +44,7 @@ def distribution(entry: dict[str, Any]) -> dict[str, float]:
 
 
 def scores(entry: Any) -> dict[str, float]:
-  """Extract BAS, VAS, and SRS from a dictionary or rating object."""
+  """Extract BAS, FAS, and PAS from a dictionary or rating object."""
   if isinstance(entry, dict):
     return {key: entry[key] for key in SCORE_KEYS}
   return {key: getattr(entry, key) for key in SCORE_KEYS}
@@ -54,8 +54,8 @@ def dp_scores(items: list[dict[str, Any]]) -> dict[str, float]:
   """Calculate current DecisionPremise scores from item Plan-B rates."""
   errors = [abs(i["llm"][0] - i["human"][0]) for i in items]
   bas = 100 * (1 - statistics.mean(errors))
-  vas = max(0.0, 100 * (1 - math.sqrt(statistics.mean(e * e for e in errors))))
-  return {"bas": bas, "vas": vas, "srs": (bas + vas) / 2}
+  fas = max(0.0, 100 * (1 - math.sqrt(statistics.mean(e * e for e in errors))))
+  return {"bas": bas, "fas": fas, "pas": (bas + fas) / 2}
 
 
 def raw_run_summary(source_name: str) -> dict[str, Any]:
@@ -228,9 +228,9 @@ def main() -> None:
         if abs(delta) > 1e-9:
           score_differences.append([model_id, qid, key, delta])
     model_table.append(table_row)
-  ranking = sorted(model_table, key=lambda m: m["overall"]["srs"], reverse=True)
+  ranking = sorted(model_table, key=lambda m: m["overall"]["pas"], reverse=True)
   for rank, row in enumerate(ranking, 1):
-    row["overall_srs_rank"] = rank
+    row["overall_pas_rank"] = rank
 
   summary = {}
   for scope in ("overall", "decision-premise", "risky-choice-framing"):
@@ -279,10 +279,10 @@ def main() -> None:
       "original_decision_premise": scores(dp),
       "revised_decision_premise": revised,
       "revised_overall": overall,
-      "overall_srs_change": overall["srs"] - model["srs"],
+      "overall_pas_change": overall["pas"] - model["pas"],
     })
   for rank, row in enumerate(
-    sorted(excluded_age, key=lambda r: r["revised_overall"]["srs"], reverse=True), 1
+    sorted(excluded_age, key=lambda r: r["revised_overall"]["pas"], reverse=True), 1
   ):
     row["revised_overall_rank"] = rank
   revised_lookup = {m["llm_id"]: m for m in excluded_age}
@@ -295,13 +295,13 @@ def main() -> None:
     thinking = revised_lookup[f"{base} (-1)"]
     revised_mode_deltas.append({
       "base_model_id": base,
-      "decision_premise_srs_no_thinking_minus_thinking": (
-        no_thinking["revised_decision_premise"]["srs"]
-        - thinking["revised_decision_premise"]["srs"]
+      "decision_premise_pas_no_thinking_minus_thinking": (
+        no_thinking["revised_decision_premise"]["pas"]
+        - thinking["revised_decision_premise"]["pas"]
       ),
-      "overall_srs_no_thinking_minus_thinking": (
-        no_thinking["revised_overall"]["srs"]
-        - thinking["revised_overall"]["srs"]
+      "overall_pas_no_thinking_minus_thinking": (
+        no_thinking["revised_overall"]["pas"]
+        - thinking["revised_overall"]["pas"]
       ),
     })
 
@@ -438,7 +438,7 @@ def main() -> None:
         "count_pooled_scores": pooled_scores,
         "source_equal_distribution_overall": scores(original_duplicate),
         "count_pooled_overall": pooled_overall,
-        "overall_srs_change": pooled_overall["srs"] - original_duplicate["srs"],
+        "overall_pas_change": pooled_overall["pas"] - original_duplicate["pas"],
         "duplicate_cells": duplicate_cells,
       },
       "constant_A_baseline": constant_a_scores,
@@ -458,15 +458,15 @@ def main() -> None:
         "study provenance or sampling design."
       ),
       (
-        "DecisionPremise VAS compares raw Plan-B rates (RMSE), not "
+        "DecisionPremise FAS compares raw Plan-B rates (RMSE), not "
         "psychological slopes or contrasts."
       ),
       (
-        "RiskyChoiceFraming VAS compares frame differences in [-1,1], "
+        "RiskyChoiceFraming FAS compares frame differences in [-1,1], "
         "divides Euclidean distance by sqrt(18), and clamps to [0,100]; "
         "sqrt(18) is not the theoretical maximum distance between such vectors."
       ),
-      "Neither VAS formula establishes shared internal psychological mechanisms.",
+      "Neither FAS formula establishes shared internal psychological mechanisms.",
       (
         "Current Py/Pm matched prompts and instructions are identical; "
         "age labels only occur in section names, which current prompt "
@@ -528,12 +528,12 @@ def main() -> None:
   print(json.dumps({
     "dataset": {k: v for k, v in audit["dataset"].items() if k != "human_items"},
     "verification": audit["verification"],
-    "duplicate_pooling_overall_srs_change": (
-      audit["sensitivity"]["duplicate_count_pooling"]["overall_srs_change"]
+    "duplicate_pooling_overall_pas_change": (
+      audit["sensitivity"]["duplicate_count_pooling"]["overall_pas_change"]
     ),
     "constant_A_baseline": constant_a_scores,
     "age_excluded_top_three": sorted(
-      excluded_age, key=lambda m: m["revised_overall"]["srs"], reverse=True
+      excluded_age, key=lambda m: m["revised_overall"]["pas"], reverse=True
     )[:3],
   }, ensure_ascii=False, indent=2))
 

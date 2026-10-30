@@ -1,4 +1,4 @@
-"""BAS, VAS, and SRS scoring for evaluator result data."""
+"""BAS, FAS, and PAS scoring for evaluator result data."""
 
 from __future__ import annotations
 
@@ -29,7 +29,7 @@ def score_questionnaire(
   llm_id: str,
   results: list[EvaluatorQuestionResult],
 ) -> QuestionnaireRating:
-  """Score one questionnaire/model pair with BAS, VAS, and SRS."""
+  """Score one questionnaire/model pair with BAS, FAS, and PAS."""
   if questionnaire_id not in SUPPORTED_QUESTIONNAIRES:
     raise RaterError(f"Unsupported questionnaire: {questionnaire_id}")
 
@@ -76,20 +76,20 @@ def _score_decision_premise(
 
   bas = _mean(item["score"] for item in bas_items)
   max_distance = math.sqrt(len(human_trajectory))
-  vas, distance = _similarity_score_and_distance(
+  fas, distance = _similarity_score_and_distance(
     llm_trajectory,
     human_trajectory,
     max_distance,
   )
   details: dict[str, Any] = {
     "bas_items": bas_items,
-    "vas": {
+    "fas": {
       "labels": [scenario.question_id for scenario in scenarios],
       "human": human_trajectory,
       "llm": llm_trajectory,
       "distance": distance,
       "max_distance": max_distance,
-      "vas": vas,
+      "fas": fas,
     },
   }
   metrics = decision_premise_behavioral_tendency_metrics(scenarios, llm_id)
@@ -98,7 +98,7 @@ def _score_decision_premise(
 
   return _rating(
     bas,
-    vas,
+    fas,
     details,
   )
 
@@ -147,23 +147,23 @@ def _score_risky_choice_framing(
 
   bas = _mean(item["score"] for item in bas_items)
   max_distance = math.sqrt(len(human_trajectory))
-  vas, distance = _similarity_score_and_distance(
+  fas, distance = _similarity_score_and_distance(
     llm_trajectory,
     human_trajectory,
     max_distance,
   )
   return _rating(
     bas,
-    vas,
+    fas,
     {
       "bas_items": bas_items,
-      "vas": {
+      "fas": {
         "labels": labels,
         "human": human_trajectory,
         "llm": llm_trajectory,
         "distance": distance,
         "max_distance": max_distance,
-        "vas": vas,
+        "fas": fas,
       },
       "behavioral_tendency_metrics": compute_risky_choice_behavioral_metrics(
         pairs,
@@ -229,11 +229,11 @@ def _similarity_score_and_distance(
   return score, distance
 
 
-def _rating(bas: float, vas: float, details: dict[str, Any]) -> QuestionnaireRating:
+def _rating(bas: float, fas: float, details: dict[str, Any]) -> QuestionnaireRating:
   return QuestionnaireRating(
     bas=bas,
-    vas=vas,
-    srs=(bas + vas) / 2.0,
+    fas=fas,
+    pas=(bas + fas) / 2.0,
     details=details,
   )
 

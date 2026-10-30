@@ -2,7 +2,7 @@
 
 ## 1. Overview
 
-The BAS / VAS / SRS scores defined in [rating.md](rating.md) measure how closely an LLM's outputs **match** human results ("how human-like is the output"). This document supplements those with a set of **Behavioral Tendency Metrics (BTMs)** that characterize the intrinsic decision-making profile of a single agent (an LLM or a human sample) on the RiskyChoiceFraming questionnaire.
+The BAS / FAS / PAS scores defined in [rating.md](rating.md) measure how closely an LLM's outputs **match** human results ("how human-like is the output"). This document supplements those with a set of **Behavioral Tendency Metrics (BTMs)** that characterize the intrinsic decision-making profile of a single agent (an LLM or a human sample) on the RiskyChoiceFraming questionnaire.
 
 These metrics satisfy two properties:
 
@@ -176,4 +176,4 @@ For each agent, emit a 7-dimensional behavioral profile:
 | CDC       | Moderate            | Cross-domain coherence |
 | RD        | Comparable to humans | Response determinism |
 
-Each dimension is computed independently on the LLM and on the human sample, enabling direct radar-chart comparison. The BTMs complement the BAS / VAS / SRS scores in [rating.md](rating.md): BTMs describe **what the agent is like**, while BAS / VAS describe **how close it is to humans**.
+Each dimension is computed independently on the LLM and on the human sample, enabling direct radar-chart comparison. The BTMs complement the BAS / FAS / PAS scores in [rating.md](rating.md): BTMs describe **what the agent is like**, while BAS / FAS describe **how close it is to humans**.
