@@ -271,8 +271,8 @@
     </header>
     <section class="charts">
       <div class="panel">
-        <h2>总体社会理性分数（SRS）</h2>
-        <p class="note">总体SRS为风险决策框架任务与风险决策前提任务的SRS等权平均。较高分数表示在所选任务和评分规则下与人类行为参照更加接近；勾选上方模型配置可筛选显示结果。</p>
+        <h2>总体心理对齐分数（PAS）</h2>
+        <p class="note">总体PAS为风险决策框架任务与风险决策前提任务的PAS等权平均。较高分数表示在所选任务和评分规则下与人类行为参照更加接近；勾选上方模型配置可筛选显示结果。</p>
         <svg id="bar-chart" role="img" aria-label="Overall ratings bar chart"></svg>
       </div>
     </section>
@@ -284,7 +284,7 @@
     <section class="panel">
       <h2>分任务评分与行为指标数据表</h2>
         <p class="note">表格可横向滚动；指标列显示中文全称和缩写，鼠标悬停在表头或查看上方图表可阅读计算定义。年龄身份调节差分（SAM）是基于四个年龄相关题项的补充描述指标。</p>
-        <p class="note"><strong>BAS（行为对齐分数，Behavioral Alignment Score）</strong>：比较选择比例分布。<strong>VAS（心理价值对齐分数，Value Alignment Score）</strong>：按任务结构比较框架效应或逐题选择比例偏差。<strong>SRS（社会理性分数，Social Rationality Score）</strong>：任务内BAS和VAS等权平均。VAS不直接表示模型具有内在心理价值或人类认知机制。</p>
+        <p class="note"><strong>BAS（行为对齐分数，Behavioral Alignment Score）</strong>：比较选择比例分布。<strong>FAS（功能对齐分数，Functional Alignment Score）</strong>：按任务结构比较框架效应或逐题选择比例偏差。<strong>PAS（心理对齐分数，Psychological Alignment Score）</strong>：任务内BAS和FAS等权平均。FAS不直接表示模型具有内在心理价值或人类认知机制。</p>
       <div id="comparison-tables"></div>
     </section>
   </main>
@@ -712,9 +712,9 @@
           <thead>
             <tr>
               <th>模型配置/参照</th>
-              <th class="srs-column" title="社会理性分数；任务内BAS与VAS等权平均">社会理性分数（SRS）</th>
+              <th class="srs-column" title="心理对齐分数；任务内BAS与FAS等权平均">心理对齐分数（PAS）</th>
               <th title="行为对齐分数">行为对齐分数（BAS）</th>
-              <th title="心理价值对齐分数">心理价值对齐分数（VAS）</th>
+              <th title="功能对齐分数">功能对齐分数（FAS）</th>
               ${metadata.metrics.map((metric) => `
                 <th title="${escapeHtml(metric.note)}">
                   ${escapeHtml(metric.name)}<span class="table-acronym">（${escapeHtml(metric.acronym)}）</span>
